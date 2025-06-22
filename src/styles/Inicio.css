@@ -1,0 +1,366 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  overflow-x: hidden;
+}
+
+.landing-container {
+  min-height: 100vh;
+  background-color: #ffffff;
+  position: relative;
+}
+
+/* Header Styles */
+.header {
+  background-color: #e5e5e5;
+  padding: 1rem 1.5rem;
+  position: relative;
+  z-index: 1000;
+  width: 100%;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.nav-desktop {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.3s;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.nav-link:hover {
+  color: #000;
+}
+
+.menu-button {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hamburger span {
+  width: 20px;
+  height: 2px;
+  background-color: #000;
+}
+
+/* Main Content */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* Welcome Section */
+.welcome-section {
+  text-align: center;
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+}
+
+/* Logo como imagen */
+.loop-logo-img {
+  width: 300px;
+  height: auto;
+  max-width: 100%;
+}
+
+/* Logo CSS (si no tienes imagen) */
+.loop-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  font-weight: bold;
+  color: #000;
+  gap: 0.5rem;
+}
+
+.logo-text {
+  color: #000;
+}
+
+.logo-circle {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  position: relative;
+}
+
+.circle-1 {
+  background: linear-gradient(45deg, #87CEEB, #98FB98);
+}
+
+.circle-2 {
+  background: #DDA0DD;
+  border: 4px solid #000;
+  position: relative;
+}
+
+.circle-2::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 2rem;
+}
+
+.button-container {
+  margin-bottom: 1.5rem;
+}
+
+.btn {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-login {
+  background-color: #DDA0DD;
+  color: #000;
+}
+
+.btn-login:hover {
+  background-color: #D8BFD8;
+}
+
+.btn-register {
+  background-color: #AFEEEE;
+  color: #000;
+  width: 100%;
+  max-width: 300px;
+}
+
+.btn-register:hover {
+  background-color: #B0E0E6;
+}
+
+.register-text {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+/* Mobile Mockups */
+.mockups-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+}
+
+.phone {
+  background-color: #fff;
+  border: 6px solid #000;
+  border-radius: 2.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.phone-1 {
+  width: 250px;
+  height: 500px;
+}
+
+.phone-2 {
+  width: 220px;
+  height: 420px;
+  margin-left: -1rem;
+}
+
+.phone-notch {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 24px;
+  background-color: #000;
+  border-radius: 12px;
+}
+
+.phone-notch-small {
+  width: 60px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.phone-content {
+  padding: 3rem 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.location-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #999;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.location-icon-small {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 1.5rem;
+}
+
+.pin {
+  width: 30px;
+  height: 35px;
+  background-color: #666;
+  border-radius: 15px 15px 15px 0;
+  transform: rotate(-45deg);
+}
+
+.pin-small {
+  width: 25px;
+  height: 30px;
+}
+
+.phone-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
+}
+
+.phone-text-small {
+  font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nav-desktop {
+    display: none;
+  }
+
+  .menu-button {
+    display: block;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .mockups-container {
+    gap: 1rem;
+  }
+
+  .phone-1 {
+    width: 200px;
+    height: 400px;
+  }
+
+  .phone-2 {
+    width: 180px;
+    height: 350px;
+  }
+
+  .loop-logo {
+    font-size: 3rem;
+  }
+
+  .logo-circle {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .welcome-title {
+    font-size: 2rem;
+  }
+
+  .loop-logo-img {
+    width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 2rem 1rem;
+  }
+
+    .mockups-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  }
+
+
+  .phone-2 {
+    margin-left: 0;
+  }
+
+  .loop-logo-img {
+    width: 200px;
+  }
+}
+
+.phone-0 {
+  width: 212px;
+  height: 397px;
+}

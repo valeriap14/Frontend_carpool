@@ -1,0 +1,95 @@
+.registro-container {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.registro-form {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 30px;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.registro-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.registro-header p {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}
+
+.registro-campos {
+  margin: 25px 0;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.campo label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.campo input {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+}
+
+.registro-condiciones {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.registro-condiciones a {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+.registro-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.registro-botones button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.registro-botones button[type='submit'] {
+  background-color: #222;
+  color: white;
+}
+
+.registro-botones .cancelar {
+  background: transparent;
+  color: #444;
+  text-decoration: underline;
+}
