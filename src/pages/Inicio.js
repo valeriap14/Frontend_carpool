@@ -22,7 +22,7 @@ export default function Inicio() {
               Iniciar Sesión
             </a>
             <a href="#" className="nav-link" onClick={() => navigate('/registrarusuario')}>
-              Registro
+              Registrarse
             </a>
           </nav>
           <button className="menu-button">
@@ -57,7 +57,7 @@ export default function Inicio() {
               )}
             </div>
 
-            <h1 className="welcome-title">BIENVENIDO</h1>
+            <h1 className="welcome-title">Bienvenido</h1>
 
             <div className="button-container">
               <button

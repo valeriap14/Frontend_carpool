@@ -15,9 +15,8 @@ body {
   position: relative;
 }
 
-/* Header Styles */
 .header {
-  background-color: #e5e5e5;
+  background-color: #c3ebff;
   padding: 1rem 1.5rem;
   position: relative;
   z-index: 1000;
@@ -212,6 +211,11 @@ body {
   overflow: hidden;
 }
 
+.phone-0 {
+  width: 212px;
+  height: 397px;
+}
+
 .phone-1 {
   width: 250px;
   height: 500px;
@@ -250,34 +254,82 @@ body {
   text-align: center;
 }
 
+/* ICONOS USANDO SVG DE LUCIDE ICONS */
+
+/* Icono base para todos */
 .location-icon {
-  width: 60px;
-  height: 60px;
-  background-color: #999;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 2rem;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .location-icon-small {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   margin-bottom: 1.5rem;
 }
 
-.pin {
-  width: 30px;
-  height: 35px;
-  background-color: #666;
-  border-radius: 15px 15px 15px 0;
-  transform: rotate(-45deg);
+/* ICONO DE UBICACIÓN (phone-0) - MapPin */
+.phone-0 .location-icon {
+  background-color: #ff6b9d;
 }
 
-.pin-small {
-  width: 25px;
-  height: 30px;
+.phone-0 .pin {
+  display: none;
+}
+
+.phone-0 .location-icon::before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ICONO DE CARRO (phone-1) - Car */
+.phone-1 .location-icon {
+  background-color: #4ecdc4;
+}
+
+.phone-1 .pin {
+  display: none;
+}
+
+.phone-1 .location-icon::before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 10H5.6L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2'/%3E%3Ccircle cx='7' cy='17' r='2'/%3E%3Cpath d='M9 17h6'/%3E%3Ccircle cx='17' cy='17' r='2'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ICONO DE RED (phone-2) - Globe */
+.phone-2 .location-icon {
+  background-color: #ffbe0b;
+}
+
+.phone-2 .pin {
+  display: none;
+}
+
+.phone-2 .location-icon::before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20'/%3E%3Cpath d='M2 12h20'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .phone-text {
@@ -310,6 +362,11 @@ body {
     gap: 1rem;
   }
 
+  .phone-0 {
+    width: 180px;
+    height: 340px;
+  }
+
   .phone-1 {
     width: 200px;
     height: 400px;
@@ -318,6 +375,23 @@ body {
   .phone-2 {
     width: 180px;
     height: 350px;
+  }
+
+  .location-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .location-icon-small {
+    width: 50px;
+    height: 50px;
+  }
+
+  .phone-0 .location-icon::before,
+  .phone-1 .location-icon::before,
+  .phone-2 .location-icon::before {
+    width: 28px;
+    height: 28px;
   }
 
   .loop-logo {
@@ -343,13 +417,12 @@ body {
     padding: 2rem 1rem;
   }
 
-    .mockups-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
+  .mockups-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
   }
-
 
   .phone-2 {
     margin-left: 0;
@@ -358,9 +431,11 @@ body {
   .loop-logo-img {
     width: 200px;
   }
-}
 
-.phone-0 {
-  width: 212px;
-  height: 397px;
+  .phone-0 .location-icon::before,
+  .phone-1 .location-icon::before,
+  .phone-2 .location-icon::before {
+    width: 24px;
+    height: 24px;
+  }
 }
