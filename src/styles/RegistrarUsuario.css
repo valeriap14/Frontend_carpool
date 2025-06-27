@@ -8,7 +8,6 @@ body {
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* CENTRADO FORZADO CON FORMULARIO MÁS ANCHO */
 .registro-container {
   display: flex !important;
   justify-content: center !important;
@@ -23,20 +22,20 @@ body {
 
 .registro-form {
   background: #fff !important;
-  padding: 40px 35px !important; /* Aumenté el padding */
+  padding: 40px 35px !important; 
   border-radius: 12px !important;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
-  max-width: 750px !important; /* Aumenté de 600px a 750px */
+  max-width: 750px !important; 
   width: 100% !important;
   margin: 0 auto !important;
   position: relative !important;
   transform: translateX(0) !important;
 }
 
-/* ESTILOS ORIGINALES DE TEXTO Y ELEMENTOS */
+
 .registro-header {
   text-align: center;
-  margin-bottom: 30px; /* Aumenté el margen */
+  margin-bottom: 30px; 
 }
 
 .registro-logo-container {
@@ -54,14 +53,14 @@ body {
 
 .registro-header h1 {
   text-align: center;
-  font-size: 28px; /* Aumenté el tamaño */
+  font-size: 28px; 
   margin-bottom: 12px;
   color: #222;
 }
 
 .registro-header p {
   text-align: center;
-  font-size: 15px; /* Aumenté el tamaño */
+  font-size: 15px; 
   color: #555;
   margin-bottom: 25px;
 }
@@ -69,29 +68,28 @@ body {
 .registro-campos {
   display: flex;
   flex-direction: column;
-  gap: 18px; /* Aumenté el gap */
+  gap: 18px; 
 }
 
 .campo {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* Aumenté el gap */
+  gap: 8px; 
 }
 
 .campo label {
   font-weight: 600;
-  font-size: 15px; /* Aumenté el tamaño */
+  font-size: 15px; 
   margin-bottom: 6px;
   color: #333;
 }
 
-/* INPUTS UNIFORMES - TODOS IGUALES */
 .campo input[type="text"],
 .campo input[type="email"],
 .campo input[type="password"],
 .campo input[type="file"] {
-  padding: 12px 16px; /* Aumenté el padding */
-  font-size: 15px; /* Aumenté el tamaño */
+  padding: 12px 16px; 
+  font-size: 15px; 
   border-radius: 6px;
   border: 1px solid #ccc;
   transition: border 0.3s;
@@ -106,7 +104,6 @@ body {
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
 
-/* ESTILOS ESPECÍFICOS PARA INPUTS DE ARCHIVO */
 .campo input[type="file"] {
   cursor: pointer;
   font-family: 'Segoe UI', sans-serif;
@@ -129,14 +126,14 @@ body {
 
 .roles-radio {
   display: flex;
-  gap: 25px; /* Aumenté el gap */
+  gap: 25px; 
   align-items: center;
   margin-top: 5px;
 }
 
 .roles-radio input[type="radio"] {
   margin-right: 8px;
-  transform: scale(1.1); /* Hice los radio buttons un poco más grandes */
+  transform: scale(1.1); 
 }
 
 .roles-radio label {
@@ -173,17 +170,17 @@ body {
 }
 
 .registro-condiciones {
-  margin-top: 20px; /* Aumenté el margen */
-  font-size: 14px; /* Aumenté el tamaño */
+  margin-top: 20px; 
+  font-size: 14px; 
   color: #444;
   display: flex;
   align-items: flex-start;
-  gap: 12px; /* Aumenté el gap */
+  gap: 12px; 
 }
 
 .registro-condiciones input[type="checkbox"] {
   margin-top: 2px;
-  transform: scale(1.1); /* Hice el checkbox un poco más grande */
+  transform: scale(1.1); 
 }
 
 .registro-condiciones label {
@@ -197,20 +194,20 @@ body {
 }
 
 .registro-botones {
-  margin-top: 25px; /* Aumenté el margen */
+  margin-top: 25px; 
   display: flex;
   flex-direction: column;
-  gap: 12px; /* Aumenté el gap */
+  gap: 12px;
 }
 
 .registro-botones button[type="submit"] {
   background-color: #4f46e5;
   color: white;
-  padding: 14px; /* Aumenté el padding */
+  padding: 14px; 
   border: none;
   border-radius: 6px;
   font-weight: 600;
-  font-size: 16px; /* Aumenté el tamaño */
+  font-size: 16px; 
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -223,10 +220,10 @@ body {
   background-color: transparent;
   color: #333;
   border: 1px solid #ccc;
-  padding: 14px; /* Aumenté el padding */
+  padding: 14px; 
   border-radius: 6px;
   font-weight: 600;
-  font-size: 16px; /* Aumenté el tamaño */
+  font-size: 16px; 
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -237,7 +234,7 @@ body {
 }
 
 .error {
-  font-size: 13px; /* Aumenté el tamaño */
+  font-size: 13px; 
   color: #dc2626;
   margin-top: 4px;
 }
@@ -251,7 +248,7 @@ body {
 .x-inside {
   position: absolute;
   top: 50%;
-  right: 12px; /* Ajusté la posición */
+  right: 12px; 
   transform: translateY(-50%);
   background: transparent;
   border: none;
@@ -264,7 +261,7 @@ body {
 }
 
 .input-con-x input[type="file"] {
-  padding-right: 35px; /* Aumenté el padding para la X */
+  padding-right: 35px; 
 }
 
 .image-preview-container {
@@ -274,14 +271,13 @@ body {
 }
 
 .image-preview {
-  max-width: 180px; /* Aumenté el tamaño */
+  max-width: 180px; 
   max-height: 180px;
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 8px;
 }
 
-/* CENTRADO ESPECÍFICO PARA DESKTOP */
 @media (min-width: 769px) {
   .registro-container {
     display: flex !important;
@@ -306,7 +302,7 @@ body {
   }
 
   .registro-form {
-    padding: 30px 25px; /* Mantuve más padding en móvil */
+    padding: 30px 25px; 
     max-width: 100%;
     left: 0 !important;
     transform: none !important;
@@ -334,7 +330,7 @@ body {
 
   .registro-form {
     padding: 25px 20px;
-    max-width: 650px; /* Mantuve un ancho generoso en móvil */
+    max-width: 650px; 
   }
 
   .registro-loop-logo-img {
@@ -346,7 +342,6 @@ body {
   }
 }
 
-/* REGLA DE EMERGENCIA PARA CENTRADO */
 main.registro-container {
   display: flex !important;
   justify-content: center !important;

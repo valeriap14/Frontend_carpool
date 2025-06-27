@@ -84,74 +84,38 @@ function RegistrarUsuario() {
 
         <div className="registro-campos">
           <div className="campo">
-            <label htmlFor="primerNombre">Primer Nombre:</label>
+            <label htmlFor="nombresCompletos">Nombres Completos:</label>
             <input 
-              id="primerNombre" 
-              {...register("primerNombre", { 
-                required: 'Primer nombre es requerido',
+              id="nombresCompletos" 
+              {...register("nombresCompletos", { 
+                required: 'Nombres completos son requeridos',
                 pattern: {
                   value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
                   message: 'Solo se permiten letras'
                 }
               })} 
-              placeholder="Juan" 
+              placeholder="Juan Alberto" 
             />
-            {(errors.primerNombre || submitAttempted) && (
-              <span className="error">{errors.primerNombre?.message || 'Primer nombre es requerido'}</span>
+            {(errors.nombresCompletos || submitAttempted) && (
+              <span className="error">{errors.nombresCompletos?.message || 'Nombres completos son requeridos'}</span>
             )}
           </div>
 
           <div className="campo">
-            <label htmlFor="segundoNombre">Segundo Nombre:</label>
+            <label htmlFor="apellidosCompletos">Apellidos Completos:</label>
             <input 
-              id="segundoNombre" 
-              {...register("segundoNombre", { 
-                required: 'Segundo nombre es requerido',
+              id="apellidosCompletos" 
+              {...register("apellidosCompletos", { 
+                required: 'Apellidos completos son requeridos',
                 pattern: {
                   value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
                   message: 'Solo se permiten letras'
                 }
               })} 
-              placeholder="Alberto" 
+              placeholder="Perez Casco" 
             />
-            {(errors.segundoNombre || submitAttempted) && (
-              <span className="error">{errors.segundoNombre?.message || 'Segundo nombre es requerido'}</span>
-            )}
-          </div>
-
-          <div className="campo">
-            <label htmlFor="primerApellido">Primer Apellido:</label>
-            <input 
-              id="primerApellido" 
-              {...register("primerApellido", { 
-                required: 'Primer apellido es requerido',
-                pattern: {
-                  value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
-                  message: 'Solo se permiten letras'
-                }
-              })} 
-              placeholder="Perez" 
-            />
-            {(errors.primerApellido || submitAttempted) && (
-              <span className="error">{errors.primerApellido?.message || 'Primer apellido es requerido'}</span>
-            )}
-          </div>
-
-          <div className="campo">
-            <label htmlFor="segundoApellido">Segundo Apellido:</label>
-            <input 
-              id="segundoApellido" 
-              {...register("segundoApellido", { 
-                required: 'Segundo apellido es requerido',
-                pattern: {
-                  value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
-                  message: 'Solo se permiten letras'
-                }
-              })} 
-              placeholder="Casco" 
-            />
-            {(errors.segundoApellido || submitAttempted) && (
-              <span className="error">{errors.segundoApellido?.message || 'Segundo apellido es requerido'}</span>
+            {(errors.apellidosCompletos || submitAttempted) && (
+              <span className="error">{errors.apellidosCompletos?.message || 'Apellidos completos son requeridos'}</span>
             )}
           </div>
 
