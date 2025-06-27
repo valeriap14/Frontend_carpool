@@ -43,8 +43,6 @@ function Login() {
   };
 
   const handleForgotPassword = () => {
-    // Agregar la lógica para recuperar contraseña
-    // navegar a una página de recuperación o mostrar un modal
     alert('Funcionalidad de recuperar contraseña - próximamente');
     // navigate('/recuperar-password'); // 
   };
@@ -54,7 +52,7 @@ function Login() {
       <div className="registro-container">
         <form className="registro-form" onSubmit={handleSubmit}>
           <div className="registro-header">
-            {/* Logo de Loop arriba del título usando la imagen */}
+            {/* Logo de Loop */}
             <div className="form-logo-container">
               <img 
                 src={loopLogo || "/placeholder.svg"} 
@@ -99,6 +97,18 @@ function Login() {
                   onClick={handleForgotPassword}
                 >
                   ¿Olvidaste tu contraseña?
+                </button>
+              </div>
+
+              {/* Enlace para registrarse */}
+              <div className="register-container">
+                <span>¿No tienes una cuenta? </span>
+                <button
+                  type="button"
+                  className="register-link"
+                  onClick={() => navigate('/registrarusuario')}
+                >
+                  Regístrate
                 </button>
               </div>
             </div>

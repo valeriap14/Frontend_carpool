@@ -74,7 +74,6 @@ body {
   background-color: #000;
 }
 
-/* Main Content */
 .main-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -88,7 +87,6 @@ body {
   align-items: center;
 }
 
-/* Welcome Section */
 .welcome-section {
   text-align: center;
 }
@@ -97,14 +95,12 @@ body {
   margin-bottom: 2rem;
 }
 
-/* Logo como imagen */
 .loop-logo-img {
   width: 300px;
   height: auto;
   max-width: 100%;
 }
 
-/* Logo CSS (si no tienes imagen) */
 .loop-logo {
   display: flex;
   align-items: center;
@@ -193,7 +189,6 @@ body {
   margin-bottom: 1rem;
 }
 
-/* Mobile Mockups */
 .mockups-container {
   display: flex;
   justify-content: center;
@@ -254,9 +249,6 @@ body {
   text-align: center;
 }
 
-/* ICONOS USANDO SVG DE LUCIDE ICONS */
-
-/* Icono base para todos */
 .location-icon {
   width: 70px;
   height: 70px;
@@ -275,7 +267,6 @@ body {
   margin-bottom: 1.5rem;
 }
 
-/* ICONO DE UBICACIÓN (phone-0) - MapPin */
 .phone-0 .location-icon {
   background-color: #ff6b9d;
 }
@@ -294,7 +285,6 @@ body {
   background-position: center;
 }
 
-/* ICONO DE CARRO (phone-1) - Car */
 .phone-1 .location-icon {
   background-color: #4ecdc4;
 }
@@ -313,7 +303,6 @@ body {
   background-position: center;
 }
 
-/* ICONO DE RED (phone-2) - Globe */
 .phone-2 .location-icon {
   background-color: #ffbe0b;
 }
