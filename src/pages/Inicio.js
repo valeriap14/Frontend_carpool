@@ -78,9 +78,7 @@ export default function Inicio() {
             </button>
           </div>
 
-          {/* Right Side - Mobile Mockups */}
           <div className="mockups-container">
-            {/* New Left Phone */}
             <div className="phone phone-0">
               <div className="phone-notch"></div>
               <div className="phone-content">

@@ -40,10 +40,10 @@ function Login() {
         contrasena: form.password
       });
 
-      // Aquí puedes guardar el token o usuario si el backend lo retorna
+    
       const { token, usuario } = response.data;
 
-      localStorage.setItem('token', token); // si usas JWT
+      localStorage.setItem('token', token); 
       localStorage.setItem('usuario', JSON.stringify(usuario));
 
       navigate('/home', {

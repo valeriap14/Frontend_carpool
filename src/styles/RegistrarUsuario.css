@@ -278,13 +278,11 @@ body {
   padding: 8px;
 }
 
-/* Estilos para campos con error */
 .error-field {
   border-color: #ff4444 !important;
   box-shadow: 0 0 0 1px #ff4444 !important;
 }
 
-/* Estilos para el spinner de carga */
 .spinner {
   display: inline-block;
   width: 1rem;
@@ -300,7 +298,6 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Mejoras para las previsualizaciones de imágenes */
 .image-preview-container {
   margin-top: 10px;
   border: 1px solid #ddd;
@@ -317,7 +314,6 @@ body {
   border-radius: 3px;
 }
 
-/* Mejoras para los inputs de archivo */
 .input-con-x {
   position: relative;
   display: inline-block;
@@ -342,7 +338,6 @@ body {
   border: 1px solid #ddd;
 }
 
-/* Mejoras para mensajes de error */
 .error-message {
   background-color: #ffebee;
   color: #c62828;
@@ -441,8 +436,6 @@ main.registro-container .registro-form {
   transform: translateX(-50%) !important;
 }
 
-
-/* Estilos para el estado de verificación */
 .input-with-status {
   position: relative;
   display: flex;
@@ -455,13 +448,11 @@ main.registro-container .registro-form {
   color: #666;
 }
 
-/* Estilos para campos con error */
 .error-field {
   border-color: #ff4444 !important;
   box-shadow: 0 0 0 1px #ff4444 !important;
 }
 
-/* Estilos para mensajes de error */
 .error {
   color: #ff4444;
   font-size: 0.8rem;
@@ -469,7 +460,6 @@ main.registro-container .registro-form {
   display: block;
 }
 
-/* Estilos para mensajes de éxito */
 .success-message {
   background-color: #e8f5e9;
   color: #2e7d32;
@@ -479,7 +469,6 @@ main.registro-container .registro-form {
   border-left: 4px solid #2e7d32;
 }
 
-/* Spinner para botón de carga */
 .spinner {
   display: inline-block;
   width: 1rem;

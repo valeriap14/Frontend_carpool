@@ -21,7 +21,6 @@ function RegistrarUsuario() {
   const rol = watch('rol');
   const navigate = useNavigate();
 
-  // Refs para los inputs de archivos
   const fotoPerfilInputRef = useRef(null);
   const fotoCarnetInputRef = useRef(null);
   const licenciaInputRef = useRef(null);
@@ -50,7 +49,6 @@ function RegistrarUsuario() {
     placa: { valido: true, mensaje: '' }
   });
 
-  // Limpieza de archivos temporales al desmontar el componente
   useEffect(() => {
     return () => {
       [fotoPerfilPreview, fotoCarnetPreview, licenciaPreview, fotoCarroPreview].forEach(preview => {
@@ -59,7 +57,6 @@ function RegistrarUsuario() {
     };
   }, [fotoPerfilPreview, fotoCarnetPreview, licenciaPreview, fotoCarroPreview]);
 
-  // Función mejorada para verificar campos únicos
   const checkUniqueField = useCallback(async (fieldName, value) => {
     if (!value) {
       setValidacionCampos(prev => ({
@@ -98,13 +95,12 @@ function RegistrarUsuario() {
       return estaDisponible;
     } catch (error) {
       console.error(`Error verificando ${fieldName}:`, error);
-      return true; // Permitir el envío si hay error en la verificación
+      return true; 
     } finally {
       setIsChecking(prev => ({ ...prev, [fieldName]: false }));
     }
   }, []);
 
-  // Efectos para verificación en tiempo real
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === 'dni') {
@@ -121,10 +117,8 @@ function RegistrarUsuario() {
     return () => subscription.unsubscribe();
   }, [watch, checkUniqueField, rol]);
 
-  // Manejo del envío del formulario
   const onSubmit = async (data) => {
     try {
-      // 1. Validar todos los campos del formulario
       const isValidForm = await trigger();
       if (!isValidForm) {
         setErrorMessage('Por favor completa todos los campos requeridos');
@@ -135,17 +129,14 @@ function RegistrarUsuario() {
       setErrorMessage(null);
       setSuccessMessage(null);
 
-      // 2. Verificación final de campos únicos (opcional)
       await Promise.all([
         checkUniqueField('dni', data.dni),
         checkUniqueField('correo', data.correo),
         rol === 'conductor' ? checkUniqueField('placa', data.placa) : Promise.resolve(true)
       ]);
 
-      // 3. Construir FormData
       const formData = new FormData();
       
-      // Datos básicos del usuario
       formData.append('nombre', data.nombresCompletos.trim());
       formData.append('apellido', data.apellidosCompletos.trim());
       formData.append('dni', data.dni.trim());
@@ -154,11 +145,9 @@ function RegistrarUsuario() {
       formData.append('role_id', rol === 'conductor' ? '2' : '1');
       formData.append('telefono', data.telefono.trim());
       
-      // Archivos obligatorios
       formData.append('fotoPerfil', data.fotoPerfil);
       formData.append('fotoCarnet', data.fotoCarnet);
 
-      // Datos específicos para conductores
       if (rol === 'conductor') {
         formData.append('licencia', data.licencia);
         formData.append('fotoCarro', data.fotoCarro);
@@ -172,14 +161,12 @@ function RegistrarUsuario() {
         formData.append('vehiculo', JSON.stringify(vehiculoData));
       }
 
-      // 4. Enviar al backend
       const response = await api.post('/usuarios', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
       
-      // Manejar respuesta exitosa
       setSuccessMessage('¡Registro exitoso! Redirigiendo...');
       setTimeout(() => {
         reset();
@@ -194,7 +181,6 @@ function RegistrarUsuario() {
     } catch (error) {
       console.error('Error en el registro:', error);
       
-      // Manejo especial para errores de duplicados
       if (error.response?.status === 409) {
         const { campo, mensaje } = error.response.data;
         setValidacionCampos(prev => ({
@@ -213,7 +199,6 @@ function RegistrarUsuario() {
     }
   };
 
-  // Manejo de cambios en imágenes
   const handleImageChange = (e, setter, fieldName) => {
     const file = e.target.files[0];
     const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
@@ -251,7 +236,6 @@ function RegistrarUsuario() {
     reader.readAsDataURL(file);
   };
 
-  // Manejo de eliminación de imágenes
   const handleImageDelete = (setter, fieldName, inputRef) => {
     if (setter === setFotoPerfilPreview && fotoPerfilPreview) URL.revokeObjectURL(fotoPerfilPreview);
     if (setter === setFotoCarnetPreview && fotoCarnetPreview) URL.revokeObjectURL(fotoCarnetPreview);
@@ -264,7 +248,6 @@ function RegistrarUsuario() {
     setError(fieldName, { type: 'manual', message: 'Este campo es requerido' });
   };
 
-  // Manejo del botón cancelar
   const handleCancel = () => {
     reset();
     setFotoPerfilPreview(null);
