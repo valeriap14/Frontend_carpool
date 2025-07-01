@@ -278,6 +278,91 @@ body {
   padding: 8px;
 }
 
+/* Estilos para campos con error */
+.error-field {
+  border-color: #ff4444 !important;
+  box-shadow: 0 0 0 1px #ff4444 !important;
+}
+
+/* Estilos para el spinner de carga */
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Mejoras para las previsualizaciones de imágenes */
+.image-preview-container {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  padding: 5px;
+  border-radius: 4px;
+  display: inline-block;
+  background-color: #f9f9f9;
+}
+
+.image-preview {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+
+/* Mejoras para los inputs de archivo */
+.input-con-x {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.x-inside {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #ff4444;
+  font-weight: bold;
+  background: white;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+}
+
+/* Mejoras para mensajes de error */
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #c62828;
+}
+
+.success-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #2e7d32;
+}
+
+
+
 @media (min-width: 769px) {
   .registro-container {
     display: flex !important;
@@ -354,4 +439,58 @@ main.registro-container .registro-form {
   position: relative !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
+}
+
+
+/* Estilos para el estado de verificación */
+.input-with-status {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.checking-status {
+  margin-left: 10px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Estilos para campos con error */
+.error-field {
+  border-color: #ff4444 !important;
+  box-shadow: 0 0 0 1px #ff4444 !important;
+}
+
+/* Estilos para mensajes de error */
+.error {
+  color: #ff4444;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  display: block;
+}
+
+/* Estilos para mensajes de éxito */
+.success-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #2e7d32;
+}
+
+/* Spinner para botón de carga */
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

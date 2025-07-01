@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import loopLogo from '../assets/loop.png';
-
+import api from '../api/api'; 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState('');
   const navigate = useNavigate(); 
 
   const validate = () => {
@@ -22,14 +23,40 @@ function Login() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-    } else {
-      setErrors({});
-      alert('Formulario válido');
+      return;
+    }
+
+    setErrors({});
+    setServerError('');
+
+    try {
+      const response = await api.post('/login', {
+        correo: form.email,
+        contrasena: form.password
+      });
+
+      // Aquí puedes guardar el token o usuario si el backend lo retorna
+      const { token, usuario } = response.data;
+
+      localStorage.setItem('token', token); // si usas JWT
+      localStorage.setItem('usuario', JSON.stringify(usuario));
+
+      navigate('/home', {
+        state: {
+          mensaje: `¡Bienvenido, ${usuario.nombre}!`
+        }
+      });
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        setServerError('Credenciales inválidas. Verifica tu correo y contraseña.');
+      } else {
+        setServerError('Ocurrió un error. Intenta más tarde.');
+      }
     }
   };
 
@@ -44,7 +71,6 @@ function Login() {
 
   const handleForgotPassword = () => {
     alert('Funcionalidad de recuperar contraseña - próximamente');
-    // navigate('/recuperar-password'); // 
   };
 
   return (
@@ -52,7 +78,6 @@ function Login() {
       <div className="registro-container">
         <form className="registro-form" onSubmit={handleSubmit}>
           <div className="registro-header">
-            {/* Logo de Loop */}
             <div className="form-logo-container">
               <img 
                 src={loopLogo || "/placeholder.svg"} 
@@ -60,10 +85,11 @@ function Login() {
                 className="form-loop-logo-img"
               />
             </div>
-            
             <h1>Bienvenido a Loop</h1>
             <p>Inicia Sesión para empezar tu Experiencia</p>
           </div>
+
+          {serverError && <div className="error-message">{serverError}</div>}
 
           <div className="registro-campos">
             <div className="campo">
@@ -89,7 +115,6 @@ function Login() {
               />
               {errors.password && <span className="error">{errors.password}</span>}
               
-              {/* Enlace de ¿Olvidaste tu contraseña? */}
               <div className="forgot-password-container">
                 <button 
                   type="button" 
@@ -100,7 +125,6 @@ function Login() {
                 </button>
               </div>
 
-              {/* Enlace para registrarse */}
               <div className="register-container">
                 <span>¿No tienes una cuenta? </span>
                 <button
