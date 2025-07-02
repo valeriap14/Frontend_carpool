@@ -328,15 +328,15 @@ body {
   cursor: pointer;
   color: #ff4444;
   font-weight: bold;
-  background: white;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: 1px solid #ddd;
+  font-size: 18px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+  height: auto;
+  display: inline;
 }
+
 
 .error-message {
   background-color: #ffebee;
@@ -354,6 +354,13 @@ body {
   border-radius: 4px;
   margin-bottom: 20px;
   border-left: 4px solid #2e7d32;
+}
+
+.error-message {
+  color: red;
+  margin: 1rem 0;
+  font-weight: bold;
+  text-align: center;
 }
 
 

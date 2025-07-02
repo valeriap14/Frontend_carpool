@@ -202,7 +202,7 @@ function RegistrarUsuario() {
   const handleImageChange = (e, setter, fieldName) => {
     const file = e.target.files[0];
     const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-    const maxSize = 2 * 1024 * 1024; // 2MB
+    const maxSize = 2 * 1024 * 1024; 
     
     clearErrors(fieldName);
     setErrorMessage(null);
@@ -660,7 +660,7 @@ function RegistrarUsuario() {
         <div className="registro-botones">
           <button
             type="submit"
-            disabled={isSubmitting || !isValid}
+            disabled={isSubmitting}
           >
             {isSubmitting ? (
               <>

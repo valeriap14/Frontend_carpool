@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Login.css';
+import '../styles/login.css';
 import loopLogo from '../assets/loop.png';
 import api from '../api/api'; 
 function Login() {
@@ -34,31 +34,40 @@ function Login() {
     setErrors({});
     setServerError('');
 
-    try {
-      const response = await api.post('/login', {
-        correo: form.email,
-        contrasena: form.password
-      });
+  try {
+    const response = await api.post('usuarios/inicioSesion', {
+      correo: form.email,
+      contrasena: form.password.trim()
+    });
 
-    
-      const { token, usuario } = response.data;
+    const { usuario } = response.data;
 
-      localStorage.setItem('token', token); 
-      localStorage.setItem('usuario', JSON.stringify(usuario));
+    //localStorage.setItem('token', token); 
+    //localStorage.setItem('usuario', JSON.stringify(usuario));
 
-      navigate('/home', {
-        state: {
-          mensaje: `¡Bienvenido, ${usuario.nombre}!`
-        }
-      });
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        setServerError('Credenciales inválidas. Verifica tu correo y contraseña.');
+    navigate('/inicioloop', {
+      state: {
+        mensaje: `¡Bienvenido, ${usuario.nombre}!`
+      }
+    });
+
+  } catch (error) {
+    if (error.response) {
+      const status = error.response.status;
+      const apiErrors = error.response.data.errors || {};
+
+      if (status === 404 && apiErrors.correo) {
+        setErrors(prev => ({ ...prev, email: apiErrors.correo }));
+      } else if (status === 401 && apiErrors.contrasena) {
+        setErrors(prev => ({ ...prev, password: apiErrors.contrasena }));
       } else {
         setServerError('Ocurrió un error. Intenta más tarde.');
       }
+    } else {
+      setServerError('Ocurrió un error. Intenta más tarde.');
     }
-  };
+  }
+};
 
   const handleChange = (e) => {
     const { id, value } = e.target;
