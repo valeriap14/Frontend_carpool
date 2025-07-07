@@ -3,6 +3,8 @@ import Inicio from "./pages/Inicio";
 import RegistrarUsuario from "./pages/RegistrarUsuario";
 import Login from "./pages/Login";
 import InicioLoop from "./pages/inicioloop";
+import EditarUsuario from "./pages/editarUsuario";
+
 
 function App() {
   return (
@@ -12,7 +14,12 @@ function App() {
         <Route path="/registrarusuario" element={<RegistrarUsuario />} />
         <Route path="/login" element={<Login />} />
         <Route path="/inicioloop" element={<InicioLoop />} />
+        <Route path="/editarUsuario" element={<EditarUsuario />} />
+        
       </Routes>
+
+       
+        
     </Router>
   );
 }
