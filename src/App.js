@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Inicio from "./pages/Inicio";
 import RegistrarUsuario from "./pages/RegistrarUsuario";
@@ -5,6 +6,7 @@ import Login from "./pages/Login";
 import InicioLoop from "./pages/inicioloop";
 import EditarUsuario from "./pages/editarUsuario";
 import Viajes from "./pages/Viajes";
+
 
 
 function App() {

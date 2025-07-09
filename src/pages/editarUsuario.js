@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+
 
 import api from '../api/api';
 import loopLogo from '../assets/loop.png';
@@ -11,29 +13,67 @@ import '../styles/editarUsuario.css';
 
 function editarUsuario(){
 
-    const navigate = useNavigate;
-    
-    const [editar, setEditar] = useState(false);
+        const { usuario, inicioDatos} = useContext(AuthContext);
 
-    const [nombre, setNombre] = useState();
-    const [apellido, setApellido] = useState();
-    const [telefono, setTelefono] = useState();
-    const [rol, setRol] = useState();
+        const navigate = useNavigate;
+
+        const [formulario, setFormulario] = useState ({
+                nombre: '',
+                apellido: '',
+                telefono: ''
+        });
+
+        
+        useEffect(() => {
+                if (usuario){
+                        setFormulario({
+                                nombre: usuario.nombre,
+                                apellido: usuario.apellido,
+                                telefono: usuario.telefono
+                        });
+                }
+        }, [usuario]);
+
+
+        
+        const handleChange = (e) => {
+                const { name, value } = e.target;
+                        setFormulario(prev => ({
+                        ...prev,
+                 [name]: value
+        }));
+        };
+
+        
+        const guardarCambios = async () =>{
+                try{
+
+                const response = await api.put(`usuarios/actualizacion/${usuario.correo}`, {
+                              nombre: formulario.nombre,
+                                apellido: formulario.apellido,
+                                telefono: formulario.telefono
+                });
+                        
+                        alert("Se guardaron cambios");
+                }catch(error){
+                console.error('error al actualizar:', error)
+      
+
+        }  
+        };
+
+   
+    const [password, setPassword] = useState();
+   
   
 
     const handleCancel = () => {
   
-    navigate('/');
+    navigate('/inicioloop');
   };
 
   
-  const editarFormulario = (val) =>{
-            setEditar(true);
-            setNombre(val.nombre);
-            
-
-  }
-
+  
 
     return (
 
@@ -41,114 +81,46 @@ function editarUsuario(){
         <>
         
         <main className="registro-container">
-        <form className="registro-form">      
+        <form className="registro-form">   
+
+
+                 
         <div className="campo">
             <label htmlFor="nombre">Nombre:</label>
             
-                <input value={nombre} onChange={(event)=> {
-                        setNombre(event.target.value);
-
-
-                }}    />
+                <input name="nombre" value={formulario.nombre} onChange={handleChange}      />
 
         </div>
 
         <div className="campo">
                 <label htmlFor="apellido">Apellidos:</label>
 
-                 <input value={nombre} onChange={(event)=> {
-                        setNombre(event.target.value);
-
-
-                }}    />
+                 <input name="apellido" value={formulario.apellido} onChange={handleChange}  />
 
         </div>
 
         <div className="campo">
                 <label htmlFor="telefono">Telefono:</label>
-                 <input value={nombre} onChange={(event)=> {
-                        setNombre(event.target.value);
-
-
-                }}    />
+                 <input name="telefono" value={formulario.telefono} onChange={handleChange}    />
 
         </div>
 
         <div className="campo">
                 <label htmlFor="password">Contraseña:</label>
-                 <input value={nombre} onChange={(event)=> {
-                        setNombre(event.target.value);
+                 <input type="password" value={password}  name="password" onChange={(event)=> {
+                        setPassword(event.target.value);
 
 
                 }}    />
 
         </div>
-        {
-                rol === "conductor" &&(
-                <>
-                <div className="campo">
-                        
-                    <label htmlFor="marca">Marca:</label>
-                     <input value={nombre} onChange={(event)=> {
-                        setNombre(event.target.value);
-
-
-                }}    />
-
-                    </div>
-
-                    <div className="campo">
-                            <label htmlFor="modelo">Modelo:</label>
-                             <input value={nombre} onChange={(event)=> {
-                        setNombre(event.target.value);
-
-
-                }}    />
-
-                    </div>
-
-                    <div className="campo">
-                            <label htmlFor="color">Color:</label>
-                             <input value={nombre} onChange={(event)=> {
-                        setNombre(event.target.value);
-
-
-                }}    />
-
-                    </div>
-
-                    <div className="campo">
-                            <label htmlFor="placa">Placa:</label>
-                             <input value={nombre} onChange={(event)=> {
-                        setNombre(event.target.value);
-
-
-                }}    />
-
-                    </div>
-
-                    <div className="campo">
-                            <label htmlFor="foto_carro">Foto Carro:</label>
-                             <input value={nombre} onChange={(event)=> {
-                        setNombre(event.target.value);
-
-
-                }}    />
-
-                    </div>
-                </>     
-
-                )
-        }
-
-
-       
-
+        
 
          <div className="registro-botones">
-          <button>
-                <span className="editarBoton"></span> Editando...
-          </button>
+               
+                <button type="button"  onClick={guardarCambios}>Guardar</button>
+               
+          
           <button type="button" className="cancelar" onClick={handleCancel}>
             Cancelar
           </button>

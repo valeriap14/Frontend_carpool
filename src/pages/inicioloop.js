@@ -17,6 +17,9 @@ function InicioLoop() {
     navigate('/');
   };
 
+
+  
+
   return (
     <div className="inicio-loop-container">
       <header className="inicio-loop-header">
@@ -44,6 +47,9 @@ function InicioLoop() {
             </button>
             <button className="inicio-loop-nav-item" onClick={() => navigate('/mis-viajes')}>
               <FaRoad /> Mis Viajes
+            </button>
+            <button className="inicio-loop-nav-item" onClick={() => navigate('/editarUsuario')}>
+              <FaRoad /> Editar Perfil
             </button>
           </aside>
         )}
