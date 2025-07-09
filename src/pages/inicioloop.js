@@ -39,7 +39,7 @@ function InicioLoop() {
       <div className="inicio-loop-contenido-principal">
         {sidebarOpen && (
           <aside className="inicio-loop-sidebar">
-            <button className="inicio-loop-nav-item" onClick={() => navigate('/publicar-viaje')}>
+            <button className="inicio-loop-nav-item" onClick={() => navigate('/Viajes')}>
               <FaCarSide /> Publicar Viaje
             </button>
             <button className="inicio-loop-nav-item" onClick={() => navigate('/mis-viajes')}>
