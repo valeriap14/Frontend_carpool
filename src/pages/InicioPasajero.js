@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaBell, FaUserCircle, FaBars, FaTimes, FaSearch, FaCarSide, FaRoad } from 'react-icons/fa';
-import '../styles/inicioloop.css';
+import '../styles/InicioConductor.css';
 import loopLogo from '../assets/loop.png'; 
 
 function InicioLoop() {

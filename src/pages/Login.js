@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 import loopLogo from '../assets/loop.png';
-import api from '../api/api'; 
+import api from '../api/api';
+
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
@@ -22,17 +23,16 @@ function Login() {
 
     return newErrors;
   };
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+  e.preventDefault();
+  const validationErrors = validate();
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
 
-    setErrors({});
-    setServerError('');
+  setErrors({});
+  setServerError('');
 
   try {
     const response = await api.post('usuarios/inicioSesion', {
@@ -41,33 +41,50 @@ function Login() {
     });
 
     const { usuario } = response.data;
+    console.log("Usuario recibido:", usuario); // 👈 Mover aquí
 
-    //localStorage.setItem('token', token); 
-    //localStorage.setItem('usuario', JSON.stringify(usuario));
+    const rolNombre = usuario.Rol?.nombre;
 
-    navigate('/inicioloop', {
-      state: {
-        mensaje: `¡Bienvenido, ${usuario.nombre}!`
-      }
-    });
+    if (!rolNombre) {
+      setServerError('Rol de usuario no reconocido.');
+      return;
+    }
 
-  } catch (error) {
-    if (error.response) {
-      const status = error.response.status;
-      const apiErrors = error.response.data.errors || {};
+    localStorage.setItem('usuario', JSON.stringify({
+      id: usuario.id,
+      nombre: usuario.nombre,
+      rol: rolNombre
+    }));
 
-      if (status === 404 && apiErrors.correo) {
-        setErrors(prev => ({ ...prev, email: apiErrors.correo }));
-      } else if (status === 401 && apiErrors.contrasena) {
-        setErrors(prev => ({ ...prev, password: apiErrors.contrasena }));
+    if (rolNombre === 'Conductor') {
+      navigate('/inicioconductor', {
+        state: { mensaje: `¡Bienvenido, ${usuario.nombre}!` }
+      });
+    } else if (rolNombre === 'Pasajero') {
+      navigate('/iniciopasajero', {
+        state: { mensaje: `¡Bienvenido, ${usuario.nombre}!` }
+      });
+    } else {
+      setServerError('Rol de usuario no reconocido.');
+    }
+
+    } catch (error) {
+      if (error.response) {
+        const status = error.response.status;
+        const apiErrors = error.response.data.errors || {};
+
+        if (status === 404 && apiErrors.correo) {
+          setErrors(prev => ({ ...prev, email: apiErrors.correo }));
+        } else if (status === 401 && apiErrors.contrasena) {
+          setErrors(prev => ({ ...prev, password: apiErrors.contrasena }));
+        } else {
+          setServerError('Ocurrió un error. Intenta más tarde.');
+        }
       } else {
         setServerError('Ocurrió un error. Intenta más tarde.');
       }
-    } else {
-      setServerError('Ocurrió un error. Intenta más tarde.');
     }
-  }
-};
+  };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -75,7 +92,7 @@ function Login() {
   };
 
   const handleCancel = () => {
-    navigate('/'); 
+    navigate('/');
   };
 
   const handleForgotPassword = () => {
@@ -88,9 +105,9 @@ function Login() {
         <form className="registro-form" onSubmit={handleSubmit}>
           <div className="registro-header">
             <div className="form-logo-container">
-              <img 
-                src={loopLogo || "/placeholder.svg"} 
-                alt="Loop Logo" 
+              <img
+                src={loopLogo || "/placeholder.svg"}
+                alt="Loop Logo"
                 className="form-loop-logo-img"
               />
             </div>
@@ -123,10 +140,10 @@ function Login() {
                 placeholder="*************"
               />
               {errors.password && <span className="error">{errors.password}</span>}
-              
+
               <div className="forgot-password-container">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="forgot-password-link"
                   onClick={handleForgotPassword}
                 >
