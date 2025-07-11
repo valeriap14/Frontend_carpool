@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 import loopLogo from '../assets/loop.png';
 import api from '../api/api';
+import { AuthContext } from '../context/AuthContext';
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
   const navigate = useNavigate();
+   const {inicioDatos } = useContext(AuthContext);
 
   const validate = () => {
     const newErrors = {};
@@ -42,7 +44,7 @@ function Login() {
 
     const { usuario } = response.data;
     console.log("Usuario recibido:", usuario); 
-
+    inicioDatos(usuario);
     const rolNombre = usuario.Rol?.nombre;
 
     if (!rolNombre) {

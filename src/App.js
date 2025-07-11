@@ -5,6 +5,7 @@ import RegistrarUsuario from "./pages/RegistrarUsuario";
 import Login from "./pages/Login";
 import InicioConductor from "./pages/InicioConductor";
 import InicioPasajero from './pages/InicioPasajero';
+import EditarUsuario from "./pages/editarUsuario";
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/inicioconductor" element={<InicioConductor />} />
         <Route path="/iniciopasajero" element={<InicioPasajero />} />
-
+        <Route path="/editarUsuario" element={<EditarUsuario />} />
       </Routes>
 
        

@@ -61,7 +61,7 @@ function InicioConductor() {
               <button className="nav-btn-activar" onClick={toggleModal}><FaCar className="nav-icon" /> Activar Viaje</button>
               <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
               <button className="nav-btn"><FaMoneyBill className="nav-icon" /> Mis Ganancias</button>
-              <button className="nav-btn"><FaUserCircle className="nav-icon" /> Editar Perfil</button>
+              <button className="nav-btn"  onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>
               <button className="nav-btn"><FaQuestionCircle className="nav-icon" /> Ayuda</button>
             </nav>
           </aside>
