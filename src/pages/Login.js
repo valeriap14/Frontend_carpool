@@ -41,7 +41,7 @@ function Login() {
     });
 
     const { usuario } = response.data;
-    console.log("Usuario recibido:", usuario); // 👈 Mover aquí
+    console.log("Usuario recibido:", usuario); 
 
     const rolNombre = usuario.Rol?.nombre;
 
