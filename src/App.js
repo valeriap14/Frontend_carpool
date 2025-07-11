@@ -3,7 +3,6 @@ import Inicio from "./pages/Inicio";
 import RegistrarUsuario from "./pages/RegistrarUsuario";
 import Login from "./pages/Login";
 import InicioConductor from "./pages/InicioConductor";
-import PublicarViaje from './pages/PublicarViaje';
 import InicioPasajero from './pages/InicioPasajero';
 
 
@@ -14,7 +13,6 @@ function App() {
         <Route path="/" element={<Inicio />} />
         <Route path="/registrarusuario" element={<RegistrarUsuario />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/publicarviaje" element={<PublicarViaje />} />
         <Route path="/inicioconductor" element={<InicioConductor />} />
         <Route path="/iniciopasajero" element={<InicioPasajero />} />
 

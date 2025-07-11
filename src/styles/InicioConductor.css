@@ -1,117 +1,328 @@
-.inicio-loop-container {
-  font-family: Arial, sans-serif;
-  height: 100vh;
+.inicio-conductor-container {
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
 }
 
-.inicio-loop-header {
-  background-color: #d1eaff;
+.main-content-container {
+  display: flex;
+  flex: 1;
+}
+
+.content-area, .content-area-fixed {
+  flex: 1;
+  padding: 2rem;
+  background-color: white;
+  min-height: 100vh;
+}
+
+.content-area-fixed {
+  margin-left: 250px;
+}
+
+.inicio-conductor-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 1rem;
+  padding: 1rem 2rem;
+  background-color: #000;
+  color: white;
 }
 
-.inicio-loop-logo-container {
-  display: flex;
-  align-items: center;
-}
-
-.inicio-loop-menu-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
-  cursor: pointer;
-}
-
-.inicio-loop-logo-text {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.inicio-loop-acciones-header {
+.header-left, .header-right {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.inicio-loop-icono-notificacion,
-.inicio-loop-icono-usuario {
-  font-size: 1.5rem;
-  cursor: pointer;
+.logo-text {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-left: 1rem;
 }
 
-.inicio-loop-cerrar-sesion {
+.menu-toggle {
   background: none;
   border: none;
-  font-weight: bold;
-  color: #000;
+  color: white;
+  font-size: 1.2rem;
   cursor: pointer;
 }
 
-.inicio-loop-contenido-principal {
-  display: flex;
-  flex: 1;
+.icon-notification, .icon-profile {
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
 }
 
-.inicio-loop-sidebar {
-  width: 200px;
-  background-color: #f0f8ff;
-  padding: 1rem;
+.logout-btn {
+  background-color: #C080C0;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #A060A0;
+}
+
+.sidebar, .sidebar-fixed {
+  width: 250px;
+  background-color: #2d2d2d;
+  color: white;
+  padding: 1rem 0;
+  position: relative;
+}
+
+.sidebar-fixed {
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1rem;
+}
+
+.nav-btn, .nav-btn-activar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.nav-btn:hover, .nav-btn-activar:hover {
+  background-color: #3d3d3d;
+}
+
+.nav-btn-activar {
+  background-color: #a1dab4;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.nav-btn-activar:hover {
+  background-color: #74a068;
+  transform: translateY(-2px);
+}
+
+.nav-btn.active {
+  background-color: #C080C0;
+}
+
+.nav-icon {
+  font-size: 1.2rem;
+}
+
+.search-container {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #777;
+}
+
+.viajes-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.inicio-loop-nav-item {
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  color: #000;
+.section-title {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
-.inicio-loop-main-content {
-  flex: 1;
-  padding: 2rem;
-  position: relative;
+.viaje-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
 }
 
-.inicio-loop-buscador-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
+.viaje-card:hover {
+  transform: translateY(-2px);
 }
 
-.inicio-loop-input-busqueda {
-  width: 100%;
-  padding: 0.5rem 1rem;
-  border-radius: 15px;
-  border: 1px solid #aaa;
-}
-
-.inicio-loop-icono-busqueda {
-  margin-left: -2rem;
+.viaje-destino {
+  color: #C080C0;
+  margin-bottom: 0.5rem;
   font-size: 1.2rem;
-  cursor: pointer;
-  color: #555;
 }
 
-.inicio-loop-contenido-central {
+.viaje-punto {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.viaje-btn {
+  background-color: #C080C0;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.viaje-btn:hover {
+  background-color: #A060A0;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60%;
+  z-index: 1000;
 }
 
-.inicio-loop-imagen-central {
-  width: 150px;
-  height: auto;
-  opacity: 0.8;
+.modal-container {
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
 }
 
+.modal-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+  color: #C080C0;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-header h3 {
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: normal;
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group h4 {
+  margin-bottom: 0.8rem;
+  color: #333;
+}
+
+.destino-options, .hora-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.destino-option, .hora-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.destino-option:hover, .hora-option:hover {
+  background-color: #e9e9e9;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.number-input, .descripcion-input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.descripcion-input {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.confirm-btn {
+  background-color: #C080C0;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.confirm-btn:hover {
+  background-color: #A060A0;
+  transform: translateY(-2px);
+}

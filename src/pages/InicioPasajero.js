@@ -4,7 +4,7 @@ import { FaBell, FaUserCircle, FaBars, FaTimes, FaSearch, FaCarSide, FaRoad } fr
 import '../styles/InicioConductor.css';
 import loopLogo from '../assets/loop.png'; 
 
-function InicioLoop() {
+function InicioPasajero() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
 
@@ -71,4 +71,4 @@ function InicioLoop() {
   );
 }
 
-export default InicioLoop;
+export default InicioPasajero;
