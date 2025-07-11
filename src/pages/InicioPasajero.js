@@ -17,6 +17,9 @@ function InicioPasajero() {
     navigate('/');
   };
 
+
+  
+
   return (
     <div className="inicio-loop-container">
       <header className="inicio-loop-header">
@@ -39,11 +42,14 @@ function InicioPasajero() {
       <div className="inicio-loop-contenido-principal">
         {sidebarOpen && (
           <aside className="inicio-loop-sidebar">
-            <button className="inicio-loop-nav-item" onClick={() => navigate('/publicar-viaje')}>
+            <button className="inicio-loop-nav-item" onClick={() => navigate('/Viajes')}>
               <FaCarSide /> Publicar Viaje
             </button>
             <button className="inicio-loop-nav-item" onClick={() => navigate('/mis-viajes')}>
               <FaRoad /> Mis Viajes
+            </button>
+            <button className="inicio-loop-nav-item" onClick={() => navigate('/editarUsuario')}>
+              <FaRoad /> Editar Perfil
             </button>
           </aside>
         )}

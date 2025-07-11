@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Inicio from "./pages/Inicio";
 import RegistrarUsuario from "./pages/RegistrarUsuario";
@@ -17,6 +18,9 @@ function App() {
         <Route path="/iniciopasajero" element={<InicioPasajero />} />
 
       </Routes>
+
+       
+        
     </Router>
   );
 }

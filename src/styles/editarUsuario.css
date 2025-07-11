@@ -1,0 +1,23 @@
+
+  container {
+   
+    padding: 16;
+    border: '1px solid #ccc';
+   
+}
+  imageBox {
+    width: '100%';
+    height: 200;
+    overflow: 'hidden';
+   
+ }
+  image {
+    width: '100%';
+    height: '100%';
+  
+ }
+  buttons{
+   
+    display: 'flex';
+   
+  }
