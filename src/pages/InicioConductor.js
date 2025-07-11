@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaBell, FaUserCircle, FaBars, FaTimes, FaSearch, FaCarSide, FaRoad } from 'react-icons/fa';
-import '../styles/inicioloop.css';
+import '../styles/InicioConductor.css';
 import loopLogo from '../assets/loop.png'; 
 
 function InicioLoop() {
@@ -16,9 +16,6 @@ function InicioLoop() {
     localStorage.clear();
     navigate('/');
   };
-
-
-  
 
   return (
     <div className="inicio-loop-container">
@@ -42,14 +39,11 @@ function InicioLoop() {
       <div className="inicio-loop-contenido-principal">
         {sidebarOpen && (
           <aside className="inicio-loop-sidebar">
-            <button className="inicio-loop-nav-item" onClick={() => navigate('/Viajes')}>
+            <button className="inicio-loop-nav-item" onClick={() => navigate('/PublicarViaje')}>
               <FaCarSide /> Publicar Viaje
             </button>
             <button className="inicio-loop-nav-item" onClick={() => navigate('/mis-viajes')}>
               <FaRoad /> Mis Viajes
-            </button>
-            <button className="inicio-loop-nav-item" onClick={() => navigate('/editarUsuario')}>
-              <FaRoad /> Editar Perfil
             </button>
           </aside>
         )}

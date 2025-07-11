@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
+
 import { useState, useRef, useEffect, useCallback, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useForm } from 'react-hook-form';
@@ -14,7 +14,8 @@ import '../styles/editarUsuario.css';
 function editarUsuario(){
 
         const { usuario, inicioDatos} = useContext(AuthContext);
-
+        const [password, setPassword] = useState();
+        const [parametros, setParametro] = useState(false);
         const navigate = useNavigate;
 
         const [formulario, setFormulario] = useState ({
@@ -53,6 +54,7 @@ function editarUsuario(){
                                 apellido: formulario.apellido,
                                 telefono: formulario.telefono
                 });
+
                         
                         alert("Se guardaron cambios");
                 }catch(error){
@@ -63,15 +65,20 @@ function editarUsuario(){
         };
 
    
-    const [password, setPassword] = useState();
+    
    
   
 
     const handleCancel = () => {
   
-    navigate('/inicioloop');
-  };
+        navigate('/inicioloop');
+        };
 
+  
+        const cambioContra = () =>{
+                setParametro(!parametros);
+                
+        }
   
   
 
@@ -104,9 +111,13 @@ function editarUsuario(){
                  <input name="telefono" value={formulario.telefono} onChange={handleChange}    />
 
         </div>
-
         <div className="campo">
-                <label htmlFor="password">Contraseña:</label>
+                <button type="button"  onClick={cambioContra}>CambiarContraseña</button>
+        </div>
+
+        {parametros && (
+                <div className="campo">
+                <label htmlFor="password">Ingrese contraseña nueva:</label>
                  <input type="password" value={password}  name="password" onChange={(event)=> {
                         setPassword(event.target.value);
 
@@ -114,6 +125,11 @@ function editarUsuario(){
                 }}    />
 
         </div>
+
+
+        )
+        }
+        
         
 
          <div className="registro-botones">
@@ -121,7 +137,7 @@ function editarUsuario(){
                 <button type="button"  onClick={guardarCambios}>Guardar</button>
                
           
-          <button type="button" className="cancelar" onClick={handleCancel}>
+          <button type="button" className="cancelar" onClick={() => navigate('/inicioloop')}>
             Cancelar
           </button>
         </div>
