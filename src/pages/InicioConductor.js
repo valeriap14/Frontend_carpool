@@ -57,8 +57,8 @@ function InicioConductor() {
         {sidebarOpen && (
           <aside className="sidebar">
             <nav className="sidebar-nav">
-              <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
               <button className="nav-btn-activar" onClick={toggleModal}><FaCar className="nav-icon" /> Activar Viaje</button>
+              <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
               <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
               <button className="nav-btn"><FaMoneyBill className="nav-icon" /> Mis Ganancias</button>
               <button className="nav-btn"  onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>

@@ -49,6 +49,20 @@ function RegistrarUsuario() {
     placa: { valido: true, mensaje: '' }
   });
 
+const [campusList, setCampusList] = useState([]);
+
+useEffect(() => {
+  const fetchCampus = async () => {
+    try {
+      const response = await api.get('campus');
+      setCampusList(response.data);
+    } catch (err) {
+      console.error('Error al cargar los campus:', err);
+    }
+  };
+  fetchCampus();
+}, []);
+
   useEffect(() => {
     return () => {
       [fotoPerfilPreview, fotoCarnetPreview, licenciaPreview, fotoCarroPreview].forEach(preview => {
@@ -144,7 +158,7 @@ function RegistrarUsuario() {
       formData.append('contrasena', data.password);
       formData.append('role_id', rol === 'conductor' ? '2' : '1');
       formData.append('telefono', data.telefono.trim());
-      formData.append('campus', data.campus);
+      formData.append('campus_id', data.campus_id);
       formData.append('fotoPerfil', data.fotoPerfil);
       formData.append('fotoCarnet', data.fotoCarnet);
 
@@ -396,30 +410,26 @@ function RegistrarUsuario() {
               <span className="error">{errors.telefono.message}</span>
             )}
           </div>
+
           <div className="campo">
-            <label htmlFor="campus">Campus Universitario:</label>
+            <label htmlFor="campus_id">Campus Universitario:</label>
             <select
-              id="campus"
-              {...register("campus", {
+              id="campus_id"
+              {...register("campus_id", {
                 required: 'Debes seleccionar un campus universitario'
               })}
               defaultValue=""
             >
-              <option value="" disabled> Selecciona el campus </option>
-              <option value="Ciudad Universitaria (Tegucigalpa)">Ciudad Universitaria (Tegucigalpa)</option>
-              <option value="UNAH-Valle de Sula (San Pedro Sula)">UNAH-Valle de Sula (San Pedro Sula)</option>
-              <option value="UNAH-La Ceiba">UNAH-La Ceiba</option>
-              <option value="UNAH-Comayagua">UNAH-Comayagua</option>
-              <option value="UNAH-Copán">UNAH-Copán</option>
-              <option value="UNAH-Choluteca">UNAH-Choluteca</option>
-              <option value="UNAH-Juticalpa">UNAH-Juticalpa</option>
-              <option value="UNAH-Valle del Aguán">UNAH-Valle del Aguán</option>
-              <option value="Centro Tecnológico UNAH-Danli">Centro Tecnológico UNAH-Danli</option>
+              <option value="" disabled>Selecciona el campus</option>
+              {campusList.map(campus => (
+                <option key={campus.id} value={campus.id}>{campus.nombre}</option>
+              ))}
             </select>
-            {errors.campus && (
-              <span className="error">{errors.campus.message}</span>
+            {errors.campus_id && (
+              <span className="error">{errors.campus_id.message}</span>
             )}
           </div>
+
 
           <div className="campo campo-imagen">
             <label htmlFor="fotoPerfil">Foto de Perfil:</label>
