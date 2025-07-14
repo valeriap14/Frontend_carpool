@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import api from '../api/api';
 import '../styles/RegistrarUsuario.css';
 import loopLogo from '../assets/loop.png';
-import camara from '../assets/camara.jpg';
+import camara from '../assets/editar.png';
 import '../styles/editarUsuario.css';
 import ImagenPerfil from '../pages/fotoPerfil';
 import ImagenCarnet from '../pages/fotoCarnet';
@@ -56,7 +56,7 @@ function EditarUsuario() {
     formData.append("fotoPerfil", file); 
 
     try {
-      const response = await api.put(`usuarios/actualizarFotoPerfil/10`, formData, {
+      const response = await api.put(`usuarios/actualizarFotoPerfil/${usuario.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
@@ -83,7 +83,7 @@ function EditarUsuario() {
     formData.append("fotoCarnet", file); 
 
     try {
-      const response = await api.put(`usuarios/actualizarFotoCarnet/10`, formData, {
+      const response = await api.put(`usuarios/actualizarFotoCarnet/${usuario.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
@@ -110,12 +110,12 @@ function EditarUsuario() {
 //${usuario.correo}
   const guardarCambios = async (datos) => {
     try {
-      const response = await api.put(`usuarios/actualizacion/maria@unah.hn`, {
+      const response = await api.put(`usuarios/actualizacion/${usuario.correo}`, {
         telefono: datos.telefono
       });
 
        if (datos.password) {
-      await api.put(`usuarios/actualizacionContra/maria@unah.hn`, {
+      await api.put(`usuarios/actualizacionContra/${usuario.correo}`, {
         contrasena: datos.password
       });
       alert("Contraseña actualizada.");
