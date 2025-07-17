@@ -1,53 +1,126 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext,useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { FaUserCircle } from 'react-icons/fa';
-
+import { useForm } from 'react-hook-form';
 import api from '../api/api';
 import '../styles/RegistrarUsuario.css';
+import loopLogo from '../assets/loop.png';
+import camara from '../assets/editar.png';
 import '../styles/editarUsuario.css';
+import ImagenPerfil from '../pages/fotoPerfil';
+import ImagenCarnet from '../pages/fotoCarnet';
 
 function EditarUsuario() {
   const { usuario } = useContext(AuthContext);
   const [password, setPassword] = useState('');
-  const [parametros, setParametro] = useState(false);
-  const [modoEdicion, setModoEdicion] = useState(null);
   const navigate = useNavigate();
+   const inputPerfilRef = useRef(null);
+  const [imagenPerfil, setImagenPerfil] = useState(null);
+     const inputCarnetRef = useRef(null);
+  const [carnet, setCarnet] = useState(null);
+   const {
+       register,
+       handleSubmit,
+     
+       setValue,
+       formState: { errors, isValid }
+     } = useForm({ mode: 'onChange' });
 
-  const [formulario, setFormulario] = useState({
-    nombre: '',
-    apellido: '',
-    telefono: ''
-  });
+
+ 
 
   useEffect(() => {
     if (usuario) {
-      setFormulario({
-        nombre: usuario.nombre,
-        apellido: usuario.apellido,
-        telefono: usuario.telefono
-      });
-    }
-  }, [usuario]);
+      
+    setValue("nombre", usuario.nombre || "");
+    setValue("apellido", usuario.apellido || "");
+    setValue("telefono", usuario.telefono || "");
+    setValue("password", "");
+     }
+}, [usuario, setValue]);
 
-  const handleChange = (e) => {
-    if (modoEdicion === null || modoEdicion === 'info') {
-      setModoEdicion('info');
-      const { name, value } = e.target;
-      setFormulario((prev) => ({
-        ...prev,
-        [name]: value
-      }));
+
+ 
+
+  const handleClickImagenPerfil = () => {
+    if (inputPerfilRef.current) {
+      inputPerfilRef.current.click();
     }
   };
 
-  const guardarCambios = async () => {
+  const handleImagenPerfilChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("fotoPerfil", file); 
+
+    try {
+      const response = await api.put(`usuarios/actualizarFotoPerfil/${usuario.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+
+      if (response.status === 200) {
+        setImagenPerfil(URL.createObjectURL(file));
+      }
+
+      setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+    } catch (error) {
+      console.error("Error al subir imagen:", error);
+      alert("Error al subir la imagen.");
+    }
+  };
+
+  const preCarnet = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("fotoCarnet", file); 
+
+    try {
+      const response = await api.put(`usuarios/actualizarFotoCarnet/${usuario.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+
+      if (response.status === 200) {
+        setCarnet(URL.createObjectURL(file));
+      }
+
+      setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+    } catch (error) {
+      console.error("Error al subir imagen:", error);
+      alert("Error al subir la imagen.");
+    }
+  };
+  const clickCarnet = () => {
+    if (inputCarnetRef.current) {
+      inputCarnetRef.current.click();
+    }
+  };
+    
+//${usuario.correo}
+  const guardarCambios = async (datos) => {
     try {
       const response = await api.put(`usuarios/actualizacion/${usuario.correo}`, {
-        nombre: formulario.nombre,
-        apellido: formulario.apellido,
-        telefono: formulario.telefono
+        telefono: datos.telefono
       });
+
+       if (datos.password) {
+      await api.put(`usuarios/actualizacionContra/${usuario.correo}`, {
+        contrasena: datos.password
+      });
+      alert("Contraseña actualizada.");
+    }
+
 
       if (response) {
         if (usuario.rolNombre === 'Conductor') {
@@ -63,7 +136,7 @@ function EditarUsuario() {
         }
       }
 
-      setModoEdicion(null);
+
       alert('Se guardaron cambios');
     } catch (error) {
       console.error('error al actualizar:', error);
@@ -82,78 +155,104 @@ function EditarUsuario() {
     } else {
       alert('Rol de usuario no reconocido.');
     }
-    setModoEdicion(null);
-    setParametro(false);
+    
     setPassword('');
   };
 
-  const cambioContra = () => {
-    if (modoEdicion === null || modoEdicion === 'password') {
-      setModoEdicion('password');
-      setParametro(!parametros);
-    }
-  };
+  
+
+   if (!usuario) {
+    return <p>Cargando datos del usuario...</p>;
+  }
 
   return (
     <main className="registro-container">
-      <form className="registro-form">
-        <h1>Editar Datos</h1>
+      <form className="registro-form" onSubmit={handleSubmit(guardarCambios)}>
 
-        <div>
-          <FaUserCircle className="icon-profile" />
+         <div className="registro-logo-container">
+          <img src={loopLogo} alt="Loop Logo" className="registro-loop-logo-img" />
         </div>
-        <div className="campo">
-          <label htmlFor="nombre">Nombre:</label>
-          <input
-            name="nombre"
-            value={formulario.nombre}
-            onChange={handleChange}
-            disabled={modoEdicion === 'password'}
-          />
+          <h1 className="edit-profile-title">Editar Perfil</h1>
+
+    <div  className='avatar-wrapper'>
+      
+              <ImagenPerfil id={usuario.id} tamaño={120} />
+
+                <input
+                type="file"
+                accept="image/*"
+                ref={inputPerfilRef}
+                onChange={handleImagenPerfilChange}
+                style={{ display: "none" }}
+              />
+               <button
+              size="sm"
+              variant="outline"
+              className="camera-button"
+            > 
+              <img src={camara} className="camera-icon"  onClick={handleClickImagenPerfil}/>
+
+            </button>
         </div>
 
-        <div className="campo">
-          <label htmlFor="apellido">Apellidos:</label>
-          <input
-            name="apellido"
-            value={formulario.apellido}
-            onChange={handleChange}
-            disabled={modoEdicion === 'password'}
-          />
+
+      <div className='document'>
+        
+            <ImagenCarnet id={usuario.id}/>
+            <input
+                type="file"
+                accept="image/*"
+                ref={inputCarnetRef}
+                onChange={preCarnet}
+                style={{ display: "none" }}
+              />
+
+            <button
+                    size="sm"
+                    variant="outline"
+                    className="camera-button"
+                  > 
+                    <img src={camara} className="camera-icon" onClick={clickCarnet}/>
+
+                  </button>
         </div>
+ 
 
         <div className="campo">
           <label htmlFor="telefono">Telefono:</label>
-          <input
-            name="telefono"
-            value={formulario.telefono}
-            onChange={handleChange}
-            disabled={modoEdicion === 'password'}
-          />
+         <input
+              type="text"
+              {...register("telefono", {
+                required: "Teléfono es requerido",
+                pattern: {
+                  value: /^\d{4}-\d{4}$/,
+                  message: "Formato inválido (Ej: 9876-1234)"
+                }
+              })}
+            />
+              {errors.telefono && <p>{errors.telefono.message}</p>}
         </div>
-        <div className="campo">
-          <button type="button" onClick={cambioContra} disabled={modoEdicion === 'info'}>
-            CambiarContraseña
-          </button>
-        </div>
+       
 
-        {parametros && (
+    
           <div className="campo">
             <label htmlFor="password">Ingrese contraseña nueva:</label>
             <input
-              type="password"
-              value={password}
-              name="password"
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
-            />
+                type="password"
+                {...register("password", {
+                  validate: (value) =>
+                    !value || value.length >= 8 || "La contraseña debe tener al menos 8 caracteres"
+                })}
+              />
+              {errors.password && <p>{errors.password.message}</p>}
           </div>
-        )}
+        
 
         <div className="registro-botones">
-          <button type="button" onClick={guardarCambios}>
-            Guardar
+           <button
+            type="submit"
+          >
+          Guardar
           </button>
           <button type="button" className="cancelar" onClick={handleCancel}>
             Cancelar

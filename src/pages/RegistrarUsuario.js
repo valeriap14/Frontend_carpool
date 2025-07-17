@@ -159,6 +159,7 @@ useEffect(() => {
       formData.append('role_id', rol === 'conductor' ? '2' : '1');
       formData.append('telefono', data.telefono.trim());
       formData.append('campus_id', data.campus_id);
+      formData.append('direccion_casa', data.direccion_casa.trim());
       formData.append('fotoPerfil', data.fotoPerfil);
       formData.append('fotoCarnet', data.fotoCarnet);
 
@@ -430,6 +431,21 @@ useEffect(() => {
             )}
           </div>
 
+          <div className="campo">
+            <label htmlFor="direccion_casa">Dirección de Domicilio:</label>
+            <input
+              id="direccion_casa"
+              type="text"
+              placeholder="Ejm: Residencial Honduras"
+              {...register("direccion_casa", {
+                required: "La dirección es requerida",
+                validate: value => value.trim().length > 0 || "La dirección no puede estar vacía"
+              })}
+            />
+            {errors.direccion_casa && (
+              <span className="error">{errors.direccion_casa.message}</span>
+            )}
+          </div>
 
           <div className="campo campo-imagen">
             <label htmlFor="fotoPerfil">Foto de Perfil:</label>
