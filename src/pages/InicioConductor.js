@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {FaBell, FaUserCircle, FaBars, FaTimes,FaCar, FaHome, FaRoute, FaMoneyBill, FaQuestionCircle} from 'react-icons/fa';
+import {FaBell, FaUserCircle, FaBars, FaTimes, FaCar,FaHome, FaRoute, FaMoneyBill, FaQuestionCircle} from 'react-icons/fa';
 import '../styles/InicioConductor.css';
+import loopLogo from '../assets/loop.png'; 
 
 function InicioConductor() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
-
+  const [showDireccionModal, setShowDireccionModal] = useState(false);
+  const [direccion, setDireccion] = useState('');
   const [viajeData, setViajeData] = useState({
     destino: '',
     horaSalida: 'Ahora',
@@ -15,6 +16,37 @@ function InicioConductor() {
     precio: 45.00,
     descripcion: ''
   });
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario && !usuario.direccion_domicilio) {
+      setShowDireccionModal(true);
+    }
+  }, []);
+
+  const guardarDireccion = async () => {
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (!direccion.trim()) return alert("La dirección no puede estar vacía");
+
+    try {
+      await fetch(`http://localhost:3000/api/usuarios/${usuario.id}/direccion`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ direccion_domicilio: direccion }),
+      });
+
+      usuario.direccion_domicilio = direccion;
+      localStorage.setItem("usuario", JSON.stringify(usuario));
+      setShowDireccionModal(false);
+    } catch (error) {
+      console.error("Error al guardar dirección:", error);
+    }
+  };
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleModal = () => setShowModal(!showModal);
@@ -61,18 +93,18 @@ function InicioConductor() {
               <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
               <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
               <button className="nav-btn"><FaMoneyBill className="nav-icon" /> Mis Ganancias</button>
-              <button className="nav-btn"  onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>
+              <button className="nav-btn" onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>
               <button className="nav-btn"><FaQuestionCircle className="nav-icon" /> Ayuda</button>
             </nav>
           </aside>
         )}
 
         <main className="content-area-fixed">
-          {/* Contenido principal */}
+          {/* Aquí va el contenido principal */}
         </main>
       </div>
 
-      {/* Modal */}
+      {/* Modal Activar Viaje */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-container">
@@ -131,6 +163,27 @@ function InicioConductor() {
                 <button type="submit" className="confirm-btn">Confirmar y Activar Viaje</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Ingreso de Dirección */}
+      {showDireccionModal && (
+        <div className="modal-overlay">
+          <div className="direccion-modal">
+            <img src={loopLogo} alt="Loop Logo" className="direccion-logo" />
+            <h2 className="direccion-title">Bienvenido</h2>
+            <p className="direccion-subtitle">Ingresa la Dirección de tu Domicilio</p>
+            <input
+              type="text"
+              placeholder="Ejm: Residencial Honduras"
+              value={direccion}
+              onChange={(e) => setDireccion(e.target.value)}
+              className="direccion-input"
+            />
+            <button className="confirm-btn" onClick={guardarDireccion}>
+              Guardar
+            </button>
           </div>
         </div>
       )}

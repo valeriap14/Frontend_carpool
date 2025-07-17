@@ -175,7 +175,7 @@ useEffect(() => {
         formData.append('vehiculo', JSON.stringify(vehiculoData));
       }
 
-      const response = await api.post('/usuarios', formData, {
+      const response = await api.post('usuarios', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
