@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {FaBell, FaUserCircle, FaBars, FaTimes, FaCar,FaHome, FaRoute, FaMoneyBill, FaQuestionCircle} from 'react-icons/fa';
+import {
+  FaBell, FaUserCircle, FaBars, FaTimes, FaCar,
+  FaHome, FaRoute, FaMoneyBill, FaQuestionCircle
+} from 'react-icons/fa';
 import '../styles/InicioConductor.css';
-import loopLogo from '../assets/loop.png'; 
-import MapaRuta from './MapaRuta'; 
-
+import loopLogo from '../assets/loop.png';
+import MapaRuta from './MapaRuta';
+import api from '../api/api'; // ✅ usamos axios configurado
 
 function InicioConductor() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -15,40 +18,44 @@ function InicioConductor() {
     destino: '',
     horaSalida: 'Ahora',
     asientos: 1,
-    precio: 10,   
+    precio: 10,
     descripcion: ''
   });
 
   const navigate = useNavigate();
 
+  // Mostrar modal si no tiene dirección casa
   useEffect(() => {
     const usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (usuario && !usuario.direccion_domicilio) {
+    if (usuario && !usuario.direccion_casa) {
       setShowDireccionModal(true);
     }
   }, []);
 
+
   const guardarDireccion = async () => {
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (!direccion.trim()) return alert("La dirección no puede estar vacía");
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  if (!direccion.trim()) return alert("La dirección no puede estar vacía");
 
-    try {
-      await fetch(`http://localhost:3000/api/usuarios/${usuario.id}/direccion`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ direccion_domicilio: direccion }),
-      });
+  try {
+    await api.post('/ruta', {
+      usuario_id: usuario.id,
+      direccion_casa: direccion
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
 
-      usuario.direccion_domicilio = direccion;
-      localStorage.setItem("usuario", JSON.stringify(usuario));
-      setShowDireccionModal(false);
-    } catch (error) {
-      console.error("Error al guardar dirección:", error);
-    }
-  };
+    usuario.direccion_domicilio = direccion;
+    localStorage.setItem("usuario", JSON.stringify(usuario));
+    setShowDireccionModal(false);
+  } catch (error) {
+    console.error("Error al guardar dirección:", error);
+    alert("Ocurrió un error al guardar la dirección.");
+  }
+};
+  
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleModal = () => setShowModal(!showModal);
@@ -66,7 +73,6 @@ function InicioConductor() {
       if (numValue < 1 || numValue > 3) return;
       setViajeData({ ...viajeData, [name]: numValue });
     } else if (name === 'precio') {
-      // Validar solo enteros positivos para precio
       const intValue = parseInt(value, 10);
       if (isNaN(intValue) || intValue < 1) return;
       setViajeData({ ...viajeData, [name]: intValue });
@@ -114,7 +120,7 @@ function InicioConductor() {
         </div>
       </header>
 
-      {/* Main layout */}
+      {/* Layout principal */}
       <div className="main-content-container">
         {sidebarOpen && (
           <aside className="sidebar">
@@ -129,12 +135,12 @@ function InicioConductor() {
           </aside>
         )}
 
-          <main className="content-area-fixed">
-            <MapaRuta
-              origen={viajeData.destino === 'Hacia la Universidad' ? 'Colonia San Miguel, Tegucigalpa' : 'Ciudad Universitaria, Tegucigalpa'}
-              destino={viajeData.destino === 'Hacia la Universidad' ? 'Ciudad Universitaria, Tegucigalpa' : 'Colonia San Miguel, Tegucigalpa'}
-            />
-          </main>
+        <main className="content-area-fixed">
+          <MapaRuta
+            origen={viajeData.destino === 'Hacia la Universidad' ? 'Colonia San Miguel, Tegucigalpa' : 'Ciudad Universitaria, Tegucigalpa'}
+            destino={viajeData.destino === 'Hacia la Universidad' ? 'Ciudad Universitaria, Tegucigalpa' : 'Colonia San Miguel, Tegucigalpa'}
+          />
+        </main>
       </div>
 
       {/* Modal Activar Viaje */}
@@ -253,6 +259,7 @@ function InicioConductor() {
           <div className="direccion-modal">
             <img src={loopLogo} alt="Loop Logo" className="direccion-logo" />
             <h2 className="direccion-title">Bienvenido</h2>
+            <h4>Crea tu ruta</h4>
             <p className="direccion-subtitle">Ingresa la Dirección de tu Domicilio</p>
             <input
               type="text"
