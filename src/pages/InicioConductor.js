@@ -7,13 +7,19 @@ import {
 import '../styles/InicioConductor.css';
 import loopLogo from '../assets/loop.png';
 import MapaRuta from './MapaRuta';
-import api from '../api/api'; // ✅ usamos axios configurado
+import api from '../api/api'; 
+
+import { FaBell, FaUserCircle, FaCar, FaHome, FaRoute, FaMoneyBill, FaQuestionCircle } from 'react-icons/fa';
+import '../styles/InicioConductor.css';
+import loopLogo from '../assets/loop.png';
+import MapaRuta from './MapaRuta';
+
 
 function InicioConductor() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showDireccionModal, setShowDireccionModal] = useState(false);
   const [direccion, setDireccion] = useState('');
+  const [viajeActivo, setViajeActivo] = useState(false);
   const [viajeData, setViajeData] = useState({
     destino: '',
     horaSalida: 'Ahora',
@@ -57,7 +63,6 @@ function InicioConductor() {
 };
   
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleModal = () => setShowModal(!showModal);
 
   const handleCerrarSesion = () => {
@@ -99,18 +104,25 @@ function InicioConductor() {
       return;
     }
 
-    console.log('Viaje activado:', viajeData);
+    setViajeActivo(true); 
     toggleModal();
+  };
+
+  const desactivarViaje = () => {
+    setViajeActivo(false);
+    setViajeData({
+      destino: '',
+      horaSalida: 'Ahora',
+      asientos: 1,
+      precio: 10,
+      descripcion: ''
+    });
   };
 
   return (
     <div className="inicio-conductor-container">
-      {/* Header */}
       <header className="inicio-conductor-header">
         <div className="header-left">
-          <button className="menu-toggle" onClick={toggleSidebar}>
-            {sidebarOpen ? <FaTimes /> : <FaBars />}
-          </button>
           <h1 className="logo-text">loop</h1>
         </div>
         <div className="header-right">
@@ -121,19 +133,34 @@ function InicioConductor() {
       </header>
 
       {/* Layout principal */}
+
       <div className="main-content-container">
-        {sidebarOpen && (
-          <aside className="sidebar">
-            <nav className="sidebar-nav">
-              <button className="nav-btn-activar" onClick={toggleModal}><FaCar className="nav-icon" /> Activar Viaje</button>
-              <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
-              <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
-              <button className="nav-btn"><FaMoneyBill className="nav-icon" /> Mis Ganancias</button>
-              <button className="nav-btn" onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>
-              <button className="nav-btn"><FaQuestionCircle className="nav-icon" /> Ayuda</button>
-            </nav>
-          </aside>
-        )}
+        <aside className="sidebar-fixed">
+          <nav className="sidebar-nav">
+            <button
+              className="nav-btn-activar"
+              onClick={() => {
+                if (viajeActivo) {
+                  desactivarViaje();
+                } else {
+                  toggleModal();
+                }
+              }}
+              style={{ backgroundColor: viajeActivo ? '#FF7177' : '#a1dab4' }}
+            >
+              <FaCar className="nav-icon" />
+              {viajeActivo ? 'Desactivar Viaje' : 'Activar Viaje'}
+            </button>
+
+
+            <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
+            <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
+            <button className="nav-btn"><FaMoneyBill className="nav-icon" /> Mis Ganancias</button>
+            <button className="nav-btn" onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>
+            <button className="nav-btn"><FaQuestionCircle className="nav-icon" /> Ayuda</button>
+          </nav>
+        </aside>
+
 
         <main className="content-area-fixed">
           <MapaRuta
@@ -150,7 +177,7 @@ function InicioConductor() {
             <div className="modal-header">
               <h2>Loop</h2>
               <h3>¿Hacia Dónde Te Diriges?</h3>
-              <button className="close-modal" onClick={toggleModal}><FaTimes /></button>
+              <button className="close-modal" onClick={toggleModal}>×</button>
             </div>
 
             <form onSubmit={handleSubmit} className="modal-form">
@@ -158,24 +185,20 @@ function InicioConductor() {
                 <h4>Activar Viaje</h4>
                 <div className="destino-options">
                   <label className="destino-option">
-                    <input
-                      type="radio"
+                    <input type="radio"
                       name="destino"
                       value="Hacia la Universidad"
                       onChange={handleInputChange}
                       required
-                      checked={viajeData.destino === 'Hacia la Universidad'}
-                    />
+                      checked={viajeData.destino === 'Hacia la Universidad'} />
                     <span>Hacia la Universidad</span>
                   </label>
                   <label className="destino-option">
-                    <input
-                      type="radio"
+                    <input type="radio"
                       name="destino"
                       value="Hacia Casa"
                       onChange={handleInputChange}
-                      checked={viajeData.destino === 'Hacia Casa'}
-                    />
+                      checked={viajeData.destino === 'Hacia Casa'} />
                     <span>Hacia Casa</span>
                   </label>
                 </div>
@@ -185,23 +208,19 @@ function InicioConductor() {
                 <h4>Hora Aproximada de Salida</h4>
                 <div className="hora-options">
                   <label className="hora-option">
-                    <input
-                      type="radio"
+                    <input type="radio"
                       name="horaSalida"
                       value="Ahora"
                       checked={viajeData.horaSalida === 'Ahora'}
-                      onChange={handleInputChange}
-                    />
+                      onChange={handleInputChange} />
                     <span>Ahora</span>
                   </label>
                   <label className="hora-option">
-                    <input
-                      type="radio"
+                    <input type="radio"
                       name="horaSalida"
                       value="En 5 minutos"
                       checked={viajeData.horaSalida === 'En 5 minutos'}
-                      onChange={handleInputChange}
-                    />
+                      onChange={handleInputChange} />
                     <span>En 5 minutos</span>
                   </label>
                 </div>
@@ -210,27 +229,21 @@ function InicioConductor() {
               <div className="form-row">
                 <div className="form-group">
                   <label>Asientos Disponibles</label>
-                  <input
-                    type="number"
+                  <input type="number"
                     name="asientos"
                     value={viajeData.asientos}
                     onChange={handleInputChange}
-                    min="1"
-                    max="3"
-                    className="number-input"
-                  />
+                    min="1" max="3"
+                    className="number-input" />
                 </div>
                 <div className="form-group">
                   <label>Precio por Asiento (LPS)</label>
-                  <input
-                    type="number"
+                  <input type="number"
                     name="precio"
                     value={viajeData.precio}
                     onChange={handleInputChange}
                     min="1"
-                    step="1"
-                    className="number-input"
-                  />
+                    className="number-input" />
                 </div>
               </div>
 
@@ -240,20 +253,22 @@ function InicioConductor() {
                   name="descripcion"
                   value={viajeData.descripcion}
                   onChange={handleInputChange}
-                  placeholder="Ej. Paso por el Estadio"
                   className="descripcion-input"
+                  placeholder="Ej. Paso por el Estadio"
                 />
               </div>
 
               <div className="modal-actions">
-                <button type="submit" className="confirm-btn">Confirmar y Activar Viaje</button>
+                <button type="submit" className="confirm-btn">
+                  {viajeActivo ? 'Actualizar Viaje' : 'Confirmar y Activar Viaje'}
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* Modal Ingreso de Dirección */}
+      {/* Modal Dirección */}
       {showDireccionModal && (
         <div className="modal-overlay">
           <div className="direccion-modal">
