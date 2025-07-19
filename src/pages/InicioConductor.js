@@ -9,10 +9,7 @@ import loopLogo from '../assets/loop.png';
 import MapaRuta from './MapaRuta';
 import api from '../api/api'; 
 
-import { FaBell, FaUserCircle, FaCar, FaHome, FaRoute, FaMoneyBill, FaQuestionCircle } from 'react-icons/fa';
-import '../styles/InicioConductor.css';
-import loopLogo from '../assets/loop.png';
-import MapaRuta from './MapaRuta';
+
 
 
 function InicioConductor() {
@@ -33,7 +30,7 @@ function InicioConductor() {
   // Mostrar modal si no tiene dirección casa
   useEffect(() => {
     const usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (usuario && !usuario.direccion_casa) {
+    if (usuario && (!usuario.Ruta|| !usuario.Ruta.direccion_casa)) {
       setShowDireccionModal(true);
     }
   }, []);
@@ -53,7 +50,7 @@ function InicioConductor() {
       }
     });
 
-    usuario.direccion_domicilio = direccion;
+    usuario.direccion_casa = direccion;
     localStorage.setItem("usuario", JSON.stringify(usuario));
     setShowDireccionModal(false);
   } catch (error) {
@@ -86,27 +83,68 @@ function InicioConductor() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
 
-    if (viajeData.asientos < 1 || viajeData.asientos > 3) {
-      alert('Los asientos deben estar entre 1 y 3.');
-      return;
-    }
 
-    if (!viajeData.destino) {
-      alert('Por favor selecciona un destino.');
-      return;
-    }
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!Number.isInteger(viajeData.precio) || viajeData.precio < 1) {
-      alert('El precio debe ser un número entero positivo.');
-      return;
-    }
+  // Validaciones básicas
+  if (viajeData.asientos < 1 || viajeData.asientos > 3) {
+    alert('Los asientos deben estar entre 1 y 3.');
+    return;
+  }
 
-    setViajeActivo(true); 
-    toggleModal();
-  };
+  if (!viajeData.destino) {
+    alert('Por favor selecciona un destino.');
+    return;
+  }
+
+  if (!Number.isInteger(viajeData.precio) || viajeData.precio < 1) {
+    alert('El precio debe ser un número entero positivo.');
+    return;
+  }
+
+  // Obtener usuario y token desde localStorage
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const token = localStorage.getItem("token");
+
+  if (!usuario || !usuario.id) {
+    alert("Usuario no autenticado.");
+    return;
+  }
+
+  try {
+    // Preparar el cuerpo de la petición
+    const body = {
+      direccion_seleccionada: viajeData.destino === 'Hacia la Universidad'
+        ? 'hacia_universidad'
+        : 'hacia_casa',
+      hora_salida: viajeData.horaSalida.toLowerCase().replace(/\s/g, '_'), // "ahora" o "en_5_minutos"
+      asientos_disponibles: viajeData.asientos,
+      precio_asiento: viajeData.precio,
+      descripcion: viajeData.descripcion,
+      conductor_id: usuario.id
+    };
+
+    // Enviar solicitud al backend
+    const response = await api.post('/viajes', body, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    // Éxito
+    console.log(' Viaje creado:', response.data);
+    alert(' Viaje activado correctamente');
+
+    setViajeActivo(true);
+    toggleModal(); // Cierra el modal
+
+  } catch (error) {
+    console.error(' Error al crear viaje:', error.response?.data || error.message);
+    alert(' Error al crear viaje: ' + (error.response?.data?.error || error.message));
+  }
+};
 
   const desactivarViaje = () => {
     setViajeActivo(false);
@@ -272,6 +310,14 @@ function InicioConductor() {
       {showDireccionModal && (
         <div className="modal-overlay">
           <div className="direccion-modal">
+
+             {/* Botón X para cerrar */}
+      <button
+        className="close-btn"
+        onClick={() => setShowDireccionModal(false)}
+      >
+        &times;
+      </button>
             <img src={loopLogo} alt="Loop Logo" className="direccion-logo" />
             <h2 className="direccion-title">Bienvenido</h2>
             <h4>Crea tu ruta</h4>
