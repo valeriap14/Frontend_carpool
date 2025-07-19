@@ -187,7 +187,7 @@ function InicioConductor() {
               style={{ backgroundColor: viajeActivo ? '#FF7177' : '#a1dab4' }}
             >
               <FaCar className="nav-icon" />
-              {viajeActivo ? 'Desactivar Viaje' : 'Activar Viaje'}
+              {viajeActivo ? 'Finalizar Viaje' : 'Iniciar Viaje'}
             </button>
 
 
