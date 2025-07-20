@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  FaBell, FaUserCircle, FaBars, FaTimes, FaCar,
+  FaBell, FaUserCircle, FaCar,
   FaHome, FaRoute, FaMoneyBill, FaQuestionCircle
 } from 'react-icons/fa';
 import '../styles/InicioConductor.css';
@@ -28,11 +28,6 @@ function InicioConductor() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (usuario && (!usuario.Ruta|| !usuario.Ruta.direccion_casa)) {
-      setShowDireccionModal(true);
-    }
-
     const verificarViajeActivo = async () => {
       const idGuardado = localStorage.getItem("viaje_id");
       if (idGuardado) {
@@ -49,7 +44,31 @@ function InicioConductor() {
       }
     };
 
+    const obtenerRutaUsuario = async () => {
+      const usuario = JSON.parse(localStorage.getItem("usuario"));
+      const token = localStorage.getItem("token");
+
+      try {
+        const response = await api.get(`/ruta/usuario/${usuario.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (!response.data || !response.data.direccion_casa?.trim()) {
+          setShowDireccionModal(true);
+        } else {
+          setShowDireccionModal(false);
+        }
+
+      } catch (error) {
+        console.error("Error al verificar dirección:", error);
+        setShowDireccionModal(true);
+      }
+    };
+
     verificarViajeActivo();
+    obtenerRutaUsuario();
   }, []);
 
   const guardarDireccion = async () => {
@@ -66,8 +85,6 @@ function InicioConductor() {
         }
       });
 
-      usuario.direccion_casa = direccion;
-      localStorage.setItem("usuario", JSON.stringify(usuario));
       setShowDireccionModal(false);
     } catch (error) {
       console.error("Error al guardar dirección:", error);
@@ -293,7 +310,7 @@ function InicioConductor() {
                     <input type="radio"
                       name="horaSalida"
                       value="En 5 minutos"
-                      checked={viajeData.horaSalida === 'En 5 minutes'}
+                      checked={viajeData.horaSalida === 'En 5 minutos'}
                       onChange={handleInputChange} />
                     <span>En 5 minutos</span>
                   </label>

@@ -430,23 +430,7 @@ useEffect(() => {
               <span className="error">{errors.campus_id.message}</span>
             )}
           </div>
-
-          <div className="campo">
-            <label htmlFor="direccion_casa">Dirección de Domicilio:</label>
-            <input
-              id="direccion_casa"
-              type="text"
-              placeholder="Ejm: Residencial Honduras"
-              {...register("direccion_casa", {
-                required: "La dirección es requerida",
-                validate: value => value.trim().length > 0 || "La dirección no puede estar vacía"
-              })}
-            />
-            {errors.direccion_casa && (
-              <span className="error">{errors.direccion_casa.message}</span>
-            )}
-          </div>
-
+          
           <div className="campo campo-imagen">
             <label htmlFor="fotoPerfil">Foto de Perfil:</label>
             <div className="input-con-x">
@@ -633,7 +617,7 @@ useEffect(() => {
               </div>
 
               <div className="campo">
-                <label htmlFor="modelo">Modelo:</label>
+                <label htmlFor="modelo">Modelo y Año:</label>
                 <input
                   id="modelo"
                   {...register("modelo", {
