@@ -7,16 +7,15 @@ import {
 import '../styles/InicioConductor.css';
 import loopLogo from '../assets/loop.png';
 import MapaRuta from './MapaRuta';
-import api from '../api/api'; 
-
-
-
+import api from '../api/api';   
+import CardViajeEnCurso from '../pages/CardViajeEnCurso';
 
 function InicioConductor() {
   const [showModal, setShowModal] = useState(false);
   const [showDireccionModal, setShowDireccionModal] = useState(false);
   const [direccion, setDireccion] = useState('');
   const [viajeActivo, setViajeActivo] = useState(false);
+  const [viajeId, setViajeId] = useState(null);
   const [viajeData, setViajeData] = useState({
     destino: '',
     horaSalida: 'Ahora',
@@ -24,46 +23,57 @@ function InicioConductor() {
     precio: 10,
     descripcion: ''
   });
+  const [datosViajeActual, setDatosViajeActual] = useState(null); 
 
   const navigate = useNavigate();
 
-  // Mostrar modal si no tiene dirección casa
   useEffect(() => {
     const usuario = JSON.parse(localStorage.getItem("usuario"));
     if (usuario && (!usuario.Ruta|| !usuario.Ruta.direccion_casa)) {
       setShowDireccionModal(true);
     }
 
-    const idGuardado = localStorage.getItem("viaje_id");
-    if (idGuardado){
-      setViajeActivo(true);
-    }
+    const verificarViajeActivo = async () => {
+      const idGuardado = localStorage.getItem("viaje_id");
+      if (idGuardado) {
+        try {
+          const response = await api.get(`/viajes/${idGuardado}`);
+          if (response.data) {
+            setViajeActivo(true);
+            setViajeId(idGuardado);
+            setDatosViajeActual(response.data); 
+          }
+        } catch (error) {
+          console.error("Error al verificar viaje activo:", error);
+        }
+      }
+    };
+
+    verificarViajeActivo();
   }, []);
 
-
   const guardarDireccion = async () => {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  if (!direccion.trim()) return alert("La dirección no puede estar vacía");
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (!direccion.trim()) return alert("La dirección no puede estar vacía");
 
-  try {
-    await api.post('/ruta', {
-      usuario_id: usuario.id,
-      direccion_casa: direccion
-    }, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    });
+    try {
+      await api.post('/ruta', {
+        usuario_id: usuario.id,
+        direccion_casa: direccion
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
 
-    usuario.direccion_casa = direccion;
-    localStorage.setItem("usuario", JSON.stringify(usuario));
-    setShowDireccionModal(false);
-  } catch (error) {
-    console.error("Error al guardar dirección:", error);
-    alert("Ocurrió un error al guardar la dirección.");
-  }
-};
-  
+      usuario.direccion_casa = direccion;
+      localStorage.setItem("usuario", JSON.stringify(usuario));
+      setShowDireccionModal(false);
+    } catch (error) {
+      console.error("Error al guardar dirección:", error);
+      alert("Ocurrió un error al guardar la dirección.");
+    }
+  };
 
   const toggleModal = () => setShowModal(!showModal);
 
@@ -88,111 +98,95 @@ function InicioConductor() {
     }
   };
 
-
-
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  // Validaciones básicas
-  if (viajeData.asientos < 1 || viajeData.asientos > 3) {
-    alert('Los asientos deben estar entre 1 y 3.');
-    return;
-  }
-
-  if (!viajeData.destino) {
-    alert('Por favor selecciona un destino.');
-    return;
-  }
-
-  if (!Number.isInteger(viajeData.precio) || viajeData.precio < 1) {
-    alert('El precio debe ser un número entero positivo.');
-    return;
-  }
-
-
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  const token = localStorage.getItem("token");
-
-  if (!usuario || !usuario.id) {
-    alert("Usuario no autenticado.");
-    return;
-  }
-
-  try {
-    
-    const body = {
-      direccion_seleccionada: viajeData.destino === 'Hacia la Universidad'
-        ? 'hacia_universidad'
-        : 'hacia_casa',
-      hora_salida: viajeData.horaSalida.toLowerCase().replace(/\s/g, '_'), // "ahora" o "en_5_minutos"
-      asientos_disponibles: viajeData.asientos,
-      precio_asiento: viajeData.precio,
-      descripcion: viajeData.descripcion,
-      conductor_id: usuario.id
-    };
-
-    
-    const response = await api.post('/viajes', body, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    
-    
-    console.log(' Viaje creado:', response.data);
-    alert(' Viaje activado correctamente');
-    localStorage.setItem("viaje_id", response.data.viaje.id);
-
-    setViajeActivo(true);
-    toggleModal(); 
-
-  } catch (error) {
-    console.error(' Error al crear viaje:', error.response?.data || error.message);
-    alert(' Error al crear viaje: ' + (error.response?.data?.error || error.message));
-  }
-};
-
- 
-
-const finalizarViaje = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    const viajeId = localStorage.getItem("viaje_id");
-
-    if (!viajeId) {
-      alert("ID del viaje no encontrado.");
+    if (viajeData.asientos < 1 || viajeData.asientos > 3) {
+      alert('Los asientos deben estar entre 1 y 3.');
       return;
     }
 
-    
-    await api.put(`/viajes/finalizar/${viajeId}`, null, {
-      headers: {
-        Authorization: `Bearer ${token}`
+    if (!viajeData.destino) {
+      alert('Por favor selecciona un destino.');
+      return;
+    }
+
+    if (!Number.isInteger(viajeData.precio) || viajeData.precio < 1) {
+      alert('El precio debe ser un número entero positivo.');
+      return;
+    }
+
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const token = localStorage.getItem("token");
+
+    if (!usuario || !usuario.id) {
+      alert("Usuario no autenticado.");
+      return;
+    }
+
+    try {
+      const body = {
+        direccion_seleccionada: viajeData.destino === 'Hacia la Universidad'
+          ? 'hacia_universidad'
+          : 'hacia_casa',
+        hora_salida: viajeData.horaSalida.toLowerCase().replace(/\s/g, '_'),
+        asientos_disponibles: viajeData.asientos,
+        precio_asiento: viajeData.precio,
+        descripcion: viajeData.descripcion,
+        conductor_id: usuario.id
+      };
+
+      const response = await api.post('/viajes', body, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const id = response.data.viaje.id;
+      localStorage.setItem("viaje_id", id);
+      setViajeActivo(true);
+      setViajeId(id);
+      setDatosViajeActual(response.data.viaje); 
+      toggleModal();
+      alert('Viaje activado correctamente');
+    } catch (error) {
+      console.error('Error al crear viaje:', error.response?.data || error.message);
+      alert('Error al crear viaje: ' + (error.response?.data?.error || error.message));
+    }
+  };
+
+  const finalizarViaje = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const viajeId = localStorage.getItem("viaje_id");
+
+      if (!viajeId) {
+        alert("ID del viaje no encontrado.");
+        return;
       }
-    });
 
-  
-    setViajeActivo(false);
-    setViajeData({
-      destino: '',
-      horaSalida: 'Ahora',
-      asientos: 1,
-      precio: 10,
-      descripcion: ''
-    });
+      await api.put(`/viajes/finalizar/${viajeId}`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
-    
-    localStorage.removeItem("viaje_id");
-
-    alert('Viaje finalizado correctamente');
-
-  } catch (error) {
-    console.error('Error al finalizar viaje:', error.response?.data || error.message);
-    alert('Error al finalizar viaje: ' + (error.response?.data?.error || error.message));
-  }
-};
-
+      setViajeActivo(false);
+      setViajeData({
+        destino: '',
+        horaSalida: 'Ahora',
+        asientos: 1,
+        precio: 10,
+        descripcion: ''
+      });
+      setDatosViajeActual(null); 
+      localStorage.removeItem("viaje_id");
+      alert('Viaje finalizado correctamente');
+    } catch (error) {
+      console.error('Error al finalizar viaje:', error.response?.data || error.message);
+      alert('Error al finalizar viaje: ' + (error.response?.data?.error || error.message));
+    }
+  };
 
   return (
     <div className="inicio-conductor-container">
@@ -206,8 +200,6 @@ const finalizarViaje = async () => {
           <button className="logout-btn" onClick={handleCerrarSesion}>Cerrar sesión</button>
         </div>
       </header>
-
-      {/* Layout principal */}
 
       <div className="main-content-container">
         <aside className="sidebar-fixed">
@@ -227,7 +219,6 @@ const finalizarViaje = async () => {
               {viajeActivo ? 'Finalizar Viaje' : 'Iniciar Viaje'}
             </button>
 
-
             <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
             <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
             <button className="nav-btn"><FaMoneyBill className="nav-icon" /> Mis Ganancias</button>
@@ -236,16 +227,24 @@ const finalizarViaje = async () => {
           </nav>
         </aside>
 
-
         <main className="content-area-fixed">
           <MapaRuta
             origen={viajeData.destino === 'Hacia la Universidad' ? 'Colonia San Miguel, Tegucigalpa' : 'Ciudad Universitaria, Tegucigalpa'}
             destino={viajeData.destino === 'Hacia la Universidad' ? 'Ciudad Universitaria, Tegucigalpa' : 'Colonia San Miguel, Tegucigalpa'}
           />
+          {viajeActivo && datosViajeActual && (
+            <CardViajeEnCurso 
+              origen={datosViajeActual.origen}
+              destino={datosViajeActual.destino}
+              horaSalida={datosViajeActual.hora_salida}
+              asientosDisponibles={datosViajeActual.asientos_disponibles}
+              precio={datosViajeActual.precio_asiento}
+              descripcion={datosViajeActual.descripcion}
+            />
+          )}
         </main>
       </div>
 
-      {/* Modal Activar Viaje */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-container">
@@ -294,7 +293,7 @@ const finalizarViaje = async () => {
                     <input type="radio"
                       name="horaSalida"
                       value="En 5 minutos"
-                      checked={viajeData.horaSalida === 'En 5 minutos'}
+                      checked={viajeData.horaSalida === 'En 5 minutes'}
                       onChange={handleInputChange} />
                     <span>En 5 minutos</span>
                   </label>
@@ -343,18 +342,10 @@ const finalizarViaje = async () => {
         </div>
       )}
 
-      {/* Modal Dirección */}
       {showDireccionModal && (
         <div className="modal-overlay">
           <div className="direccion-modal">
-
-             {/* Botón X para cerrar */}
-      <button
-        className="close-btn"
-        onClick={() => setShowDireccionModal(false)}
-      >
-        &times;
-      </button>
+            <button className="close-btn" onClick={() => setShowDireccionModal(false)}>&times;</button>
             <img src={loopLogo} alt="Loop Logo" className="direccion-logo" />
             <h2 className="direccion-title">Bienvenido</h2>
             <h4>Crea tu ruta</h4>
