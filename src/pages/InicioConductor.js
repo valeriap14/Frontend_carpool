@@ -33,6 +33,11 @@ function InicioConductor() {
     if (usuario && (!usuario.Ruta|| !usuario.Ruta.direccion_casa)) {
       setShowDireccionModal(true);
     }
+
+    const idGuardado = localStorage.getItem("viaje_id");
+    if (idGuardado){
+      setViajeActivo(true);
+    }
   }, []);
 
 
@@ -104,7 +109,7 @@ function InicioConductor() {
     return;
   }
 
-  // Obtener usuario y token desde localStorage
+
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const token = localStorage.getItem("token");
 
@@ -114,7 +119,7 @@ function InicioConductor() {
   }
 
   try {
-    // Preparar el cuerpo de la petición
+    
     const body = {
       direccion_seleccionada: viajeData.destino === 'Hacia la Universidad'
         ? 'hacia_universidad'
@@ -126,19 +131,21 @@ function InicioConductor() {
       conductor_id: usuario.id
     };
 
-    // Enviar solicitud al backend
+    
     const response = await api.post('/viajes', body, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
 
-    // Éxito
+    
+    
     console.log(' Viaje creado:', response.data);
     alert(' Viaje activado correctamente');
+    localStorage.setItem("viaje_id", response.data.viaje.id);
 
     setViajeActivo(true);
-    toggleModal(); // Cierra el modal
+    toggleModal(); 
 
   } catch (error) {
     console.error(' Error al crear viaje:', error.response?.data || error.message);
@@ -146,7 +153,26 @@ function InicioConductor() {
   }
 };
 
-  const desactivarViaje = () => {
+ 
+
+const finalizarViaje = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const viajeId = localStorage.getItem("viaje_id");
+
+    if (!viajeId) {
+      alert("ID del viaje no encontrado.");
+      return;
+    }
+
+    
+    await api.put(`/viajes/finalizar/${viajeId}`, null, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+  
     setViajeActivo(false);
     setViajeData({
       destino: '',
@@ -155,7 +181,18 @@ function InicioConductor() {
       precio: 10,
       descripcion: ''
     });
-  };
+
+    
+    localStorage.removeItem("viaje_id");
+
+    alert('Viaje finalizado correctamente');
+
+  } catch (error) {
+    console.error('Error al finalizar viaje:', error.response?.data || error.message);
+    alert('Error al finalizar viaje: ' + (error.response?.data?.error || error.message));
+  }
+};
+
 
   return (
     <div className="inicio-conductor-container">
@@ -179,7 +216,7 @@ function InicioConductor() {
               className="nav-btn-activar"
               onClick={() => {
                 if (viajeActivo) {
-                  desactivarViaje();
+                  finalizarViaje();
                 } else {
                   toggleModal();
                 }
