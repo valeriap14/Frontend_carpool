@@ -25,12 +25,14 @@ function RegistrarUsuario() {
   const fotoCarnetInputRef = useRef(null);
   const licenciaInputRef = useRef(null);
   const fotoCarroInputRef = useRef(null);
+  const fotoRevisionInputRef = useRef(null);
 
   // Estados para las previsualizaciones de imágenes
   const [fotoPerfilPreview, setFotoPerfilPreview] = useState(null);
   const [fotoCarnetPreview, setFotoCarnetPreview] = useState(null);
   const [licenciaPreview, setLicenciaPreview] = useState(null);
   const [fotoCarroPreview, setFotoCarroPreview] = useState(null);
+   const [fotoRevisionPreview, setFotoRevisionPreview] = useState(null);
   
   // Estados para el formulario
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,11 +67,11 @@ useEffect(() => {
 
   useEffect(() => {
     return () => {
-      [fotoPerfilPreview, fotoCarnetPreview, licenciaPreview, fotoCarroPreview].forEach(preview => {
+      [fotoPerfilPreview, fotoCarnetPreview, licenciaPreview, fotoCarroPreview, fotoRevisionPreview].forEach(preview => {
         if (preview) URL.revokeObjectURL(preview);
       });
     };
-  }, [fotoPerfilPreview, fotoCarnetPreview, licenciaPreview, fotoCarroPreview]);
+  }, [fotoPerfilPreview, fotoCarnetPreview, licenciaPreview, fotoCarroPreview, fotoRevisionPreview]);
 
   const checkUniqueField = useCallback(async (fieldName, value) => {
     if (!value) {
@@ -159,13 +161,14 @@ useEffect(() => {
       formData.append('role_id', rol === 'conductor' ? '2' : '1');
       formData.append('telefono', data.telefono.trim());
       formData.append('campus_id', data.campus_id);
-      formData.append('direccion_casa', data.direccion_casa.trim());
+     // formData.append('direccion_casa', data.direccion_casa.trim());
       formData.append('fotoPerfil', data.fotoPerfil);
       formData.append('fotoCarnet', data.fotoCarnet);
 
       if (rol === 'conductor') {
-        formData.append('licencia', data.licencia);
+        formData.append('licencia_conducir', data.licencia_conducir);
         formData.append('fotoCarro', data.fotoCarro);
+        formData.append('fotoRevision', data.fotoRevision);
         
         const vehiculoData = {
           marca: data.marca.trim(),
@@ -256,7 +259,7 @@ useEffect(() => {
     if (setter === setFotoCarnetPreview && fotoCarnetPreview) URL.revokeObjectURL(fotoCarnetPreview);
     if (setter === setLicenciaPreview && licenciaPreview) URL.revokeObjectURL(licenciaPreview);
     if (setter === setFotoCarroPreview && fotoCarroPreview) URL.revokeObjectURL(fotoCarroPreview);
-    
+     if (setter === setFotoRevisionPreview && fotoRevisionPreview) URL.revokeObjectURL(fotoRevisionPreview);
     setter(null);
     setValue(fieldName, null, { shouldValidate: true });
     if (inputRef?.current) inputRef.current.value = '';
@@ -269,6 +272,7 @@ useEffect(() => {
     setFotoCarnetPreview(null);
     setLicenciaPreview(null);
     setFotoCarroPreview(null);
+    setFotoRevisionPreview(null);
     navigate('/');
   };
 
@@ -531,35 +535,70 @@ useEffect(() => {
           {rol === 'conductor' && (
             <>
               <div className="campo campo-imagen">
-                <label htmlFor="licencia">Foto Licencia:</label>
+                <label htmlFor="licencia_conducir">Foto Licencia:</label>
                 <div className="input-con-x">
                   <input
-                    id="licencia"
+                    id="licencia_conducir"
                     type="file"
                     accept="image/png, image/jpeg, image/jpg"
-                    {...register("licencia", {
+                    {...register("licencia_conducir", {
                       required: 'Foto de licencia es requerida para conductores'
                     })}
                     ref={licenciaInputRef}
-                    onChange={(e) => handleImageChange(e, setLicenciaPreview, 'licencia')}
+                    onChange={(e) => handleImageChange(e, setLicenciaPreview, 'licencia_conducir')}
                   />
                   {licenciaPreview && (
                     <span
                       className="x-inside"
-                      onClick={() => handleImageDelete(setLicenciaPreview, 'licencia', licenciaInputRef)}
+                      onClick={() => handleImageDelete(setLicenciaPreview, 'licencia_conducir', licenciaInputRef)}
                     >
                       ✕
                     </span>
                   )}
                 </div>
-                {errors.licencia && (
-                  <span className="error">{errors.licencia.message}</span>
+                {errors.licencia_conducir && (
+                  <span className="error">{errors.licencia_conducir.message}</span>
                 )}
                 {licenciaPreview && (
                   <div className="image-preview-container">
                     <img
                       src={licenciaPreview}
                       alt="Vista previa de licencia"
+                      className="image-preview"
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="campo campo-imagen">
+                <label htmlFor="fotoRevision">Foto Revision:</label>
+                <div className="input-con-x">
+                  <input
+                    id="fotoRevision"
+                    type="file"
+                    accept="image/png, image/jpeg, image/jpg"
+                    {...register("fotoRevision", {
+                      required: 'Foto de revision es requerida para conductores'
+                    })}
+                    ref={licenciaInputRef}
+                    onChange={(e) => handleImageChange(e, setFotoRevisionPreview, 'fotoRevision')}
+                  />
+                  {licenciaPreview && (
+                    <span
+                      className="x-inside"
+                      onClick={() => handleImageDelete(setFotoRevisionPreview, 'fotoRevision', fotoRevisionInputRef)}
+                    >
+                      ✕
+                    </span>
+                  )}
+                </div>
+                {errors.licencia && (
+                  <span className="error">{errors.fotoRevision.message}</span>
+                )}
+                {fotoRevisionPreview && (
+                  <div className="image-preview-container">
+                    <img
+                      src={fotoRevisionPreview}
+                      alt="Vista previa de revision"
                       className="image-preview"
                     />
                   </div>
