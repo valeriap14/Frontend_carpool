@@ -17,67 +17,59 @@
   font-weight: bold;
 }
 
-.search-form {
+.search-form-modern {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.search-bar-contenedor {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  max-width: 1100px;
   width: 100%;
 }
 
-.form-row {
-  display: flex;
-  gap: 1.5rem;
-  align-items: flex-end;
-  flex-wrap: wrap;
-}
-
-.form-group {
+.search-bar-wrapper {
   flex: 1;
-  min-width: 200px;
-}
-
-.form-group h2 {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 0.5rem;
-  font-weight: normal;
-}
-
-.search-input, .time-select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-.checkbox-group {
   display: flex;
   align-items: center;
-  margin-top: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  background-color: #fff;
+  padding-left: 16px;
+  overflow: hidden;
+  height: 50px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.checkbox-option {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.search-bar-icon {
+  color: #000; 
+  font-size: 1.2rem;
+  margin-right: 10px;
+}
+
+.search-bar-input {
+  flex: 1;
+  padding: 14px 16px;
   font-size: 1rem;
-  color: #555;
+  border: none;
+  outline: none;
+  background: transparent;
 }
 
-.search-button {
+.search-bar-button-texto {
   background-color: #C080C0;
   color: white;
   border: none;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  height: fit-content;
-  margin-top: 1.5rem;
+  transition: background-color 0.3s;
 }
 
-.search-button:hover {
+.search-bar-button-texto:hover {
   background-color: #A060A0;
 }
 
@@ -214,16 +206,22 @@
   font-style: italic;
 }
 
+.driver-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
 @media (max-width: 1024px) {
-  .form-row {
+  .search-bar-contenedor {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
   }
-  
-  .search-button {
+
+  .search-bar-button-texto {
     width: 100%;
-    margin-top: 0;
   }
 }
 
@@ -231,12 +229,12 @@
   .trips-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .footer-info {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .average-rating {
     flex-direction: column;
     gap: 0.5rem;
@@ -247,7 +245,7 @@
   .pasajero-content {
     padding: 1rem;
   }
-  
+
   .search-title, .trips-title {
     font-size: 1.3rem;
   }

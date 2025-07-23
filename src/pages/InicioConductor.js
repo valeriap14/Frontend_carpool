@@ -15,34 +15,48 @@ function InicioConductor() {
   const [showDireccionModal, setShowDireccionModal] = useState(false);
   const [direccion, setDireccion] = useState('');
   const [viajeActivo, setViajeActivo] = useState(false);
-  const [viajeId, setViajeId] = useState(null);
   const [viajeData, setViajeData] = useState({
     destino: '',
     horaSalida: 'Ahora',
     asientos: 1,
-    precio: 10,
+    precio: '10',
     descripcion: ''
   });
+  const [errors, setErrors] = useState({}); 
   const [datosViajeActual, setDatosViajeActual] = useState(null); 
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const verificarViajeActivo = async () => {
-      const idGuardado = localStorage.getItem("viaje_id");
-      if (idGuardado) {
-        try {
-          const response = await api.get(`/viajes/${idGuardado}`);
-          if (response.data) {
-            setViajeActivo(true);
-            setViajeId(idGuardado);
-            setDatosViajeActual(response.data); 
-          }
-        } catch (error) {
-          console.error("Error al verificar viaje activo:", error);
-        }
+  const sincronizarViajeActivo = async () => {
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (!usuario?.id) {
+      setViajeActivo(false);
+      setDatosViajeActual(null);
+      localStorage.removeItem("viaje_id");
+      return;
+    }
+
+    try {
+      const response = await api.get(`/viajes/activo/${usuario.id}`);
+      if (response.data?.viaje) {
+        setViajeActivo(true);
+        setDatosViajeActual(response.data.viaje);
+        localStorage.setItem("viaje_id", response.data.viaje.id);
+      } else {
+        setViajeActivo(false);
+        setDatosViajeActual(null);
+        localStorage.removeItem("viaje_id");
       }
-    };
+    } catch (error) {
+      console.error("Error al sincronizar viaje activo:", error);
+      setViajeActivo(false);
+      setDatosViajeActual(null);
+      localStorage.removeItem("viaje_id");
+    }
+  };
+
+  useEffect(() => {
+    sincronizarViajeActivo();
 
     const obtenerRutaUsuario = async () => {
       const usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -66,10 +80,17 @@ function InicioConductor() {
         setShowDireccionModal(true);
       }
     };
-
-    verificarViajeActivo();
     obtenerRutaUsuario();
   }, []);
+
+  const verificarViajeActivo = async () => {
+    await sincronizarViajeActivo();
+    if (viajeActivo) {
+      alert('Ya tienes un viaje activo. Por favor finalízalo antes de crear uno nuevo.');
+      return true;
+    }
+    return false;
+  };
 
   const guardarDireccion = async () => {
     const usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -92,7 +113,10 @@ function InicioConductor() {
     }
   };
 
-  const toggleModal = () => setShowModal(!showModal);
+  const toggleModal = () => {
+    setShowModal(!showModal);
+    setErrors({}); 
+  };
 
   const handleCerrarSesion = () => {
     localStorage.clear();
@@ -102,35 +126,50 @@ function InicioConductor() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
+    setErrors(prev => ({ ...prev, [name]: '' }));
+
     if (name === 'asientos') {
       const numValue = Number(value);
       if (numValue < 1 || numValue > 3) return;
       setViajeData({ ...viajeData, [name]: numValue });
     } else if (name === 'precio') {
-      const intValue = parseInt(value, 10);
-      if (isNaN(intValue) || intValue < 1) return;
-      setViajeData({ ...viajeData, [name]: intValue });
+      if (value === '' || /^[0-9]+$/.test(value)) {
+        setViajeData({ ...viajeData, [name]: value });
+      }
     } else {
       setViajeData({ ...viajeData, [name]: value });
     }
   };
 
+  const validarFormulario = () => {
+    let nuevosErrores = {};
+
+    if (!viajeData.destino) {
+      nuevosErrores.destino = 'Por favor selecciona un destino.';
+    }
+
+    if (viajeData.asientos < 1 || viajeData.asientos > 3) {
+      nuevosErrores.asientos = 'Los asientos deben estar entre 1 y 3.';
+    }
+
+    const precioEntero = parseInt(viajeData.precio, 10);
+    if (isNaN(precioEntero) || precioEntero < 10 || precioEntero > 500) {
+      nuevosErrores.precio = 'La tarifa debe ser entre 10 y 500 LPS.';
+    }
+
+    setErrors(nuevosErrores);
+
+    return Object.keys(nuevosErrores).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (viajeData.asientos < 1 || viajeData.asientos > 3) {
-      alert('Los asientos deben estar entre 1 y 3.');
-      return;
-    }
+    const tieneViajeActivo = await verificarViajeActivo();
+    if (tieneViajeActivo) return;
 
-    if (!viajeData.destino) {
-      alert('Por favor selecciona un destino.');
-      return;
-    }
-
-    if (!Number.isInteger(viajeData.precio) || viajeData.precio < 1) {
-      alert('El precio debe ser un número entero positivo.');
-      return;
+    if (!validarFormulario()) {
+      return; 
     }
 
     const usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -148,7 +187,7 @@ function InicioConductor() {
           : 'hacia_casa',
         hora_salida: viajeData.horaSalida.toLowerCase().replace(/\s/g, '_'),
         asientos_disponibles: viajeData.asientos,
-        precio_asiento: viajeData.precio,
+        precio_asiento: parseInt(viajeData.precio, 10),
         descripcion: viajeData.descripcion,
         conductor_id: usuario.id
       };
@@ -162,7 +201,6 @@ function InicioConductor() {
       const id = response.data.viaje.id;
       localStorage.setItem("viaje_id", id);
       setViajeActivo(true);
-      setViajeId(id);
       setDatosViajeActual(response.data.viaje); 
       toggleModal();
       alert('Viaje activado correctamente');
@@ -193,7 +231,7 @@ function InicioConductor() {
         destino: '',
         horaSalida: 'Ahora',
         asientos: 1,
-        precio: 10,
+        precio: '10',
         descripcion: ''
       });
       setDatosViajeActual(null); 
@@ -245,10 +283,13 @@ function InicioConductor() {
         </aside>
 
         <main className="content-area-fixed">
-          <MapaRuta
-            origen={viajeData.destino === 'Hacia la Universidad' ? 'Colonia San Miguel, Tegucigalpa' : 'Ciudad Universitaria, Tegucigalpa'}
-            destino={viajeData.destino === 'Hacia la Universidad' ? 'Ciudad Universitaria, Tegucigalpa' : 'Colonia San Miguel, Tegucigalpa'}
-          />
+          {datosViajeActual && (
+            <MapaRuta
+              origen={datosViajeActual.origen}
+              destino={datosViajeActual.destino}
+            />
+          )}
+
           {viajeActivo && datosViajeActual && (
             <CardViajeEnCurso 
               origen={datosViajeActual.origen}
@@ -293,6 +334,7 @@ function InicioConductor() {
                     <span>Hacia Casa</span>
                   </label>
                 </div>
+                {errors.destino && <p className="error-message">{errors.destino}</p>}
               </div>
 
               <div className="form-group">
@@ -320,21 +362,41 @@ function InicioConductor() {
               <div className="form-row">
                 <div className="form-group">
                   <label>Asientos Disponibles</label>
-                  <input type="number"
+                  <select
                     name="asientos"
                     value={viajeData.asientos}
                     onChange={handleInputChange}
-                    min="1" max="3"
-                    className="number-input" />
+                    className="number-input"
+                    required
+                  >
+                    <option value={1}>1 </option>
+                    <option value={2}>2 </option>
+                    <option value={3}>3 </option>
+                  </select>
+                  {errors.asientos && <p className="error-message">{errors.asientos}</p>}
                 </div>
                 <div className="form-group">
                   <label>Precio por Asiento (LPS)</label>
-                  <input type="number"
+                  <input type="text"
                     name="precio"
                     value={viajeData.precio}
                     onChange={handleInputChange}
-                    min="1"
-                    className="number-input" />
+                    onKeyDown={(e) => {
+                      if (
+                        !/[0-9]/.test(e.key) &&
+                        e.key !== "Backspace" &&
+                        e.key !== "ArrowLeft" &&
+                        e.key !== "ArrowRight" &&
+                        e.key !== "Tab"
+                      ) {
+                        e.preventDefault();
+                      }
+                    }}
+                    className="number-input"
+                    placeholder="10 - 500 LPS"
+                    inputMode="numeric" 
+                  />
+                  {errors.precio && <p className="error-message">{errors.precio}</p>}
                 </div>
               </div>
 

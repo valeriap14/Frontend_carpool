@@ -296,6 +296,33 @@ body {
   border-top: 1px solid #eee;
 }
 
+.number-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+.number-input:focus {
+  border-color: #C080C0;
+  outline: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 13px;
+  margin: 4px 0 0 4px;
+  font-weight: normal;
+}
+
+
+
 .confirm-btn {
   background-color: #C080C0;
   color: white;

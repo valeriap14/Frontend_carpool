@@ -1,14 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaBell, FaUserCircle, FaHome, FaHistory, FaStar, FaQuestionCircle, FaSearch } from 'react-icons/fa';
+import {
+  FaBell, FaUserCircle, FaHome, FaHistory,
+  FaStar, FaQuestionCircle, FaSearch
+} from 'react-icons/fa';
+import api from '../api/api';
 import '../styles/InicioPasajero.css';
 
 function InicioPasajero() {
   const [searchParams, setSearchParams] = useState({
-    destino: '',
-    horario: 'Ahora'
+    destino: ''
   });
+
+  const [viajesDisponibles, setViajesDisponibles] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const obtenerViajes = async () => {
+      try {
+        const res = await api.get('/viajes/disponibles');
+        if (Array.isArray(res.data.viajes)) {
+          setViajesDisponibles(res.data.viajes);
+        } else {
+          setViajesDisponibles([]);
+        }
+      } catch (error) {
+        console.error('Error al cargar viajes:', error);
+        setViajesDisponibles([]);
+      }
+    };
+
+    obtenerViajes();
+  }, []);
 
   const handleCerrarSesion = () => {
     localStorage.clear();
@@ -17,55 +40,13 @@ function InicioPasajero() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setSearchParams({
-      ...searchParams,
-      [name]: value
-    });
+    setSearchParams({ ...searchParams, [name]: value });
   };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    console.log('Buscando viajes con:', searchParams);
+    console.log('Buscar viajes con:', searchParams);
   };
-  
-  const viajesDisponibles = [
-    {
-      id: 1,
-      conductor: 'Carlos Mendoza',
-      rating: 4.8,
-      ruta: 'Col. Palmira → Centro Comercial Multiplaza',
-      hora: '7:30 AM',
-      asientos: 3,
-      precio: 'L.50'
-    },
-    {
-      id: 2,
-      conductor: 'Roberto Silva',
-      rating: 4.9,
-      ruta: 'Residencial El Trapiche → City Mall',
-      hora: '9:00 AM',
-      asientos: 1,
-      precio: 'L.40'
-    },
-    {
-      id: 3,
-      conductor: 'María González',
-      rating: 4.2,
-      ruta: 'UNAH → Mall Premier',
-      hora: '8:15 AM',
-      asientos: 2,
-      precio: 'L.45'
-    },
-    {
-      id: 4,
-      conductor: 'Ana López',
-      rating: 4.6,
-      ruta: 'Col. Kennedy → Aeropuerto Toncontín',
-      hora: '10:30 AM',
-      asientos: 2,
-      precio: 'L.50'
-    }
-  ];
 
   return (
     <div className="inicio-conductor-container">
@@ -95,83 +76,63 @@ function InicioPasajero() {
           <div className="pasajero-content">
             <div className="search-container">
               <h1 className="search-title">Buscar Viajes</h1>
-              
-              <form onSubmit={handleSearchSubmit} className="search-form">
-                <div className="form-row">
-                  <div className="form-group">
-                    <h2>Destino o Dirección</h2>
-                    <input 
-                      type="text" 
-                      name="destino" 
+
+              <form onSubmit={handleSearchSubmit} className="search-form-modern">
+                <div className="search-bar-contenedor">
+                  <div className="search-bar-wrapper">
+                    <FaSearch className="search-bar-icon" />
+                    <input
+                      type="text"
+                      name="destino"
                       value={searchParams.destino}
                       onChange={handleInputChange}
-                      placeholder="A dónde vas?"
-                      className="search-input"
+                      placeholder="¿A dónde vas?"
+                      className="search-bar-input"
                     />
                   </div>
-                  
-                  <div className="form-group">
-                    <h2>Rango de Horario</h2>
-                    <select 
-                      name="horario" 
-                      value={searchParams.horario}
-                      onChange={handleInputChange}
-                      className="time-select"
-                    >
-                      <option value="Ahora">Ahora</option>
-                      <option value="Mañana">Mañana</option>
-                      <option value="Tarde">Tarde</option>
-                    </select>
-                  </div>
-                  
-                  <div className="form-group checkbox-group">
-                    <label className="checkbox-option">
-                      <input 
-                        type="checkbox" 
-                        name="soloDisponibles" 
-                        checked={true}
-                        onChange={() => {}}
-                      />
-                      <span>Solo viajes disponibles</span>
-                    </label>
-                  </div>
-                  
-                  <button type="submit" className="search-button">
-                    <FaSearch className="search-icon" /> Buscar Viajes
-                  </button>
+                  <button type="submit" className="search-bar-button-texto">Buscar</button>
                 </div>
               </form>
+
+
             </div>
-            
+
             <div className="available-trips-container">
               <h2 className="trips-title">Viajes Disponibles</h2>
-              
+
               <div className="trips-grid">
-                {viajesDisponibles.map((viaje) => (
-                  <div key={viaje.id} className="trip-card">
-                    <div className="trip-header">
-                      <h3 className="driver-name">{viaje.conductor}</h3>
-                      <div className="driver-rating">
-                        <span className="rating-number">+{viaje.rating}</span>
+                {viajesDisponibles.length > 0 ? (
+                  viajesDisponibles.map((viaje) => (
+                    <div key={viaje.id} className="trip-card">
+                      <div className="trip-header">
+                        <img src={viaje.conductor.fotoPerfil || '/default-avatar.png'} alt="Conductor" className="driver-avatar" />
+                        <div>
+                          <h3 className="driver-name">{viaje.conductor.nombre}</h3>
+                          <div className="driver-rating">
+                            <span className="rating-number">★ 4.7</span>
+                          </div>
+                        </div>
                       </div>
+
+                      <p className="trip-route">{viaje.origen} → {viaje.destino}</p>
+                      <p className="trip-time">{viaje.hora_salida}</p>
+                      <p className="trip-seats">{viaje.asientos_disponibles} asiento{viaje.asientos_disponibles !== 1 ? 's' : ''} disponible{viaje.asientos_disponibles !== 1 ? 's' : ''}</p>
+                      <p className="trip-price">L.{viaje.precio_asiento}</p>
+
+                      <button className="reserve-button">Reservar Viaje</button>
                     </div>
-                    
-                    <p className="trip-route">{viaje.ruta}</p>
-                    <p className="trip-time">{viaje.hora}</p>
-                    <p className="trip-seats">{viaje.asientos} asiento{viaje.asientos !== 1 ? 's' : ''} disponible{viaje.asientos !== 1 ? 's' : ''}</p>
-                    <p className="trip-price">{viaje.precio}</p>
-                    
-                    <button className="reserve-button">Reservar Viaje</button>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p>No hay viajes activos en este momento.</p>
+                )}
               </div>
-              
+
               <div className="footer-info">
                 <div className="average-rating">
-                  <p>Viajes esta semana <span>12</span></p>
+                  <p>Viajes esta semana <span>{viajesDisponibles.length}</span></p>
                   <p>Calificación promedio <span>4.7</span></p>
                 </div>
-                
+
                 <div className="safety-tip">
                   <p>Consejo de Seguridad</p>
                   <p className="tip-text">Verifica siempre la placa del vehículo antes de abordar</p>
@@ -186,3 +147,4 @@ function InicioPasajero() {
 }
 
 export default InicioPasajero;
+
