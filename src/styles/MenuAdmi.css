@@ -1,0 +1,8 @@
+
+.contenido-padre {
+  margin-left: 250px; 
+  padding: 30px;
+  width: calc(100% - 250px);
+  background-color: #f9f9f9;
+  overflow-y: auto;
+}
