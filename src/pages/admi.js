@@ -31,7 +31,7 @@ function MenuAdmi({ children }){
         <aside className="sidebar-fixed">
           <nav className="sidebar-nav">
             <button className="nav-btn active" onClick={() => navigate('/InicioAdmi')}><FaHome className="nav-icon" /> Inicio</button>
-            <button className="nav-btn" onClick={() => navigate('/Admi/Historia Viajes')}><FaHistory className="nav-icon" /> Historial pasajeros</button>
+            <button className="nav-btn" onClick={() => navigate('/Admi/HistorialViajes')}><FaHistory className="nav-icon" /> Historial pasajeros</button>
             <button className="nav-btn" onClick={() => navigate('/Admi/Notificaciones')}><FaQuestionCircle className="nav-icon" /> Historial conductores</button>
             <button className="nav-btn" onClick={() => navigate('/Admi/Pasajero')}><FaUserCircle className="nav-icon" /> Pasajero</button>
             <button className="nav-btn" onClick={() => navigate('/Admi/Conductor')}><FaUserCircle className="nav-icon" /> Conductores</button>

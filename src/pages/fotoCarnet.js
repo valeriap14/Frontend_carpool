@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import api from '../api/api';
 import '../styles/img.css';
+import defaultCarnet from '../assets/carnet.png';
 
 function ImagenCarnet({id, alt='Imagen de perfil'}){
 
@@ -44,7 +45,7 @@ function ImagenCarnet({id, alt='Imagen de perfil'}){
                     <p>...</p>
                 ): (
                     
-                    <img src={imagenUrl} alt={alt} className="carnet-photo"></img>
+                    <img src={imagenUrl || defaultCarnet} alt={alt} className="carnet-photo"></img>
                     
 
                 )
