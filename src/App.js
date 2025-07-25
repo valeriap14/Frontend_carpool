@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import InicioConductor from "./pages/InicioConductor";
 import InicioPasajero from './pages/InicioPasajero';
 import EditarUsuario from "./pages/editarUsuario";
-
+import ConfirmarReserva from './pages/ConfirmarReserva';
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
         <Route path="/inicioconductor" element={<InicioConductor />} />
         <Route path="/iniciopasajero" element={<InicioPasajero />} />
         <Route path="/editarUsuario" element={<EditarUsuario />} />
+        <Route path="/confirmar-reserva" element={<ConfirmarReserva />} />
       </Routes>
 
        
@@ -27,3 +28,4 @@ function App() {
 }
 
 export default App;
+

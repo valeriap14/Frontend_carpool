@@ -6,6 +6,8 @@ import {
 } from 'react-icons/fa';
 import api from '../api/api';
 import '../styles/InicioPasajero.css';
+import ConfirmarReserva from '../pages/ConfirmarReserva';
+
 
 function InicioPasajero() {
   const [searchParams, setSearchParams] = useState({
@@ -13,6 +15,7 @@ function InicioPasajero() {
   });
 
   const [viajesDisponibles, setViajesDisponibles] = useState([]);
+  const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -119,7 +122,9 @@ function InicioPasajero() {
                       <p className="trip-seats">{viaje.asientos_disponibles} asiento{viaje.asientos_disponibles !== 1 ? 's' : ''} disponible{viaje.asientos_disponibles !== 1 ? 's' : ''}</p>
                       <p className="trip-price">L.{viaje.precio_asiento}</p>
 
-                      <button className="reserve-button">Reservar Viaje</button>
+                      <button className="reserve-button" onClick={() => setReservaSeleccionada(viaje)}>Reservar Viaje</button>
+
+
                     </div>
                   ))
                 ) : (
@@ -140,6 +145,12 @@ function InicioPasajero() {
               </div>
             </div>
           </div>
+              {reservaSeleccionada && (
+                <div className="confirmar-reserva-overlay">
+                  <ConfirmarReserva viaje={reservaSeleccionada} onClose={() => setReservaSeleccionada(null)} />
+                </div>
+              )}
+
         </main>
       </div>
     </div>
