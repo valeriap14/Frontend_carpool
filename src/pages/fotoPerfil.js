@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import api from '../api/api';
 import '../styles/img.css';
+import defaultAvatar from '../assets/perfil-de-usuario.png';
 
 function ImagenPerfil({id, alt='Imagen de perfil'}){
 
@@ -44,7 +45,7 @@ function ImagenPerfil({id, alt='Imagen de perfil'}){
                     <p>...</p>
                 ): (
                     
-                    <img src={imagenUrl} alt={alt} className="avatar-circle"></img>
+                    <img src={imagenUrl || defaultAvatar} alt={alt} className="avatar-circle"></img>
                     
 
                 )

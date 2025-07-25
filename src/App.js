@@ -15,6 +15,8 @@ import HistorialViaje from "./pages/AdmiHistorial";
 import AdmiPasajero from "./pages/admiPasajero";
 import AdmiConductor from "./pages/admiConductor";
 import AdmiUsuario from "./pages/admiUsuario";
+import AdmiVerPasajero from "./pages/admiVerPasajero";
+import AdmiVerConductor from "./pages/admiVerConductor";
 
 
 function App() {
@@ -32,10 +34,12 @@ function App() {
 
         <Route path="/inicioAdmi" element={<InicioAdmi />} />
           <Route path="/Admi/HistoriaPasajeros" element={<HistoriaPasajeros />} />
-          <Route path="/Admi/HistorialViaje" element={<HistorialViaje />} />
+          <Route path="/Admi/HistorialViajes" element={<HistorialViaje />} />
           <Route path="/Admi/Pasajero" element={<AdmiPasajero />} />
           <Route path="/Admi/Conductor" element={<AdmiConductor />} />
           <Route path="/Admi/Usuario" element={<AdmiUsuario />} />
+          <Route path="/Admi/InfoPasajero" element={<AdmiVerPasajero />} />
+          <Route path="/Admi/InfoConductor" element={<AdmiVerConductor />} />
 
       </Routes>
 
