@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  FaBell, FaUserCircle, FaHome, FaHistory,
-  FaStar, FaQuestionCircle, FaSearch
-} from 'react-icons/fa';
+import {FaBell, FaUserCircle, FaHome, FaHistory,FaStar, FaQuestionCircle, FaSearch} from 'react-icons/fa';
 import api from '../api/api';
 import '../styles/InicioPasajero.css';
 import ConfirmarReserva from '../pages/ConfirmarReserva';

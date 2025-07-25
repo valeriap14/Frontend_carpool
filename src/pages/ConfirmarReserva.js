@@ -4,23 +4,42 @@ import '../styles/ConfirmarReserva.css';
 
 function ConfirmarReserva({ viaje, onClose }) {
   const [detalle, setDetalle] = useState(null);
+  const [reservaEnviada, setReservaEnviada] = useState(false);
 
   useEffect(() => {
-  const obtenerDetalle = async () => {
+    const obtenerDetalle = async () => {
+      try {
+        const res = await api.get(`/viajePasajero/detalle/${viaje.id}`);
+        console.log('Detalle viaje:', res.data);
+        setDetalle(res.data.viaje);
+      } catch (error) {
+        console.error('Error al obtener el detalle del viaje:', error);
+      }
+    };
+
+    if (viaje?.id) {
+      obtenerDetalle();
+    }
+  }, [viaje]);
+
+  const confirmarReserva = async () => {
     try {
-      const res = await api.get(`/viajePasajero/detalle/${viaje.id}`);
-      console.log('Detalle viaje:', res.data);
-      setDetalle(res.data.viaje);
+      const usuario = JSON.parse(localStorage.getItem('usuario'));
+      const pasajero_id = usuario?.id;
+      const mensaje = '¡Quiero unirme a tu viaje!';
+
+      await api.post('/reservas/solicitar', {
+        pasajero_id,
+        viaje_id: viaje.id,
+        mensaje
+      });
+
+      setReservaEnviada(true);
     } catch (error) {
-      console.error('Error al obtener el detalle del viaje:', error);
+      console.error('Error al enviar la reserva:', error);
+      alert('Error al enviar la solicitud.');
     }
   };
-
-  if (viaje?.id) {
-    obtenerDetalle();
-  }
-}, [viaje]);
-
 
   if (!detalle) return <p className="reserva-titulo">Cargando detalles...</p>;
 
@@ -60,9 +79,30 @@ function ConfirmarReserva({ viaje, onClose }) {
           <p><strong>Color:</strong> {vehiculo?.color}</p>
         </div>
 
-        <button className="confirmar-btn"> Confirmar Reserva</button>
+        <button className="confirmar-btn" onClick={confirmarReserva}>
+          Confirmar Reserva
+        </button>
+
         <p className="reserva-nota">Puedes cancelar sin cargos hasta 30 minutos antes del viaje.</p>
       </div>
+
+      {reservaEnviada && (
+        <div className="modal-overlay">
+          <div className="modal-card">
+            <h2>Solicitud enviada</h2>
+            <p>Tu solicitud de reserva ha sido enviada con exito</p>
+            <button
+              className="btn cerrar-btn"
+              onClick={() => {
+                setReservaEnviada(false);
+                onClose(); 
+              }}
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

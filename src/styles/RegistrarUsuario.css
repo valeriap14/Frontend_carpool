@@ -364,8 +364,6 @@ body {
   text-align: center;
 }
 
-/* Agrega estos estilos a tu archivo CSS */
-
 .campo select {
   padding: 12px 16px;
   font-size: 15px;
@@ -383,7 +381,7 @@ body {
   background-position: right 12px center;
   background-size: 12px 12px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  height: 44px; /* Misma altura que el input de teléfono */
+  height: 44px; 
 }
 
 .campo select:focus {
@@ -392,24 +390,24 @@ body {
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
 
-/* Estilo para la opción por defecto */
+
 .campo select option:first-child {
   color: #888;
 }
 
-/* Estilo para las opciones del dropdown */
+
 .campo select option {
   color: #333;
   padding: 8px;
 }
 
-/* Estilo cuando hay error */
+
 .campo select.error-field {
   border-color: #ff4444 !important;
   box-shadow: 0 0 0 1px #ff4444 !important;
 }
 
-/* Mejora para móviles */
+
 @media (max-width: 480px) {
   .campo select {
     padding: 10px 14px;
@@ -433,7 +431,6 @@ body {
   }
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .registro-container {
     padding: 20px 15px !important;

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  FaBell, FaUserCircle, FaCar,
-  FaHome, FaRoute, FaMoneyBill, FaQuestionCircle
-} from 'react-icons/fa';
+import {FaBell, FaUserCircle, FaCar,FaHome, FaRoute, FaMoneyBill, FaQuestionCircle} from 'react-icons/fa';
 import '../styles/InicioConductor.css';
 import loopLogo from '../assets/loop.png';
 import MapaRuta from './MapaRuta';
