@@ -25,8 +25,13 @@ body {
 }
 
 .content-area-fixed {
+  position: relative; 
   margin-left: 250px;
+  padding: 2rem;
+  background-color: white;
+  min-height: calc(100vh - 60px);
 }
+
 
 .inicio-conductor-header {
   position: fixed;
@@ -341,6 +346,11 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.card-viaje-en-curso {
+  margin-bottom: 320px; 
+}
+
 
 /* MODAL DIRECCIÓN */
 .direccion-modal {

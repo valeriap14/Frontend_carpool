@@ -6,6 +6,7 @@ import loopLogo from '../assets/loop.png';
 import MapaRuta from './MapaRuta';
 import api from '../api/api';   
 import CardViajeEnCurso from '../pages/CardViajeEnCurso';
+import SolicitudesReserva from './SolicitudesReserva';
 
 function InicioConductor() {
   const [showModal, setShowModal] = useState(false);
@@ -288,16 +289,21 @@ function InicioConductor() {
           )}
 
           {viajeActivo && datosViajeActual && (
-            <CardViajeEnCurso 
-              origen={datosViajeActual.origen}
-              destino={datosViajeActual.destino}
-              horaSalida={datosViajeActual.hora_salida}
-              asientosDisponibles={datosViajeActual.asientos_disponibles}
-              precio={datosViajeActual.precio_asiento}
-              descripcion={datosViajeActual.descripcion}
-            />
+            <>
+              <CardViajeEnCurso 
+                origen={datosViajeActual.origen}
+                destino={datosViajeActual.destino}
+                horaSalida={datosViajeActual.hora_salida}
+                asientosDisponibles={datosViajeActual.asientos_disponibles}
+                precio={datosViajeActual.precio_asiento}
+                descripcion={datosViajeActual.descripcion}
+              />
+
+              <SolicitudesReserva conductorId={JSON.parse(localStorage.getItem('usuario')).id} />
+            </>
           )}
         </main>
+
       </div>
 
       {showModal && (

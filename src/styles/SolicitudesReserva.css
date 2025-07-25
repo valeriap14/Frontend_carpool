@@ -1,0 +1,48 @@
+.solicitudes-container {
+  padding: 20px;
+}
+
+.solicitud-card {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: white;
+}
+
+.foto-pasajero {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+}
+
+.info-pasajero h3 {
+  margin: 0 0 4px 0;
+}
+
+.botones-respuesta {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+}
+
+.btn-aceptar {
+  background-color: #28a745; 
+}
+
+.btn-rechazar {
+  background-color: #dc3545; 
+}
