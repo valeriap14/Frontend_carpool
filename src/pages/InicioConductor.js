@@ -424,7 +424,6 @@ function InicioConductor() {
       {showDireccionModal && (
         <div className="modal-overlay">
           <div className="direccion-modal">
-            <button className="close-btn" onClick={() => setShowDireccionModal(false)}>&times;</button>
             <img src={loopLogo} alt="Loop Logo" className="direccion-logo" />
             <h2 className="direccion-title">Bienvenido</h2>
             <h4>Crea tu ruta</h4>
