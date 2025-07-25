@@ -1,0 +1,91 @@
+
+.contenido-padre {
+  margin-left: 250px; 
+  padding: 30px;
+  width: calc(100% - 250px);
+  background-color: #f9f9f9;
+  overflow-y: auto;
+}
+
+.pasajero-detalle {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.btn-regresar {
+  background-color: #d4a5d9;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-regresar:hover {
+  background-color: #c28cc6;
+}
+
+.info-principal {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.imagen-perfil img {
+  width: 120px;
+  height: 120px;
+  border-radius: 100%;
+  object-fit: cover;
+  background-color: #e0e0e0;
+}
+
+.datos-usuario h2 {
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.datos-usuario p {
+  margin: 4px 0;
+  font-size: 16px;
+}
+
+.datos-vehiculo {
+  margin-bottom: 30px;
+}
+
+.datos-vehiculo h3 {
+  margin-bottom: 10px;
+}
+
+.tabla-datos div {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.tabla-datos span {
+  margin-left: 5px;
+  font-weight: normal;
+}
+
+.documento-imagen h3 {
+  margin-bottom: 10px;
+}
+
+.documento-imagen img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}

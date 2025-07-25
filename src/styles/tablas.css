@@ -1,0 +1,192 @@
+.contenido-blanco {
+  margin-left: 50%; 
+  padding: 30px 40px;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+    max-width: 1000px;
+
+}
+
+.contenedor-usuarios {
+
+    max-width: 1000px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    max-width: 1000px;
+  margin: auto;
+  overflow: hidden;
+  
+}
+
+.input-buscar {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.tabla-responsive {
+     overflow-x: auto;
+}
+
+.tabla-usuarios {
+  width: 100%;
+  height: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-usuarios th {
+  background-color: #f4b6c2;
+  color: #333;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.tabla-usuarios td {
+  padding: 12px;
+  background-color: #fef4f7;
+  color: #333;
+}
+
+.tabla-usuarios tr:hover {
+  background-color: #ffe8ee;
+}
+
+.boton-revisar {
+  background-color: #b58392;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.boton-revisar:hover {
+  background-color: #9f6d7a;
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.paginacion button {
+  background-color: #d4a5a5;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.paginacion button:disabled {
+  background-color: #ccc;
+  cursor: default;
+}
+
+.paginacion span {
+  font-weight: 500;
+}
+
+.pasajero-detalle {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.btn-regresar {
+  background-color: #d4a5d9;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-regresar:hover {
+  background-color: #c28cc6;
+}
+
+.info-principal {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.imagen-perfil img {
+  width: 120px;
+  height: 120px;
+  border-radius: 100%;
+  object-fit: cover;
+  background-color: #e0e0e0;
+}
+
+.datos-usuario h2 {
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.datos-usuario p {
+  margin: 4px 0;
+  font-size: 16px;
+}
+
+.datos-vehiculo {
+  margin-bottom: 30px;
+}
+
+.datos-vehiculo h3 {
+  margin-bottom: 10px;
+}
+
+.tabla-datos div {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.tabla-datos span {
+  margin-left: 5px;
+  font-weight: normal;
+}
+
+.documento-imagen h3 {
+  margin-bottom: 10px;
+}
+
+.documento-imagen img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
