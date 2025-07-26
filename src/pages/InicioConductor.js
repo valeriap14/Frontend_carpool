@@ -290,6 +290,8 @@ function InicioConductor() {
 
           {viajeActivo && datosViajeActual && (
             <>
+              <SolicitudesReserva conductorId={JSON.parse(localStorage.getItem('usuario')).id} />
+
               <CardViajeEnCurso 
                 origen={datosViajeActual.origen}
                 destino={datosViajeActual.destino}
@@ -298,10 +300,9 @@ function InicioConductor() {
                 precio={datosViajeActual.precio_asiento}
                 descripcion={datosViajeActual.descripcion}
               />
-
-              <SolicitudesReserva conductorId={JSON.parse(localStorage.getItem('usuario')).id} />
             </>
           )}
+
         </main>
 
       </div>

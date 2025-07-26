@@ -5,12 +5,11 @@ import api from '../api/api';
 import '../styles/InicioPasajero.css';
 import ConfirmarReserva from '../pages/ConfirmarReserva';
 
-
 function InicioPasajero() {
-  const [searchParams, setSearchParams] = useState({
-    destino: ''
-  });
+  const [searchParams, setSearchParams] = useState({ 
+    destino: '' 
 
+  });
   const [viajesDisponibles, setViajesDisponibles] = useState([]);
   const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
   const navigate = useNavigate();
@@ -93,8 +92,6 @@ function InicioPasajero() {
                   <button type="submit" className="search-bar-button-texto">Buscar</button>
                 </div>
               </form>
-
-
             </div>
 
             <div className="available-trips-container">
@@ -105,23 +102,31 @@ function InicioPasajero() {
                   viajesDisponibles.map((viaje) => (
                     <div key={viaje.id} className="trip-card">
                       <div className="trip-header">
-                        <img src={viaje.conductor.fotoPerfil || '/default-avatar.png'} alt="Conductor" className="driver-avatar" />
-                        <div>
-                          <h3 className="driver-name">{viaje.conductor.nombre}</h3>
-                          <div className="driver-rating">
-                            <span className="rating-number">★ 4.7</span>
+                        <div className="driver-info">
+                          <img
+                            src={viaje.conductor.fotoPerfil || '/default-avatar.png'}
+                            alt="Conductor"
+                            className="driver-avatar"
+                          />
+                          <div className="driver-details">
+                            <h3 className="driver-name">{viaje.conductor.nombre}</h3>
+                            <div className="driver-rating">
+                              <span className="rating-number">★ 4.7</span>
+                            </div>
                           </div>
                         </div>
                       </div>
 
                       <p className="trip-route">{viaje.origen} → {viaje.destino}</p>
                       <p className="trip-time">{viaje.hora_salida}</p>
-                      <p className="trip-seats">{viaje.asientos_disponibles} asiento{viaje.asientos_disponibles !== 1 ? 's' : ''} disponible{viaje.asientos_disponibles !== 1 ? 's' : ''}</p>
+                      <p className="trip-seats">
+                        {viaje.asientos_disponibles} asiento{viaje.asientos_disponibles !== 1 ? 's' : ''} disponible{viaje.asientos_disponibles !== 1 ? 's' : ''}
+                      </p>
                       <p className="trip-price">L.{viaje.precio_asiento}</p>
 
-                      <button className="reserve-button" onClick={() => setReservaSeleccionada(viaje)}>Reservar Viaje</button>
-
-
+                      <button className="reserve-button" onClick={() => setReservaSeleccionada(viaje)}>
+                        Reservar Viaje
+                      </button>
                     </div>
                   ))
                 ) : (
@@ -142,12 +147,12 @@ function InicioPasajero() {
               </div>
             </div>
           </div>
-              {reservaSeleccionada && (
-                <div className="confirmar-reserva-overlay">
-                  <ConfirmarReserva viaje={reservaSeleccionada} onClose={() => setReservaSeleccionada(null)} />
-                </div>
-              )}
 
+          {reservaSeleccionada && (
+            <div className="confirmar-reserva-overlay">
+              <ConfirmarReserva viaje={reservaSeleccionada} onClose={() => setReservaSeleccionada(null)} />
+            </div>
+          )}
         </main>
       </div>
     </div>
@@ -155,4 +160,3 @@ function InicioPasajero() {
 }
 
 export default InicioPasajero;
-
