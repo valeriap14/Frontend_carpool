@@ -7,6 +7,7 @@ import MapaRuta from './MapaRuta';
 import api from '../api/api';   
 import CardViajeEnCurso from '../pages/CardViajeEnCurso';
 import SolicitudesReserva from './SolicitudesReserva';
+import ImagenPerfil from '../pages/fotoPerfil';
 
 function InicioConductor() {
   const [showModal, setShowModal] = useState(false);
@@ -249,7 +250,11 @@ function InicioConductor() {
         </div>
         <div className="header-right">
           <FaBell className="icon-notification" />
-          <FaUserCircle className="icon-profile" />
+          <ImagenPerfil
+            id={JSON.parse(localStorage.getItem('usuario'))?.id}
+            alt="Foto del conductor"
+            className="avatar-circle"
+          />
           <button className="logout-btn" onClick={handleCerrarSesion}>Cerrar sesión</button>
         </div>
       </header>

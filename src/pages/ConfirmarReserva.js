@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../api/api';
 import '../styles/ConfirmarReserva.css';
+import ImagenPerfil from '../pages/fotoPerfil';
 
 function ConfirmarReserva({ viaje, onClose }) {
   const [detalle, setDetalle] = useState(null);
@@ -53,7 +54,8 @@ function ConfirmarReserva({ viaje, onClose }) {
         <h2 className="reserva-titulo">Confirmar Reserva</h2>
 
         <div className="reserva-conductor">
-          <img src={conductor.fotoPerfil || '/default-avatar.png'} alt="Conductor" className="conductor-foto" />
+          <ImagenPerfil id={conductor.id} className="conductor-foto" alt={`${conductor.nombre} ${conductor.apellido}`} />
+
           <div className="conductor-info">
             <h3>{conductor.nombre} {conductor.apellido}</h3>
             <p className="conductor-rating">4.7</p>

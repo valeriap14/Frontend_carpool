@@ -4,6 +4,7 @@ import {FaBell, FaUserCircle, FaHome, FaHistory,FaStar, FaQuestionCircle, FaSear
 import api from '../api/api';
 import '../styles/InicioPasajero.css';
 import ConfirmarReserva from '../pages/ConfirmarReserva';
+import ImagenPerfil from '../pages/fotoPerfil';
 
 function InicioPasajero() {
   const [searchParams, setSearchParams] = useState({ 
@@ -55,7 +56,11 @@ function InicioPasajero() {
         </div>
         <div className="header-right">
           <FaBell className="icon-notification" />
-          <FaUserCircle className="icon-profile" />
+          <ImagenPerfil
+            id={JSON.parse(localStorage.getItem('usuario'))?.id}
+            alt="Foto del conductor"
+            className="avatar-circle"
+          />
           <button className="logout-btn" onClick={handleCerrarSesion}>Cerrar sesión</button>
         </div>
       </header>
@@ -103,11 +108,7 @@ function InicioPasajero() {
                     <div key={viaje.id} className="trip-card">
                       <div className="trip-header">
                         <div className="driver-info">
-                          <img
-                            src={viaje.conductor.fotoPerfil || '/default-avatar.png'}
-                            alt="Conductor"
-                            className="driver-avatar"
-                          />
+                          <ImagenPerfil id={viaje.conductor.id} className="driver-avatar" alt="Foto del conductor" />
                           <div className="driver-details">
                             <h3 className="driver-name">{viaje.conductor.nombre}</h3>
                             <div className="driver-rating">

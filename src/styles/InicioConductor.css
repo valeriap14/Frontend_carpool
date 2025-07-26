@@ -68,6 +68,15 @@ body {
   cursor: pointer;
 }
 
+.avatar-circle {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  width: 35px !important;
+  height: 35px !important;
+}
+
 .logout-btn {
   background-color: #C080C0;
   color: white;

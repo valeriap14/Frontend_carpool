@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../api/api';
 import '../styles/SolicitudesReserva.css';
+import ImagenPerfil from '../pages/fotoPerfil';
 
 function SolicitudesReserva({ conductorId }) {
   const [solicitudes, setSolicitudes] = useState([]);
@@ -20,15 +21,13 @@ function SolicitudesReserva({ conductorId }) {
 
   useEffect(() => {
     cargarSolicitudes();
-    // Opcional: cargar cada cierto tiempo para "actualizar"
-    const interval = setInterval(cargarSolicitudes, 30000); // cada 30 seg
+    const interval = setInterval(cargarSolicitudes, 30000); 
     return () => clearInterval(interval);
   }, []);
 
   const responderSolicitud = async (id, estado) => {
     try {
       await api.put(`/reservas/responder/${id}`, { estado });
-      // Refrescar la lista después de responder
       cargarSolicitudes();
     } catch (error) {
       console.error('Error respondiendo solicitud:', error);
@@ -46,11 +45,8 @@ function SolicitudesReserva({ conductorId }) {
         const pasajero = solicitud.Usuario; 
         return (
           <div key={solicitud.id} className="solicitud-card">
-            <img
-              src={pasajero.fotoPerfil || '/default-avatar.png'}
-              alt={`${pasajero.nombre} ${pasajero.apellido}`}
-              className="foto-pasajero"
-            />
+            <ImagenPerfil id={pasajero.id} className="driver-avatar" alt={`${pasajero.nombre} ${pasajero.apellido}`} />
+
             <div className="info-pasajero">
               <h3>{pasajero.nombre} {pasajero.apellido}</h3>
               <p>{solicitud.mensaje || 'Solicita unirse a tu viaje'}</p>

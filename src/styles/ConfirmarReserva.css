@@ -28,13 +28,15 @@
   gap: 1rem;
 }
 
-.conductor-foto {
-  width: 55px;
-  height: 55px;
+.avatar-circle {
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #a1dab4;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  width: 35px !important;
+  height: 35px !important;
 }
+
 
 .conductor-info h3 {
   margin: 0;
