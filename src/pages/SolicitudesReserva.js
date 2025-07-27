@@ -45,11 +45,13 @@ function SolicitudesReserva({ conductorId }) {
         const pasajero = solicitud.Usuario; 
         return (
           <div key={solicitud.id} className="solicitud-card">
-            <ImagenPerfil id={pasajero.id} className="driver-avatar" alt={`${pasajero.nombre} ${pasajero.apellido}`} />
+            <div className="solicitud-avatar-info">
+                <ImagenPerfil id={pasajero.id} className="driver-avatar" alt={`${pasajero.nombre} ${pasajero.apellido}`} />
 
-            <div className="info-pasajero">
-              <h3>{pasajero.nombre} {pasajero.apellido}</h3>
-              <p>{solicitud.mensaje || 'Solicita unirse a tu viaje'}</p>
+                <div className="info-pasajero">
+                  <h3>{pasajero.nombre} {pasajero.apellido}</h3>
+                  <p>{solicitud.mensaje || 'Solicita unirse a tu viaje'}</p>
+                </div>
             </div>
             <div className="botones-respuesta">
               <button className="btn btn-aceptar" onClick={() => responderSolicitud(solicitud.id, 'aceptada')}>
