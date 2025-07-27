@@ -10,14 +10,14 @@ import ConfirmarReserva from './pages/ConfirmarReserva';
 
 //administrador
 import InicioAdmi from "./pages/inicioAdmi";
-import HistoriaPasajeros from "./pages/hisPasajero";
+import HistoriaPasajeros from "./pages/admiHistorialPasajero";
 import HistorialViaje from "./pages/AdmiHistorial";
 import AdmiPasajero from "./pages/admiPasajero";
 import AdmiConductor from "./pages/admiConductor";
 import AdmiUsuario from "./pages/admiUsuario";
 import AdmiVerPasajero from "./pages/admiVerPasajero";
 import AdmiVerConductor from "./pages/admiVerConductor";
-
+import AdmiHistorialReserva from "./pages/AdmiHistorialReserva";
 
 function App() {
   return (
@@ -40,6 +40,7 @@ function App() {
           <Route path="/Admi/Usuario" element={<AdmiUsuario />} />
           <Route path="/Admi/InfoPasajero" element={<AdmiVerPasajero />} />
           <Route path="/Admi/InfoConductor" element={<AdmiVerConductor />} />
+          <Route path="/Admi/HistorialReserva" element={<AdmiHistorialReserva />} />
 
       </Routes>
 
