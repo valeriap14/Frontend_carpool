@@ -1,37 +1,49 @@
 import Menu from "./admi";
 import '../styles/tablas.css';
-import React from 'react';
 
-import { useState} from 'react';
+import api from '../api/api';
+
+import { useState, useEffect} from 'react';
 
 function Pasajero(){
-        const usuarios = [
-    { nombre: 'Jose Anthonio', apellido: 'Alvarez Rodriguez', correo: 'jose.alvarez@unah.hn', celular: '31481092' },
-    { nombre: 'Maria Jese', apellido: 'Gomez Caceres', correo: 'maria.gomez@unah.hn', celular: '31888888' },
-    { nombre: 'Luis Nombre', apellido: 'Perez Nombre', correo: 'luis.perez@unah.hn', celular: '31234567' },
-    { nombre: 'Ana Nombre', apellido: 'Lopez Nombre', correo: 'ana.lopez@unah.hn', celular: '31999999' },
-    { nombre: 'Carlos Nombre', apellido: 'Martinez Nombre', correo: 'carlos.m@unah.hn', celular: '31123456' },
-    { nombre: 'Lucia Nombre', apellido: 'Diaz Nombre', correo: 'lucia.diaz@unah.hn', celular: '31098765' },
-    { nombre: 'Lucia Nombre', apellido: 'Diaz Nombre', correo: 'lucia.diaz@unah.hn', celular: '31098765' },
-    { nombre: 'Jose Anthonio', apellido: 'Alvarez Rodriguez', correo: 'jose.alvarez@unah.hn', celular: '31481092' },
-    { nombre: 'Maria Jese', apellido: 'Gomez Caceres', correo: 'maria.gomez@unah.hn', celular: '31888888' },
-    { nombre: 'Luis Nombre', apellido: 'Perez Nombre', correo: 'luis.perez@unah.hn', celular: '31234567' },
-    { nombre: 'Ana Nombre', apellido: 'Lopez Nombre', correo: 'ana.lopez@unah.hn', celular: '31999999' },
-    { nombre: 'Carlos Nombre', apellido: 'Martinez Nombre', correo: 'carlos.m@unah.hn', celular: '31123456' },
-    { nombre: 'Lucia Nombre', apellido: 'Diaz Nombre', correo: 'lucia.diaz@unah.hn', celular: '31098765' },
-    { nombre: 'Lucia Nombre', apellido: 'Diaz Nombre', correo: 'lucia.diaz@unah.hn', celular: '31098765' },
-   
-  ];
-
   const [busqueda, setBusqueda] = useState('');
   const [paginaActual, setPaginaActual] = useState(1);
   const registrosPorPagina = 4;
 
-  const usuariosFiltrados = usuarios.filter(usuario =>
-    Object.values(usuario).some(valor =>
-      valor.toLowerCase().includes(busqueda.toLowerCase())
+  const [usuarios, setUsuario] = useState([]);
+  
+  
+              useEffect(() => {
+  
+              const historial = async () =>  {
+              try {
+                
+                  const respuesta = await api.get('administrador/pasajeros');
+                  setUsuario(respuesta.data);
+                  
+
+                  const data = Object.values(respuesta.data).filter(item => typeof item === 'object' && item.nombre);
+                  setUsuario(data);
+                  
+  
+                }catch(error){  
+                  console.error('Error al encontrar pasajeros:', error);
+                }
+                };
+  
+                historial();
+            }, []);
+       
+
+  
+
+ const usuariosFiltrados = Array.isArray(usuarios)
+  ? usuarios.filter(usuario =>
+      Object.values(usuario).some(valor =>
+        String(valor).toLowerCase().includes(busqueda.toLowerCase())
+      )
     )
-  );
+  : [];
 
   const totalPaginas = Math.ceil(usuariosFiltrados.length / registrosPorPagina);
   const inicio = (paginaActual - 1) * registrosPorPagina;
@@ -69,7 +81,7 @@ function Pasajero(){
                       <th>Nombre</th>
                       <th>Apellido</th>
                       <th>Correo Electrónico</th>
-                      <th>Celular</th>
+                      <th>Telefono</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -80,7 +92,7 @@ function Pasajero(){
                           <td>{u.nombre}</td>
                           <td>{u.apellido}</td>
                           <td>{u.correo}</td>
-                          <td>{u.celular}</td>
+                          <td>{u.telefono}</td>
                           <td>
                             <button className="boton-revisar">Revisar</button>
                           </td>

@@ -1,30 +1,51 @@
 import Menu from "./admi";
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
 import '../styles/tablas.css';
-
+import api from '../api/api';
 
 
 function HistorialReserva(){
-  const usuarios = [
-        { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-        { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-        { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-        { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-        { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-        { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-        { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-        
-      ];
+ const [busqueda, setBusqueda] = useState('');
+    const [paginaActual, setPaginaActual] = useState(1);
+    const registrosPorPagina = 4;
+  
+    const [usuarios, setUsuario] = useState([]);
     
-      const [busqueda, setBusqueda] = useState('');
-      const [paginaActual, setPaginaActual] = useState(1);
-      const registrosPorPagina = 4;
     
-      const usuariosFiltrados = usuarios.filter(usuario =>
+                useEffect(() => {
+    
+                const historial = async () =>  {
+                try {
+                  
+                    const respuesta = await api.get('administrador/reserva');
+                    setUsuario(respuesta.data);
+                    
+  
+                   const data = Object.values(respuesta.data).filter(
+                     item => typeof item === 'object' && item.Usuario
+                    );
+                   setUsuario(data);
+                    console.log(data);
+                    
+    
+                  }catch(error){  
+                    console.error('Error al encontrar el historial de reserva:', error);
+                  }
+                  };
+    
+                  historial();
+              }, []);
+         
+  
+    
+  
+   const usuariosFiltrados = Array.isArray(usuarios)
+    ? usuarios.filter(usuario =>
         Object.values(usuario).some(valor =>
-          valor.toLowerCase().includes(busqueda.toLowerCase())
+          String(valor).toLowerCase().includes(busqueda.toLowerCase())
         )
-      );
+      )
+    : [];
     
       const totalPaginas = Math.ceil(usuariosFiltrados.length / registrosPorPagina);
       const inicio = (paginaActual - 1) * registrosPorPagina;
@@ -60,10 +81,12 @@ function HistorialReserva(){
                 <table className="tabla-usuarios">
                   <thead>
                     <tr>
-                      <th>Pasajero</th>
-                      <th>Codigo Viaje</th>
-                      <th>Fecha de Viaje</th>
                       <th>Estado</th>
+                      <th>Codigo Viaje</th>
+                      <th>Mensaje</th>
+                      <th>Nombre</th>
+                      <th>Telefono</th>
+                      <th>Correo</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -71,10 +94,12 @@ function HistorialReserva(){
                     {usuariosPaginados.length > 0 ? (
                       usuariosPaginados.map((u, i) => (
                         <tr key={i}>
-                          <td>{u.pasajero}</td>
-                          <td>{u.id_viaje}</td>
-                          <td>{u.fechaViaje}</td>
                           <td>{u.estado}</td>
+                          <td>{u.viaje_id}</td>
+                          <td>{u.mensaje}</td>
+                          <td>{u.Usuario.nombre}</td>
+                          <td>{u.Usuario.telefono}</td>
+                          <td>{u.Usuario.correo}</td>
                           <td>
                             <button className="boton-revisar">Revisar</button>
                           </td>
