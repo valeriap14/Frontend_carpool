@@ -5,6 +5,7 @@ import api from '../api/api';
 import '../styles/InicioPasajero.css';
 import ConfirmarReserva from '../pages/ConfirmarReserva';
 import ImagenPerfil from '../pages/fotoPerfil';
+import Toast from '../components/toast';
 
 function InicioPasajero() {
   const [searchParams, setSearchParams] = useState({ 
@@ -13,6 +14,7 @@ function InicioPasajero() {
   });
   const [viajesDisponibles, setViajesDisponibles] = useState([]);
   const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
+   const [notificacion, setNotificacion] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -154,6 +156,16 @@ function InicioPasajero() {
               <ConfirmarReserva viaje={reservaSeleccionada} onClose={() => setReservaSeleccionada(null)} />
             </div>
           )}
+
+        {notificacion && (
+        <Toast
+    mensaje={notificacion.mensaje}
+    onClose={() => setNotificacion(null)}
+       />
+       )}
+
+
+
         </main>
       </div>
     </div>
