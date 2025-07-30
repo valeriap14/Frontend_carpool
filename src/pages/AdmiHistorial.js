@@ -1,36 +1,52 @@
 import Menu from "./admi";
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
 import '../styles/tablas.css';
+import api from '../api/api';
 
 
 
 function HistorialViaje(){
-  const usuarios = [
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-        { conductor: 'jose.moncada@unah.hn', pasajero: 'monica.caceres@unah.hn', fechaViaje: '25/02/2021', precio: '30' },
-
-      ];
-    
-      const [busqueda, setBusqueda] = useState('');
+   const [busqueda, setBusqueda] = useState('');
       const [paginaActual, setPaginaActual] = useState(1);
       const registrosPorPagina = 4;
     
-      const usuariosFiltrados = usuarios.filter(usuario =>
-        Object.values(usuario).some(valor =>
-          valor.toLowerCase().includes(busqueda.toLowerCase())
+      const [usuarios, setUsuario] = useState([]);
+      
+      
+                  useEffect(() => {
+      
+                  const historial = async () =>  {
+                  try {
+                    
+                      const respuesta = await api.get('administrador/viajes');
+                      setUsuario(respuesta.data);
+                      
+    
+                     const data = Object.values(respuesta.data).filter(
+                       item => typeof item === 'object' && item.Usuario
+                      );
+                     setUsuario(data);
+                      console.log(data);
+                      
+      
+                    }catch(error){  
+                      console.error('Error al encontrar el historial de viajes:', error);
+                    }
+                    };
+      
+                    historial();
+                }, []);
+           
+    
+      
+    
+     const usuariosFiltrados = Array.isArray(usuarios)
+      ? usuarios.filter(usuario =>
+          Object.values(usuario).some(valor =>
+            String(valor).toLowerCase().includes(busqueda.toLowerCase())
+          )
         )
-      );
+      : [];
     
       const totalPaginas = Math.ceil(usuariosFiltrados.length / registrosPorPagina);
       const inicio = (paginaActual - 1) * registrosPorPagina;
@@ -66,10 +82,11 @@ function HistorialViaje(){
                 <table className="tabla-usuarios">
                   <thead>
                     <tr>
+                      <th>Codigo</th>
+                      <th>Destino</th>
                       <th>Conductor</th>
-                      <th>Pasajero</th>
-                      <th>Fecha de Viaje</th>
-                      <th>Precio</th>
+                      <th>Correo</th>
+                      <th>Telefono</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -77,10 +94,11 @@ function HistorialViaje(){
                     {usuariosPaginados.length > 0 ? (
                       usuariosPaginados.map((u, i) => (
                         <tr key={i}>
-                          <td>{u.conductor}</td>
-                          <td>{u.pasajero}</td>
-                          <td>{u.fechaViaje}</td>
-                          <td>{u.precio}</td>
+                          <td>{u.id}</td>
+                          <td>{u.destino}</td>
+                          <td>{u.Usuario.nombre}</td>
+                          <td>{u.Usuario.correo}</td>
+                          <td>{u.Usuario.telefono}</td>
                           <td>
                             <button className="boton-revisar">Revisar</button>
                           </td>

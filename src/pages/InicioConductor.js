@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {FaBell, FaUserCircle, FaCar,FaHome, FaRoute, FaMoneyBill, FaQuestionCircle} from 'react-icons/fa';
 import '../styles/InicioConductor.css';
 import loopLogo from '../assets/loop.png';
-import MapaRuta from './MapaRuta';
+import MapaRuta from '../pages/MapaRutaLeaflet';
+import { geocodeAddress } from '../utils/geocoding';
 import api from '../api/api';   
 import CardViajeEnCurso from '../pages/CardViajeEnCurso';
 import SolicitudesReserva from './SolicitudesReserva';
@@ -23,7 +24,8 @@ function InicioConductor() {
   });
   const [errors, setErrors] = useState({}); 
   const [datosViajeActual, setDatosViajeActual] = useState(null); 
-
+  const [origenCoords, setOrigenCoords] = useState(null);
+  const [destinoCoords, setDestinoCoords] = useState(null);
   const navigate = useNavigate();
 
   const sincronizarViajeActivo = async () => {
@@ -53,6 +55,20 @@ function InicioConductor() {
       localStorage.removeItem("viaje_id");
     }
   };
+
+  useEffect(() => {
+    const obtenerCoordenadas = async () => {
+      if (datosViajeActual?.origen && datosViajeActual?.destino) {
+        const origen = await geocodeAddress(datosViajeActual.origen);
+        const destino = await geocodeAddress(datosViajeActual.destino);
+        setOrigenCoords(origen);
+        setDestinoCoords(destino);
+      }
+    };
+
+    obtenerCoordenadas();
+  }, [datosViajeActual]);
+
 
   useEffect(() => {
     sincronizarViajeActivo();
@@ -286,12 +302,10 @@ function InicioConductor() {
         </aside>
 
         <main className="content-area-fixed">
-          {datosViajeActual && (
-            <MapaRuta
-              origen={datosViajeActual.origen}
-              destino={datosViajeActual.destino}
-            />
+          {origenCoords && destinoCoords && (
+            <MapaRuta origen={origenCoords} destino={destinoCoords} />
           )}
+
 
           {viajeActivo && datosViajeActual && (
             <>

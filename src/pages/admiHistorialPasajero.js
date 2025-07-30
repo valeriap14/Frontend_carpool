@@ -1,30 +1,49 @@
 
 import Menu from "./admi";
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
 import '../styles/tablas.css';
+import api from '../api/api';
 
 
 function HistorialPasajeros(){
-    const usuarios = [
-            { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-            { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-            { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-            { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-            { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-            { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-            { pasajero: 'jose.moncada@unah.hn', id_viaje: '2', fechaViaje: '25/02/2021', estado: 'Aceptado' },
-            
-          ];
-        
+
+
+   const [usuarios, setUsuario] = useState([]);
           const [busqueda, setBusqueda] = useState('');
           const [paginaActual, setPaginaActual] = useState(1);
           const registrosPorPagina = 4;
+    
+                useEffect(() => {
+    
+                const historial = async () =>  {
+                try {
+                  
+                    const respuesta = await api.get('administrador/pasajeros');
+                    setUsuario(respuesta.data);
+                    
+  
+                    const data = Object.values(respuesta.data).filter(item => typeof item === 'object' && item.nombre);
+                    setUsuario(data);
+                    
+    
+                  }catch(error){  
+                    console.error('Error al encontrar conductores:', error);
+                  }
+                  };
+    
+                  historial();
+              }, []);
+    
         
-          const usuariosFiltrados = usuarios.filter(usuario =>
-            Object.values(usuario).some(valor =>
-              valor.toLowerCase().includes(busqueda.toLowerCase())
-            )
-          );
+          
+        
+         const usuariosFiltrados = Array.isArray(usuarios)
+  ? usuarios.filter(usuario =>
+      Object.values(usuario).some(valor =>
+        String(valor).toLowerCase().includes(busqueda.toLowerCase())
+      )
+    )
+  : [];
         
           const totalPaginas = Math.ceil(usuariosFiltrados.length / registrosPorPagina);
           const inicio = (paginaActual - 1) * registrosPorPagina;

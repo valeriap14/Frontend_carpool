@@ -32,10 +32,10 @@ function MenuAdmi({ children }){
           <nav className="sidebar-nav">
             <button className="nav-btn active" onClick={() => navigate('/InicioAdmi')}><FaHome className="nav-icon" /> Inicio</button>
             <button className="nav-btn" onClick={() => navigate('/Admi/HistorialViajes')}><FaHistory className="nav-icon" /> Historial pasajeros</button>
-            <button className="nav-btn" onClick={() => navigate('/Admi/Notificaciones')}><FaQuestionCircle className="nav-icon" /> Historial conductores</button>
+            <button className="nav-btn" onClick={() => navigate('/Admi/Historial')}><FaQuestionCircle className="nav-icon" /> Historial conductores</button>
             <button className="nav-btn" onClick={() => navigate('/Admi/Pasajero')}><FaUserCircle className="nav-icon" /> Pasajero</button>
             <button className="nav-btn" onClick={() => navigate('/Admi/Conductor')}><FaUserCircle className="nav-icon" /> Conductores</button>
-            <button className="nav-btn" onClick={() => navigate('/Admi/Usuario')}>< FaStar className="nav-icon"/> Crear usuario</button>
+            <button className="nav-btn" onClick={() => navigate('/Admi/HistorialReserva')}>< FaStar className="nav-icon"/> Reserva</button>
           </nav>
         </aside>
 
