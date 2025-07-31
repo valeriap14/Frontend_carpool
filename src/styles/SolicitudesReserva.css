@@ -11,7 +11,7 @@
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 10px;
-  background: #fafafa;
+  background: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   width: 100%; 
 }
@@ -45,11 +45,11 @@
 }
 
 .btn-aceptar {
-  background-color: #28a745; 
+  background-color: #94cd97; 
 }
 
 .btn-rechazar {
-  background-color: #dc3545; 
+  background-color: #C080C0; 
 }
 
 .solicitud-avatar-info {

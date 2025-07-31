@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {FaBell, FaUserCircle, FaHome, FaHistory,FaStar, FaQuestionCircle, FaSearch} from 'react-icons/fa';
+import { FaBell, FaUserCircle, FaHome, FaRoute, FaSearch, FaQuestionCircle } from 'react-icons/fa';
 import api from '../api/api';
 import '../styles/InicioPasajero.css';
 import ConfirmarReserva from '../pages/ConfirmarReserva';
 import ImagenPerfil from '../pages/fotoPerfil';
+import ViajeAceptadoCard from '../pages/ViajeAceptadoCard';
 
 function InicioPasajero() {
-  const [searchParams, setSearchParams] = useState({ 
-    destino: '' 
-
-  });
+  const [searchParams, setSearchParams] = useState({ destino: '' });
   const [viajesDisponibles, setViajesDisponibles] = useState([]);
   const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
+  const [viajeAceptado, setViajeAceptado] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,8 +28,19 @@ function InicioPasajero() {
         setViajesDisponibles([]);
       }
     };
-
     obtenerViajes();
+
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario?.id) {
+      api.get(`/viajePasajero/pasajero/${usuario.id}/viaje-aceptado`)
+        .then(res => {
+          console.log("Datos viaje aceptado:", res.data);
+          setViajeAceptado(res.data);
+        })
+        .catch(err => {
+          console.error("Error al cargar viaje aceptado:", err);
+        });
+    }
   }, []);
 
   const handleCerrarSesion = () => {
@@ -55,7 +65,6 @@ function InicioPasajero() {
           <h1 className="logo-text">loop</h1>
         </div>
         <div className="header-right">
-          <FaBell className="icon-notification" />
           <ImagenPerfil
             id={JSON.parse(localStorage.getItem('usuario'))?.id}
             alt="Foto del conductor"
@@ -69,8 +78,7 @@ function InicioPasajero() {
         <aside className="sidebar-fixed">
           <nav className="sidebar-nav">
             <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
-            <button className="nav-btn"><FaHistory className="nav-icon" /> Viajes Reservados</button>
-            <button className="nav-btn"><FaStar className="nav-icon" /> Historial de Viajes</button>
+            <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
             <button className="nav-btn" onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>
             <button className="nav-btn"><FaQuestionCircle className="nav-icon" /> Ayuda</button>
           </nav>
@@ -90,7 +98,7 @@ function InicioPasajero() {
                       name="destino"
                       value={searchParams.destino}
                       onChange={handleInputChange}
-                      placeholder="¿A dónde vas?"
+                      placeholder="¿A dónde te diriges?"
                       className="search-bar-input"
                     />
                   </div>
@@ -134,18 +142,6 @@ function InicioPasajero() {
                   <p>No hay viajes activos en este momento.</p>
                 )}
               </div>
-
-              <div className="footer-info">
-                <div className="average-rating">
-                  <p>Viajes esta semana <span>{viajesDisponibles.length}</span></p>
-                  <p>Calificación promedio <span>4.7</span></p>
-                </div>
-
-                <div className="safety-tip">
-                  <p>Consejo de Seguridad</p>
-                  <p className="tip-text">Verifica siempre la placa del vehículo antes de abordar</p>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -154,6 +150,9 @@ function InicioPasajero() {
               <ConfirmarReserva viaje={reservaSeleccionada} onClose={() => setReservaSeleccionada(null)} />
             </div>
           )}
+
+          {viajeAceptado && <ViajeAceptadoCard viaje={viajeAceptado} />}
+
         </main>
       </div>
     </div>
