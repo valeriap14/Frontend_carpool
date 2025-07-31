@@ -1,45 +1,30 @@
-.trip-card.active-trip {
-  background-color: #e6f7ff;       
-  border: 2px solid #1890ff;        
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 24px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', sans-serif;
+.perfil-conductor-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px; 
 }
 
-.trip-card.active-trip h3 {
-  color: #1890ff;
-  margin-bottom: 12px;
-}
-
-.trip-card.active-trip p {
-  margin: 6px 0;
-  color: #333;
-}
-
-.avatar-circle {
+.avatar-conductor {
   width: 70px;
   height: 70px;
-  border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 12px;
-}
-
-.perfil-conductor {
-  display: flex;
-  align-items: center;      
-  gap: 12px;
-  margin-bottom: 12px;
 }
 
 .nombre-conductor {
   font-size: 18px;
   font-weight: 600;
-  color: #1890ff;
-  line-height: 1;            
-  margin: 0;                
-  display: flex;
-  align-items: center;
+  color: #000000;
+  margin: 0;
 }
 
+.trip-card.active-trip p {
+  margin: 10px 0; 
+  color: #333;
+}
+
+
+.titulo-viaje {
+  margin: 10px 0; 
+  color: #1890ff; 
+}

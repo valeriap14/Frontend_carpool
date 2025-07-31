@@ -253,6 +253,11 @@
   position: relative;
 }
 
+.viaje-en-curso-container {
+  margin: 20px 0; 
+}
+
+
 @media (max-width: 1024px) {
   .search-bar-contenedor {
     flex-direction: column;

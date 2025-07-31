@@ -6,18 +6,19 @@ const ViajeAceptadoCard = ({ viaje }) => {
 
   return (
     <div className="trip-card active-trip">
-      <h3>Viaje en curso</h3>
+      <h3 FaRout className="titulo-viaje">Viaje en curso</h3>
 
-      <div className="perfil-conductor">
-        <ImagenPerfil
-          id={viaje.Usuario?.id}
-          alt="Foto del conductor"
-          className="avatar-circle"
-        />
-        <span className="nombre-conductor">
-          {viaje.Usuario?.nombre} {viaje.Usuario?.apellido}
-        </span>
-      </div>
+      <div className="perfil-conductor-info">
+            <ImagenPerfil
+                id={viaje.Usuario?.id}
+                alt="Foto del conductor"
+                className="avatar-conductor"
+            />
+            <span className="nombre-conductor">
+                {viaje.Usuario?.nombre} {viaje.Usuario?.apellido}
+            </span>
+     </div>
+
 
       <p><strong>Ruta:</strong> {viaje.origen} → {viaje.destino}</p>
       <p><strong>Hora de salida:</strong> {viaje.hora_salida}</p>
