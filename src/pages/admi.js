@@ -1,12 +1,14 @@
 
-import { useNavigate } from 'react-router-dom';
-import { FaBell, FaUserCircle, FaHome, FaHistory, FaStar, FaQuestionCircle } from 'react-icons/fa';
+import { useNavigate , useLocation} from 'react-router-dom';
+import {  FaUserCircle, FaHome,  FaStar, FaQuestionCircle } from 'react-icons/fa';
 import '../styles/MenuAdmi.css';
 
 
 function MenuAdmi({ children }){
     const navigate = useNavigate();
+     const location = useLocation();
     
+    const activo = (path) => location.pathname === path;
 
     const handleCerrarSesion = () => {
     localStorage.clear();
@@ -21,8 +23,7 @@ function MenuAdmi({ children }){
           <h1 className="logo-text">loop</h1>
         </div>
         <div className="header-right">
-          <FaBell className="icon-notification" />
-          <FaUserCircle className="icon-profile" />
+         
           <button className="logout-btn" onClick={handleCerrarSesion}>Cerrar sesión</button>
         </div>
       </header>
@@ -30,12 +31,30 @@ function MenuAdmi({ children }){
       <div className="main-content-container">
         <aside className="sidebar-fixed">
           <nav className="sidebar-nav">
-            <button className="nav-btn active" onClick={() => navigate('/InicioAdmi')}><FaHome className="nav-icon" /> Inicio</button>
-            <button className="nav-btn" onClick={() => navigate('/Admi/HistorialViajes')}><FaHistory className="nav-icon" /> Historial pasajeros</button>
-            <button className="nav-btn" onClick={() => navigate('/Admi/Historial')}><FaQuestionCircle className="nav-icon" /> Historial conductores</button>
-            <button className="nav-btn" onClick={() => navigate('/Admi/Pasajero')}><FaUserCircle className="nav-icon" /> Pasajero</button>
-            <button className="nav-btn" onClick={() => navigate('/Admi/Conductor')}><FaUserCircle className="nav-icon" /> Conductores</button>
-            <button className="nav-btn" onClick={() => navigate('/Admi/HistorialReserva')}>< FaStar className="nav-icon"/> Reserva</button>
+            <button className={`nav-btn ${activo('/InicioAdmi') ? 'active' : ''}`} 
+            onClick={() => navigate('/InicioAdmi')}>
+              <FaHome className="nav-icon" /> Inicio</button>
+
+            <button className={`nav-btn ${activo('/Admi/HistorialViajes') ? 'active' : ''}`}
+            onClick={() => navigate('/Admi/HistorialViajes')}>
+              <FaQuestionCircle className="nav-icon" /> Viajes General </button>
+
+            <button className={`nav-btn ${activo('/Admi/ViajeDetalles') ? 'active' : ''}`}
+            onClick={() => navigate('/Admi/ViajeDetalles')}>
+              <FaStar className="nav-icon" /> No apretar</button>
+
+            <button className={`nav-btn ${activo('/Admi/Pasajero') ? 'active' : ''}`} 
+             onClick={() => navigate('/Admi/Pasajero')}>
+              <FaUserCircle className="nav-icon" /> Pasajero</button>
+
+            <button className={`nav-btn ${activo('/Admi/Conductor') ? 'active' : ''}`} 
+            onClick={() => navigate('/Admi/Conductor')}>
+              <FaUserCircle className="nav-icon" /> Conductores</button>
+
+            <button className={`nav-btn ${activo('/Admi/HistorialReserva') ? 'active' : ''}`}  
+            onClick={() => navigate('/Admi/HistorialReserva')}>
+              < FaStar className="nav-icon"/> Reserva</button>
+              
           </nav>
         </aside>
 

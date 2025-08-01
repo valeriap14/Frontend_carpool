@@ -1,10 +1,9 @@
-import React from "react";
 import { useEffect, useState } from "react";
 import api from '../api/api';
 import '../styles/img.css';
 import defaultCarnet from '../assets/carnet.png';
 
-function ImagenCarnet({id, alt='Foto de carnet'}){
+function ImagenRevision({id, alt='Foto de revision'}){
 
     const [imagenUrl, setImagenUrl] = useState('');
     const [loading, setLoading] = useState(true);
@@ -15,13 +14,13 @@ function ImagenCarnet({id, alt='Foto de carnet'}){
 
             try{
 
-                const response = await api.get(`usuarios/fotoCarnet/${id}`);
+                const response = await api.get(`vehiculo/fotoRevision/${id}`);
 
                 setImagenUrl(response.data.url);
                 console.log(response.data.url);
 
             }catch(error){
-                    console.error('Eror al obtener la imagen del carnet', error);
+                    console.error('Eror al obtener la imagen', error);
                     setImagenUrl('');
 
              }finally {
@@ -60,4 +59,4 @@ function ImagenCarnet({id, alt='Foto de carnet'}){
 
 }
 
-export default ImagenCarnet;
+export default ImagenRevision;

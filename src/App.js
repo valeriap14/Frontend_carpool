@@ -10,11 +10,11 @@ import ConfirmarReserva from './pages/ConfirmarReserva';
 
 //administrador
 import InicioAdmi from "./pages/inicioAdmi";
-import HistoriaPasajeros from "./pages/admiHistorialPasajero";
+
 import HistorialViaje from "./pages/AdmiHistorial";
 import AdmiPasajero from "./pages/admiPasajero";
 import AdmiConductor from "./pages/admiConductor";
-import AdmiUsuario from "./pages/admiUsuario";
+import AdmiViajeDetalle from "./pages/admiHistorialDetalles";
 import AdmiVerPasajero from "./pages/admiVerPasajero";
 import AdmiVerConductor from "./pages/admiVerConductor";
 import AdmiHistorialReserva from "./pages/AdmiHistorialReserva";
@@ -33,13 +33,13 @@ function App() {
 
 
         <Route path="/inicioAdmi" element={<InicioAdmi />} />
-          <Route path="/Admi/HistoriaPasajeros" element={<HistoriaPasajeros />} />
+          
           <Route path="/Admi/HistorialViajes" element={<HistorialViaje />} />
           <Route path="/Admi/Pasajero" element={<AdmiPasajero />} />
           <Route path="/Admi/Conductor" element={<AdmiConductor />} />
-          <Route path="/Admi/Usuario" element={<AdmiUsuario />} />
-          <Route path="/Admi/InfoPasajero" element={<AdmiVerPasajero />} />
-          <Route path="/Admi/InfoConductor" element={<AdmiVerConductor />} />
+          <Route path="/Admi/ViajeDetalles/:id" element={<AdmiViajeDetalle />} />
+          <Route path="/Admi/InfoPasajero/:id" element={<AdmiVerPasajero />} />
+          <Route path="/Admi/InfoConductor/:id" element={<AdmiVerConductor />} />
           <Route path="/Admi/HistorialReserva" element={<AdmiHistorialReserva />} />
 
       </Routes>
