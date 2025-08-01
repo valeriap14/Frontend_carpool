@@ -87,7 +87,7 @@ function HistorialReserva(){
                       <th>Nombre</th>
                       <th>Telefono</th>
                       <th>Correo</th>
-                      <th></th>
+                    
                     </tr>
                   </thead>
                   <tbody>
@@ -100,9 +100,7 @@ function HistorialReserva(){
                           <td>{u.Usuario.nombre}</td>
                           <td>{u.Usuario.telefono}</td>
                           <td>{u.Usuario.correo}</td>
-                          <td>
-                            <button className="boton-revisar">Revisar</button>
-                          </td>
+                          
                         </tr>
                       ))
                     ) : (

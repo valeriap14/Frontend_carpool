@@ -4,11 +4,13 @@ import '../styles/tablas.css';
 import api from '../api/api';
 
 import { useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Pasajero(){
   const [busqueda, setBusqueda] = useState('');
   const [paginaActual, setPaginaActual] = useState(1);
   const registrosPorPagina = 4;
+  const navigate = useNavigate();
 
   const [usuarios, setUsuario] = useState([]);
   
@@ -34,6 +36,7 @@ function Pasajero(){
                 historial();
             }, []);
        
+            
 
   
 
@@ -55,7 +58,10 @@ function Pasajero(){
     }
   };
 
-   
+
+  const revisarUsuario = (id) =>{
+    navigate(`/Admi/InfoPasajero/${id}`);
+  };
 
         return(
           
@@ -94,7 +100,7 @@ function Pasajero(){
                           <td>{u.correo}</td>
                           <td>{u.telefono}</td>
                           <td>
-                            <button className="boton-revisar">Revisar</button>
+                            <button className="boton-revisar" onClick={() => revisarUsuario(u.id)}>Revisar</button>
                           </td>
                         </tr>
                       ))

@@ -1,21 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {FaBell, FaUserCircle, FaHome, FaHistory,FaStar, FaQuestionCircle, FaSearch} from 'react-icons/fa';
+import { FaBell, FaUserCircle, FaHome, FaRoute, FaQuestionCircle, FaSearch } from 'react-icons/fa';
 import api from '../api/api';
 import '../styles/InicioPasajero.css';
 import ConfirmarReserva from '../pages/ConfirmarReserva';
 import ImagenPerfil from '../pages/fotoPerfil';
-import Toast from '../components/toast';
+import { useNotificaciones } from '../hooks/useNotificaciones';
+import SnackbarNotificacion from '../pages/SnackbarNotificacion';
+import ViajeAceptadoCard from '../pages/ViajeAceptadoCard';
 
 function InicioPasajero() {
-  const [searchParams, setSearchParams] = useState({ 
-    destino: '' 
-
-  });
+  const [searchParams, setSearchParams] = useState({ destino: '' });
   const [viajesDisponibles, setViajesDisponibles] = useState([]);
   const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
-   const [notificacion, setNotificacion] = useState(null);
+  const [viajeAceptado, setViajeAceptado] = useState(null);
+  const [notificaciones, setNotificaciones] = useState(0);
+  const [snackbar, setSnackbar] = useState(null);
+
   const navigate = useNavigate();
+  useNotificaciones(setViajeAceptado, setNotificaciones, setSnackbar);
 
   useEffect(() => {
     const obtenerViajes = async () => {
@@ -33,6 +36,13 @@ function InicioPasajero() {
     };
 
     obtenerViajes();
+
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario?.id) {
+      api.get(`/viajePasajero/pasajero/${usuario.id}/viaje-aceptado`)
+        .then(res => setViajeAceptado(res.data))
+        .catch(err => console.error("Error al cargar viaje aceptado:", err));
+    }
   }, []);
 
   const handleCerrarSesion = () => {
@@ -57,7 +67,12 @@ function InicioPasajero() {
           <h1 className="logo-text">loop</h1>
         </div>
         <div className="header-right">
-          <FaBell className="icon-notification" />
+          <div className="notification-icon-container">
+            <FaBell className="icon-notification" />
+            {notificaciones > 0 && (
+              <span className="notification-count">{notificaciones}</span>
+            )}
+          </div>
           <ImagenPerfil
             id={JSON.parse(localStorage.getItem('usuario'))?.id}
             alt="Foto del conductor"
@@ -71,8 +86,7 @@ function InicioPasajero() {
         <aside className="sidebar-fixed">
           <nav className="sidebar-nav">
             <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
-            <button className="nav-btn"><FaHistory className="nav-icon" /> Viajes Reservados</button>
-            <button className="nav-btn"><FaStar className="nav-icon" /> Historial de Viajes</button>
+            <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
             <button className="nav-btn" onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>
             <button className="nav-btn"><FaQuestionCircle className="nav-icon" /> Ayuda</button>
           </nav>
@@ -100,6 +114,12 @@ function InicioPasajero() {
                 </div>
               </form>
             </div>
+
+            {viajeAceptado && (
+              <div className="viaje-en-curso-container">
+                <ViajeAceptadoCard viaje={viajeAceptado} />
+              </div>
+            )}
 
             <div className="available-trips-container">
               <h2 className="trips-title">Viajes Disponibles</h2>
@@ -157,15 +177,13 @@ function InicioPasajero() {
             </div>
           )}
 
-        {notificacion && (
-        <Toast
-    mensaje={notificacion.mensaje}
-    onClose={() => setNotificacion(null)}
-       />
-       )}
-
-
-
+          {snackbar && (
+            <SnackbarNotificacion
+              mensaje={snackbar.mensaje}
+              tipo={snackbar.tipo}
+              onClose={() => setSnackbar(null)}
+            />
+          )}
         </main>
       </div>
     </div>

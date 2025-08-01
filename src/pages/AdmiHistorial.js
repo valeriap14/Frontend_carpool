@@ -1,5 +1,6 @@
 import Menu from "./admi";
 import { useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/tablas.css';
 import api from '../api/api';
 
@@ -9,7 +10,7 @@ function HistorialViaje(){
    const [busqueda, setBusqueda] = useState('');
       const [paginaActual, setPaginaActual] = useState(1);
       const registrosPorPagina = 4;
-    
+    const navigate = useNavigate();
       const [usuarios, setUsuario] = useState([]);
       
       
@@ -26,7 +27,7 @@ function HistorialViaje(){
                        item => typeof item === 'object' && item.Usuario
                       );
                      setUsuario(data);
-                      console.log(data);
+   
                       
       
                     }catch(error){  
@@ -58,7 +59,9 @@ function HistorialViaje(){
         }
       };
     
-    
+      const revisarUsuario = (id) =>{
+    navigate(`/Admi/ViajeDetalles/${id}`);
+  };
 
    
 
@@ -82,9 +85,9 @@ function HistorialViaje(){
                 <table className="tabla-usuarios">
                   <thead>
                     <tr>
-                      <th>Codigo</th>
-                      <th>Destino</th>
+                      <th>Viaje</th>
                       <th>Conductor</th>
+                      <th>DNI</th>
                       <th>Correo</th>
                       <th>Telefono</th>
                       <th></th>
@@ -95,12 +98,12 @@ function HistorialViaje(){
                       usuariosPaginados.map((u, i) => (
                         <tr key={i}>
                           <td>{u.id}</td>
-                          <td>{u.destino}</td>
                           <td>{u.Usuario.nombre}</td>
+                          <td>{u.Usuario.dni}</td>
                           <td>{u.Usuario.correo}</td>
                           <td>{u.Usuario.telefono}</td>
                           <td>
-                            <button className="boton-revisar">Revisar</button>
+                            <button className="boton-revisar" onClick={() => revisarUsuario(u.id)}>Revisar</button>
                           </td>
                         </tr>
                       ))

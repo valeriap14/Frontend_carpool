@@ -1,0 +1,13 @@
+docker buildx build --platform linux/amd64 -t loop-fronted:latest . --load
+
+docker run -d -p 3000:3000 --name loop-container-front loop-fronted:latest
+
+az login --use-device-code
+
+az acr login --name crloopdev
+
+docker tag loop-fronted:latest crloopdev.azurecr.io/loop-frontend:latest
+docker tag loop-fronted:latest crloopdev.azurecr.io/loop-frontend:0.1.0
+
+docker push crloopdev.azurecr.io/loop-frontend:latest
+docker push crloopdev.azurecr.io/loop-frontend:0.1.0

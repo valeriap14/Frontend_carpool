@@ -1,6 +1,7 @@
 import Menu from "./admi";
 import '../styles/tablas.css';
 import { useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 
 
@@ -9,6 +10,7 @@ function Conductor(){
    const [busqueda, setBusqueda] = useState('');
    const [paginaActual, setPaginaActual] = useState(1);
    const registrosPorPagina = 4;
+   const navigate = useNavigate();
  
    const [usuarios, setUsuario] = useState([]);
    
@@ -24,6 +26,7 @@ function Conductor(){
  
                    const data = Object.values(respuesta.data).filter(item => typeof item === 'object' && item.nombre);
                    setUsuario(data);
+                   
                    
    
                  }catch(error){  
@@ -55,6 +58,9 @@ function Conductor(){
       }
     };
   
+    const revisarUsuario = (id) =>{
+    navigate(`/Admi/InfoConductor/${id}`);
+  };
     
 
    
@@ -97,7 +103,7 @@ function Conductor(){
                           <td>{u.correo}</td>
                           <td>{u.telefono}</td>
                           <td>
-                            <button className="boton-revisar">Revisar</button>
+                            <button className="boton-revisar" onClick={() => revisarUsuario(u.id)}>Revisar</button>
                           </td>
                         </tr>
                       ))

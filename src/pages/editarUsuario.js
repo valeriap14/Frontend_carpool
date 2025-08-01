@@ -12,18 +12,18 @@ import ImagenCarnet from '../pages/fotoCarnet';
 
 function EditarUsuario() {
   const { usuario } = useContext(AuthContext);
-  const [password, setPassword] = useState('');
+  
   const navigate = useNavigate();
    const inputPerfilRef = useRef(null);
-  const [imagenPerfil, setImagenPerfil] = useState(null);
+  const [ setImagenPerfil] = useState(null);
      const inputCarnetRef = useRef(null);
-  const [carnet, setCarnet] = useState(null);
+  const [ setCarnet] = useState(null);
    const {
        register,
        handleSubmit,
      
        setValue,
-       formState: { errors, isValid }
+       formState: { errors }
      } = useForm({ mode: 'onChange' });
 
 
@@ -156,7 +156,6 @@ function EditarUsuario() {
       alert('Rol de usuario no reconocido.');
     }
     
-    setPassword('');
   };
 
   
@@ -190,7 +189,7 @@ function EditarUsuario() {
               variant="outline"
               className="camera-button"
             > 
-              <img src={camara} className="camera-icon"  onClick={handleClickImagenPerfil}/>
+              <img src={camara} className="camera-icon" alt={'fotoPerfil'} onClick={handleClickImagenPerfil}/>
 
             </button>
         </div>
@@ -212,7 +211,7 @@ function EditarUsuario() {
                     variant="outline"
                     className="camera-button"
                   > 
-                    <img src={camara} className="camera-icon" onClick={clickCarnet}/>
+                    <img src={camara} className="camera-icon"  alt={'fotoCarnet'} onClick={clickCarnet}/>
 
                   </button>
         </div>

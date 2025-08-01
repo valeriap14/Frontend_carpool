@@ -9,6 +9,8 @@ import api from '../api/api';
 import CardViajeEnCurso from '../pages/CardViajeEnCurso';
 import SolicitudesReserva from './SolicitudesReserva';
 import ImagenPerfil from '../pages/fotoPerfil';
+import { useNotificacionesConductor } from '../hooks/useNotificacionesConductor';
+
 
 function InicioConductor() {
   const [showModal, setShowModal] = useState(false);
@@ -27,6 +29,8 @@ function InicioConductor() {
   const [origenCoords, setOrigenCoords] = useState(null);
   const [destinoCoords, setDestinoCoords] = useState(null);
   const navigate = useNavigate();
+  const nuevasSolicitudes = useNotificacionesConductor();
+
 
   const sincronizarViajeActivo = async () => {
     const usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -265,7 +269,12 @@ function InicioConductor() {
           <h1 className="logo-text">loop</h1>
         </div>
         <div className="header-right">
-          <FaBell className="icon-notification" />
+          <div className="notificacion-wrapper">
+            <FaBell className="icon-notification" />
+            {nuevasSolicitudes.length > 0 && (
+              <span className="notificacion-count">{nuevasSolicitudes.length}</span>
+            )}
+          </div>
           <ImagenPerfil
             id={JSON.parse(localStorage.getItem('usuario'))?.id}
             alt="Foto del conductor"

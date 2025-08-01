@@ -1,0 +1,29 @@
+.snackbar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  z-index: 1000;
+  animation: fadeInOut 4s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.snackbar.success {
+  background-color: #28a745;
+}
+
+.snackbar.error {
+  background-color: #dc3545;
+}
+
+@keyframes fadeInOut {
+  0%   { opacity: 0; bottom: 10px; }
+  10%  { opacity: 1; bottom: 20px; }
+  90%  { opacity: 1; bottom: 20px; }
+  100% { opacity: 0; bottom: 10px; }
+}

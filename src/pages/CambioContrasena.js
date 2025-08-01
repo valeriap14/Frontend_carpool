@@ -1,16 +1,16 @@
-import { useContext, useState } from 'react';
+import {  useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 import loopLogo from '../assets/loop.png';
 import api from '../api/api';
-import { AuthContext } from '../context/AuthContext';
 
-function Login() {
+
+function CambioContrasena() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
   const navigate = useNavigate();
-   const {inicioDatos } = useContext(AuthContext);
+
 
   const validate = () => {
     const newErrors = {};
@@ -37,42 +37,9 @@ function Login() {
   setServerError('');
 
   try {
-    const response = await api.post('usuarios/inicioSesion', {
-      correo: form.email,
-      contrasena: form.password.trim()
-    });
+   
 
-    const { usuario } = response.data;
-    console.log("Usuario recibido:", usuario); 
-    inicioDatos(usuario);
-    const rolNombre = usuario.Rol?.nombre;
-
-    if (!rolNombre) {
-      setServerError('Rol de usuario no reconocido.');
-      return;
-    }
-
-    localStorage.setItem('usuario', JSON.stringify({
-      id: usuario.id,
-      nombre: usuario.nombre,
-      rol: rolNombre
-    }));
-
-    if (rolNombre === 'Conductor') {
-      navigate('/inicioconductor', {
-        state: { mensaje: `¡Bienvenido, ${usuario.nombre}!` }
-      });
-    } else if (rolNombre === 'Pasajero') {
-      navigate('/iniciopasajero', {
-        state: { mensaje: `¡Bienvenido, ${usuario.nombre}!` }
-      });
-    }else if (rolNombre === 'Administrador') {
-      navigate('/inicioAdmi', {
-        state: { mensaje: `¡Bienvenido, ${usuario.nombre}!` }
-      });
-    } else {
-      setServerError('Rol de usuario no reconocido.');
-    }
+   
 
     } catch (error) {
       if (error.response) {
@@ -101,9 +68,7 @@ function Login() {
     navigate('/');
   };
 
-  const handleForgotPassword = () => {
-    alert('Funcionalidad de recuperar contraseña - próximamente');
-  };
+
 
   return (
     <main className="login-layout">
@@ -117,8 +82,8 @@ function Login() {
                 className="form-loop-logo-img"
               />
             </div>
-            <h1>Bienvenido a Loop</h1>
-            <p>Inicia Sesión para empezar tu Experiencia</p>
+            <h1>Olvidaste la contraseña</h1>
+            <p>Ingresa tu correo para restablecer</p>
           </div>
 
           {serverError && <div className="error-message">{serverError}</div>}
@@ -134,44 +99,12 @@ function Login() {
                 placeholder="kasanchez@unah.hn"
               />
               {errors.email && <span className="error">{errors.email}</span>}
-            </div>
-
-            <div className="campo">
-              <label htmlFor="password">Contraseña:</label>
-              <input
-                type="password"
-                id="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="*************"
-              />
-              {errors.password && <span className="error">{errors.password}</span>}
-
-              <div className="forgot-password-container">
-                <button
-                  type="button"
-                  className="forgot-password-link"
-                  onClick={handleForgotPassword}
-                >
-                  ¿Olvidaste tu contraseña?
-                </button>
-              </div>
-
-              <div className="register-container">
-                <span>¿No tienes una cuenta? </span>
-                <button
-                  type="button"
-                  className="register-link"
-                  onClick={() => navigate('/registrarusuario')}
-                >
-                  Regístrate
-                </button>
-              </div>
-            </div>
+            </div> 
+            
           </div>
 
           <div className="registro-botones">
-            <button type="submit">Iniciar Sesión</button>
+            <button type="submit">Aceptar</button>
             <button type="button" className="cancelar" onClick={handleCancel}>
               Cancelar
             </button>
@@ -182,4 +115,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default CambioContrasena;

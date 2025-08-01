@@ -1,14 +1,46 @@
 import Menu from "./admi";
-
+import { useState,  useEffect, } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/editarUsuario.css';
 import '../styles/MenuAdmi.css';
 import '../styles/tablas.css';
-import defaultAvatar from '../assets/perfil-de-usuario.png';
-import defaultCarnet from '../assets/carnet.png';
+
+import ImagenPerfil from '../pages/fotoPerfil';
+import ImagenCarnet from '../pages/fotoCarnet';
+import ImagenVehiculo from '../pages/fotoVehiculo';
+import ImagenRevision from '../pages/fotoRevision';
+import ImagenLicencia from '../pages/fotoLicencia';
+import api from "../api/api";
 
 function VisualizacionConductor(){
+        const { id } = useParams();
+      const [usuario, setUsuario] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const navigate = useNavigate();
+    
+      useEffect(() => {
+        const obtenerUsuario = async () => {
+          try {
+            const response = await api.post(`administrador/conductor/${id}`);
+            setUsuario(response.data);
+          } catch (error) {
+            console.error('Error al obtener el usuario', error);
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        obtenerUsuario();
+      }, [id]);
+    
+      if (loading) return <p>Cargando...</p>;
+      if (!usuario) return <p>Usuario no encontrado.</p>;
      
-
+      
+      const regresarAdmi = async () =>{
+        setUsuario('');
+        navigate('/Admi/Conductor');
+      }
 
         return(
 
@@ -16,47 +48,49 @@ function VisualizacionConductor(){
             <div className="contenedor-blanco">
                <div className="pasajero-detalle">
                     <div className="encabezado">
-                        <button className="btn-regresar">Regresar</button>
+                        <button className="btn-regresar" onClick={regresarAdmi}>Regresar</button>
                     </div>
                     <div className="info-principal">
                          <div  className='avatar-wrapper'>
-                            <img src={defaultAvatar} alt={'fotoPerfil'}  className="avatar-circle"></img>
-                    
+                           <ImagenPerfil id={usuario.id} tamaño={120} alt={'fotoPerfil'} className="avatar-circle"/>
+                               
 
                          </div>
                         <div className="datos-usuario">
-                        <h2>Jose Antonio Moncada Garcia</h2>
-                        <p>jose.moncada@unah.hn</p>
-                        <p>3148-1092</p>
-                        <p>0801-2002-09087</p>
+                        <h2>{usuario.nombre} {usuario.apellido}</h2>
+                         <p>{usuario.correo}</p>
+                        <p>{usuario.telefono}</p>
+                        <p>{usuario.cedula}</p>
                         </div>
                 
                         <div className="datos-vehiculo">
                             <h3>Datos del automóvil</h3>
                             <div className="tabla-datos">
-                            <div><strong>Marca:</strong> <span>Toyota</span></div>
-                            <div><strong>Modelo/Año:</strong> <span>Corolla 2001</span></div>
-                            <div><strong>Color:</strong> <span>Blanco</span></div>
-                            <div><strong>Placa:</strong> <span>HDN-0909</span></div>
+                            <div><strong>Marca:</strong> <span>{usuario.Vehiculo.marca}</span></div>
+                            <div><strong>Modelo/Año:</strong> <span>{usuario.Vehiculo.modelo}</span></div>
+                            <div><strong>Color:</strong> <span>{usuario.Vehiculo.color}</span></div>
+                            <div><strong>Placa:</strong> <span>{usuario.Vehiculo.placa}</span></div>
                             </div>
                         </div>
                 
                             <div className="card-image">
                                
-                                <img src={defaultCarnet} alt={'fotoCarnet'} className="carnet-photo"></img>
+                               <ImagenCarnet id={usuario.id} alt={'fotoCarnet'} className="carnet-photo"/>
+                      
+                                
+                            </div>
+                             <div className="card-image">
+                                <ImagenVehiculo id={usuario.id} alt={'fotoCarnet'} className="carnet-photo"/>
+                                
                                 
                                 
                             </div>
                              <div className="card-image">
-                                
-                                <img src={defaultCarnet} alt={'fotoCarnet'} className="carnet-photo"></img>
-                                
+                              <ImagenRevision id={usuario.id} alt={'fotoCarnet'} className="carnet-photo"/>
                                 
                             </div>
-                             <div className="card-image">
-                              
-                                <img src={defaultCarnet} alt={'fotoCarnet'} className="carnet-photo"></img>
-                                
+                            <div className="card-image">
+                              <ImagenLicencia id={usuario.id} alt={'fotoCarnet'} className="carnet-photo"/>
                                 
                             </div>
                                 

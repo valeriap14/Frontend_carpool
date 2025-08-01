@@ -1,0 +1,30 @@
+.perfil-conductor-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px; 
+}
+
+.avatar-conductor {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+}
+
+.nombre-conductor {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+  margin: 0;
+}
+
+.trip-card.active-trip p {
+  margin: 10px 0; 
+  color: #333;
+}
+
+
+.titulo-viaje {
+  margin: 10px 0; 
+  color: #1890ff; 
+}

@@ -225,6 +225,39 @@
   border: 1px solid #ccc;
 }
 
+.trip-card.active-trip {
+  background-color: #e6f7ff;
+  border-left: 5px solid #00aaff;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.notification-icon-container {
+  position: relative;
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  padding: 2px 6px;
+  font-weight: bold;
+}
+
+.notification-wrapper {
+  position: relative;
+}
+
+.viaje-en-curso-container {
+  margin: 20px 0; 
+}
+
+
 @media (max-width: 1024px) {
   .search-bar-contenedor {
     flex-direction: column;
