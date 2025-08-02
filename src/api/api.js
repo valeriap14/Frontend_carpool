@@ -1,10 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://localhost:3000/api/',  
+  baseURL: 'https://wa-backend-loop-dev-a3b8gpcxbybrhpcn.eastus-01.azurewebsites.net/api/',  
 
 });
-
 api.interceptors.request.use(config => {
   if (config.data instanceof FormData) {
     config.headers['Content-Type'] = 'multipart/form-data';
