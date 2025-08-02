@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://wa-backend-loop-dev-a3b8gpcxbybrhpcn.eastus-01.azurewebsites.net/api/',  
+  baseURL: 'https://localhost:3000/api/',  
 
 });
 
