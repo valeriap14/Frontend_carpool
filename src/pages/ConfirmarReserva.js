@@ -23,7 +23,35 @@ function ConfirmarReserva({ viaje, onClose }) {
     }
   }, [viaje]);
 
+
+
+
   const confirmarReserva = async () => {
+  try {
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    const pasajero_id = usuario?.id;
+
+    if (!viaje?.id || !pasajero_id) {
+      alert('Faltan datos para enviar la solicitud.');
+      return;
+    }
+
+    const mensaje = '¡Quiero unirme a tu viaje!';
+
+    await api.post('/reservas/solicitar', {
+      pasajero_id,
+      viaje_id: viaje.id,
+      mensaje
+    });
+
+    setReservaEnviada(true);
+  } catch (error) {
+    console.error('Error al enviar la reserva:', error);
+    alert('Error al enviar la solicitud.');
+  }
+};
+
+  /*const confirmarReserva = async () => {
     try {
       const usuario = JSON.parse(localStorage.getItem('usuario'));
       const pasajero_id = usuario?.id;
@@ -40,12 +68,24 @@ function ConfirmarReserva({ viaje, onClose }) {
       console.error('Error al enviar la reserva:', error);
       alert('Error al enviar la solicitud.');
     }
-  };
+  };*/
 
   if (!detalle) return <p className="reserva-titulo">Cargando detalles...</p>;
 
-  const conductor = detalle.Usuario;
+  if (!viaje) return <p className="reserva-titulo">Cargando viaje...</p>;
+
+  
+
+
+
+  const conductor = detalle.Usuarios;
   const vehiculo = conductor?.Vehiculo;
+
+  
+  if (!conductor) return <p className="reserva-titulo">Cargando conductor...</p>;
+
+  
+
 
   return (
     <div className="reserva-container-overlay">
