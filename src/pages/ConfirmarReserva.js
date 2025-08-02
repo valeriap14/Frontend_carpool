@@ -47,9 +47,18 @@ function ConfirmarReserva({ viaje, onClose }) {
     setReservaEnviada(true);
   } catch (error) {
     console.error('Error al enviar la reserva:', error);
-    alert('Error al enviar la solicitud.');
+
+    if (error.response && error.response.data) {
+      console.error('Respuesta del servidor:', error.response.data);
+      alert(`Error del servidor: ${error.response.data.error || 'Error desconocido'}`);
+    } else {
+      alert('Error al enviar la solicitud.');
+    }
   }
 };
+
+
+
 
   /*const confirmarReserva = async () => {
     try {
@@ -78,7 +87,7 @@ function ConfirmarReserva({ viaje, onClose }) {
 
 
 
-  const conductor = detalle.Usuarios;
+  const conductor = detalle.conductor;
   const vehiculo = conductor?.Vehiculo;
 
   

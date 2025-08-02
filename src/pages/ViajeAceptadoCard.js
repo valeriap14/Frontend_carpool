@@ -10,12 +10,12 @@ const ViajeAceptadoCard = ({ viaje }) => {
 
       <div className="perfil-conductor-info">
             <ImagenPerfil
-                id={viaje.Usuario?.id}
+                id={viaje.conductor?.id}
                 alt="Foto del conductor"
                 className="avatar-conductor"
             />
             <span className="nombre-conductor">
-                {viaje.Usuario?.nombre} {viaje.Usuario?.apellido}
+                {viaje.conductor?.nombre} {viaje.conductor?.apellido}
             </span>
      </div>
 
@@ -23,13 +23,13 @@ const ViajeAceptadoCard = ({ viaje }) => {
       <p><strong>Ruta:</strong> {viaje.origen} → {viaje.destino}</p>
       <p><strong>Hora de salida:</strong> {viaje.hora_salida}</p>
       <p><strong>Precio:</strong> L.{viaje.precio_asiento}</p>
-      <p><strong>Teléfono:</strong> {viaje.Usuario?.telefono || 'No disponible'}</p>
+      <p><strong>Teléfono:</strong> {viaje.conductor?.telefono || 'No disponible'}</p>
 
-      {viaje.Usuario?.Vehiculo && (
+      {viaje.conductor?.Vehiculo && (
         <div>
-          <p><strong>Vehículo:</strong> {viaje.Usuario.Vehiculo.marca} {viaje.Usuario.Vehiculo.modelo}</p>
-          <p><strong>Placa:</strong> {viaje.Usuario.Vehiculo.placa}</p>
-          <p><strong>Color:</strong> {viaje.Usuario.Vehiculo.color}</p>
+          <p><strong>Vehículo:</strong> {viaje.conductor.Vehiculo.marca} {viaje.conductor.Vehiculo.modelo}</p>
+          <p><strong>Placa:</strong> {viaje.conductor.Vehiculo.placa}</p>
+          <p><strong>Color:</strong> {viaje.conductor.Vehiculo.color}</p>
         </div>
       )}
     </div>
