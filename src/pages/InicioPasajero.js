@@ -55,10 +55,20 @@ function InicioPasajero() {
     setSearchParams({ ...searchParams, [name]: value });
   };
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    console.log('Buscar viajes con:', searchParams);
+    const destino = searchParams.destino.trim();
+    if (!destino) return;
+
+    try {
+      const res = await api.get(`/viajePasajero/buscar?q=${destino}`);
+      setViajesDisponibles(res.data);
+    } catch (error) {
+      console.error('Error al buscar viajes:', error);
+      setViajesDisponibles([]);
+    }
   };
+
 
   return (
     <div className="inicio-conductor-container">
