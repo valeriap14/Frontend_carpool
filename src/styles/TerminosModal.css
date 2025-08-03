@@ -1,0 +1,135 @@
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(68, 67, 67, 0.486);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 16px; /* bordes redondeados */
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  text-align: left;
+  box-sizing: border-box;
+  overflow: visible; 
+  max-height: none;
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.modal-content h3 {
+  margin-top: 1.5rem;
+  font-size: 1.4rem;
+  color: #444;
+}
+
+.modal-content p,
+.modal-content ul {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.modal-content ul {
+  margin-left: 1.5rem;
+  padding-left: 1rem;
+}
+
+.modal-content li {
+  margin-bottom: 0.5rem;
+}
+
+.modal-close {
+  display: block;
+  margin: 2rem auto 0;
+  background-color: #C080C0;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.modal-close:hover {
+  background-color: #a066a0;
+}
+
+/* Para los botones “términos” y “políticas” que parecen links */
+.link-button {
+  all: unset;
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Si quieres que el checkbox y etiqueta tengan algo de margen */
+.registro-condiciones {
+  margin-bottom: 1rem;
+}
+
+/* Estilos de error */
+.error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Botones de registro y cancelar (ejemplo básico) */
+.registro-botones button {
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.registro-botones button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.registro-botones .cancelar {
+  background-color: #ccc;
+  color: #333;
+}
+
+
+/* Responsive */
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1.2rem 1.5rem;
+    width: 95%;
+  }
+
+  .modal-content h2 {
+    font-size: 1.4rem;
+  }
+
+  .modal-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .modal-content p,
+  .modal-content ul {
+    font-size: 0.9rem;
+  }
+
+  .modal-close {
+    font-size: 0.9rem;
+    padding: 0.5rem 1.2rem;
+  }
+}

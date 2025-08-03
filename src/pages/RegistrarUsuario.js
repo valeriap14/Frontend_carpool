@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 import loopLogo from '../assets/loop.png';
 import '../styles/RegistrarUsuario.css';
+import TerminosModal from '../pages/TerminosModal';
 
 function RegistrarUsuario() {
   const {
@@ -17,6 +18,25 @@ function RegistrarUsuario() {
     trigger,
     formState: { errors, isValid }
   } = useForm({ mode: 'onChange' });
+
+  const formatIdentidad = (value) => {
+    const raw = value.replace(/\D/g, '');
+    if (raw.length <= 4) return raw;
+    if (raw.length <= 8) return `${raw.slice(0, 4)}-${raw.slice(4)}`;
+    return `${raw.slice(0, 4)}-${raw.slice(4, 8)}-${raw.slice(8, 13)}`;
+  };
+
+  const formatTelefono = (value) => {
+    const raw = value.replace(/\D/g, '');
+    if (raw.length <= 4) return raw;
+    return `${raw.slice(0, 4)}-${raw.slice(4, 8)}`;
+  };
+
+  const formatPlaca = (value) => {
+    const raw = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (raw.length <= 3) return raw;
+    return `${raw.slice(0, 3)}-${raw.slice(3, 7)}`;
+  };
 
   const rol = watch('rol');
   const navigate = useNavigate();
@@ -276,6 +296,14 @@ useEffect(() => {
     navigate('/');
   };
 
+  const [mostrarModal, setMostrarModal] = useState(false);
+
+  const handleCheckboxChange = (e) => {
+    if (e.target.checked) {
+      setMostrarModal(true); 
+    }
+  };
+
   return (
     <main className="registro-container">
       <form className="registro-form" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -332,8 +360,7 @@ useEffect(() => {
           <div className="campo">
             <label htmlFor="dni">Número de Identidad:</label>
             <div className="input-with-status">
-              <input
-                id="dni"
+              <input id="dni"
                 {...register("dni", {
                   required: 'Número de identidad es requerido',
                   pattern: {
@@ -342,7 +369,12 @@ useEffect(() => {
                   }
                 })}
                 placeholder="0801-2000-90123"
+                onChange={(e) => {
+                  const formatted = formatIdentidad(e.target.value);
+                  setValue("dni", formatted); // <- react-hook-form
+                }}
               />
+
               {isChecking.dni && (
                 <span className="checking-status">Verificando...</span>
               )}
@@ -400,8 +432,7 @@ useEffect(() => {
 
           <div className="campo">
             <label htmlFor="telefono">Teléfono Celular:</label>
-            <input
-              id="telefono"
+            <input id="telefono"
               {...register("telefono", {
                 required: 'Teléfono es requerido',
                 pattern: {
@@ -410,7 +441,12 @@ useEffect(() => {
                 }
               })}
               placeholder="9876-1234"
+              onChange={(e) => {
+                const formatted = formatTelefono(e.target.value);
+                setValue("telefono", formatted);
+              }}
             />
+
             {errors.telefono && (
               <span className="error">{errors.telefono.message}</span>
             )}
@@ -700,6 +736,10 @@ useEffect(() => {
                       }
                     })}
                     placeholder="PDH-4567"
+                    onChange={(e) => {
+                      const formatted = formatPlaca(e.target.value);
+                      setValue("placa", formatted);
+                    }}
                   />
                   {isChecking.placa && (
                     <span className="checking-status">Verificando...</span>
@@ -721,9 +761,25 @@ useEffect(() => {
             type="checkbox"
             id="terms"
             {...register("terminos", { required: 'Debes aceptar los términos y condiciones' })}
+            onChange={handleCheckboxChange}
           />
           <label htmlFor="terms">
-            Acepto los <a href="#">términos</a> y <a href="#">políticas</a>.
+            Acepto los{' '}
+            <button
+              type="button"
+              className="link-button"
+              onClick={() => setMostrarModal(true)}
+            >
+              términos
+            </button>{' '}
+            y{' '}
+            <button
+              type="button"
+              className="link-button"
+              onClick={() => setMostrarModal(true)}
+            >
+              políticas
+            </button>.
           </label>
           {errors.terminos && (
             <span className="error">{errors.terminos.message}</span>
@@ -731,10 +787,7 @@ useEffect(() => {
         </div>
 
         <div className="registro-botones">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-          >
+          <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
                 <span className="spinner"></span> Registrando...
@@ -748,6 +801,8 @@ useEffect(() => {
           </button>
         </div>
       </form>
+
+      <TerminosModal visible={mostrarModal} onClose={() => setMostrarModal(false)} />
     </main>
   );
 }
