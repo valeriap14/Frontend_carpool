@@ -1,46 +1,51 @@
 import Menu from "./admi";
-import '../styles/tablas.css';
 
-import api from '../api/api';
+import api from "../api/api";
+  import { useState, useEffect} from 'react';
 
-import { useState, useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
 
-function Pasajero(){
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
+function Usuario(){
+
+
+
+
   const [busqueda, setBusqueda] = useState('');
   const [paginaActual, setPaginaActual] = useState(1);
   const registrosPorPagina = 4;
-  const navigate = useNavigate();
+  
 
   const [usuarios, setUsuario] = useState([]);
   
   
               useEffect(() => {
   
-              const historial = async () =>  {
+              const usuariosInactivos = async () =>  {
               try {
                 
-                  const respuesta = await api.get('administrador/pasajeros');
+                  const respuesta = await api.get('administrador/usuariosInactivos');
                   setUsuario(respuesta.data);
                   
 
-                 const pasajero = respuesta.data.data
+                 const usuarioInactivo = respuesta.data.data
                   ? respuesta.data.data  
                   : Object.values(respuesta.data).filter(item => 
                   typeof item === 'object' && 
                   item?.nombre  
                   );
 
-                  setUsuario(pasajero);
-                  console.log(pasajero);
+                  setUsuario(usuarioInactivo);
+                  console.log(usuarioInactivo);
                   
   
                 }catch(error){  
-                  console.error('Error al encontrar pasajeros:', error);
+                  console.error('Error al encontrar usuarios:', error);
                 }
                 };
   
-                historial();
+                usuariosInactivos();
             }, []);
        
             
@@ -66,14 +71,55 @@ function Pasajero(){
   };
 
 
-  const revisarUsuario = (id) =>{
-    navigate(`/Admi/InfoPasajero/${id}`);
-  };
+ 
+
+   const aceptarUsuario = async (id) =>{
+          confirmAlert({
+      title: 'Activar Usuario',
+      message: '¿Estás seguro que deseas activar el usuario?',
+      buttons: [
+        {
+          label: 'Sí',
+          onClick: async () => {
+            try {
+              const respuesta = await api.post(`administrador/usuario/${id}`);
+              console.log('Reserva eliminada:', respuesta.data);
+              const actualizacion = await api.get('administrador/usuariosInactivos');
+                      setUsuario(respuesta.data);
+                      
+    
+                    
+                    const usuarioActivo = actualizacion.data.data
+                    ? actualizacion.data.data  
+                    : Object.values(actualizacion.data).filter(item => 
+                    typeof item === 'object' && 
+                    item?.nombre  
+                    );
+  
+                    setUsuario(usuarioActivo);
+            } catch (error) {
+              console.error('Error al activar usuario', error);
+            }
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            console.log('Cancelado por el usuario');
+          }
+        }
+      ]
+    });
+    };
+      
+    
+
+   
 
         return(
           
           <Menu>
-              <div className="contenedor-blanco">
+            <div className="contenedor-blanco">
               <div className="contenedor-usuarios">
     
                 <input
@@ -91,10 +137,11 @@ function Pasajero(){
                 <table className="tabla-usuarios">
                   <thead>
                     <tr>
+                      <th>id</th>
                       <th>Nombre</th>
                       <th>Apellido</th>
                       <th>Correo Electrónico</th>
-                      <th>Telefono</th>
+                      <th>Dni</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -102,12 +149,13 @@ function Pasajero(){
                     {usuariosPaginados.length > 0 ? (
                       usuariosPaginados.map((u, i) => (
                         <tr key={i}>
+                          <td>{u.id}</td>
                           <td>{u.nombre}</td>
                           <td>{u.apellido}</td>
                           <td>{u.correo}</td>
-                          <td>{u.telefono}</td>
+                          <td>{u.dni}</td>
                           <td>
-                            <button className="boton-revisar" onClick={() => revisarUsuario(u.id)}>Revisar</button>
+                            <button className="boton-revisar" onClick={() => aceptarUsuario(u.id)}>Activar</button>
                           </td>
                         </tr>
                       ))
@@ -131,7 +179,7 @@ function Pasajero(){
               </div>
             </div>
           </div>
-         
+
              
           </Menu>
 
@@ -139,4 +187,4 @@ function Pasajero(){
 
 
 }
-export default Pasajero;
+export default Usuario;

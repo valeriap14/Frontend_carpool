@@ -20,13 +20,18 @@ function HistorialViaje(){
                   try {
                     
                       const respuesta = await api.get('administrador/viajes');
-                      setUsuario(respuesta.data);
+                     
                       
     
-                     const data = Object.values(respuesta.data).filter(
-                       item => typeof item === 'object' && item.Usuario
-                      );
-                     setUsuario(data);
+                  const conductores = respuesta.data.data
+                  ? respuesta.data.data  
+                  : Object.values(respuesta.data).filter(item => 
+                  typeof item === 'object' && 
+                  item?.nombre  
+                  );
+
+                  setUsuario(conductores);
+                  console.log(conductores);
    
                       
       
@@ -52,7 +57,8 @@ function HistorialViaje(){
       const totalPaginas = Math.ceil(usuariosFiltrados.length / registrosPorPagina);
       const inicio = (paginaActual - 1) * registrosPorPagina;
       const usuariosPaginados = usuariosFiltrados.slice(inicio, inicio + registrosPorPagina);
-    
+        
+
       const cambiarPagina = (nuevaPagina) => {
         if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
           setPaginaActual(nuevaPagina);
@@ -94,16 +100,17 @@ function HistorialViaje(){
                     </tr>
                   </thead>
                   <tbody>
-                    {usuariosPaginados.length > 0 ? (
+                    {
+                    usuariosPaginados.length > 0 ? (
                       usuariosPaginados.map((u, i) => (
                         <tr key={i}>
                           <td>{u.id}</td>
-                          <td>{u.Usuario.nombre}</td>
-                          <td>{u.Usuario.dni}</td>
-                          <td>{u.Usuario.correo}</td>
-                          <td>{u.Usuario.telefono}</td>
+                          <td>{u.conductor.nombre }</td>
+                          <td>{u.conductor.dni }</td>
+                          <td>{u.conductor.correo}</td>
+                          <td>{u.conductor.telefono}</td> 
                           <td>
-                            <button className="boton-revisar" onClick={() => revisarUsuario(u.id)}>Revisar</button>
+                            <button className="boton-revisar" onClick={() => revisarUsuario(u.id) }>Revisar</button>
                           </td>
                         </tr>
                       ))

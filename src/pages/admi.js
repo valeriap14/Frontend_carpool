@@ -39,9 +39,9 @@ function MenuAdmi({ children }){
             onClick={() => navigate('/Admi/HistorialViajes')}>
               <FaQuestionCircle className="nav-icon" /> Viajes General </button>
 
-            <button className={`nav-btn ${activo('/Admi/ViajeDetalles') ? 'active' : ''}`}
-            onClick={() => navigate('/Admi/ViajeDetalles')}>
-              <FaStar className="nav-icon" /> No apretar</button>
+            <button className={`nav-btn ${activo('/Admi/UsuariosInactivos') ? 'active' : ''}`}
+            onClick={() => navigate('/Admi/UsuariosInactivos')}>
+              <FaStar className="nav-icon" /> Usuarios Inactivos</button>
 
             <button className={`nav-btn ${activo('/Admi/Pasajero') ? 'active' : ''}`} 
              onClick={() => navigate('/Admi/Pasajero')}>

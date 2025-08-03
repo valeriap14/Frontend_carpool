@@ -21,8 +21,17 @@ function VisualizacionConductor(){
       useEffect(() => {
         const obtenerUsuario = async () => {
           try {
-            const response = await api.post(`administrador/conductor/${id}`);
-            setUsuario(response.data);
+            const respuesta = await api.post(`administrador/conductor/${id}`);
+           const conductores = respuesta.data.data
+                  ? respuesta.data.data  
+                  : Object.values(respuesta.data).filter(item => 
+                  typeof item === 'object' && 
+                  item?.nombre  
+                  );
+
+                  setUsuario(conductores);
+                  console.log(conductores);
+
           } catch (error) {
             console.error('Error al obtener el usuario', error);
           } finally {
