@@ -24,16 +24,15 @@ function VisualizacionPasajero(){
     const obtenerUsuario = async () => {
       try {
         const respuesta = await api.post(`administrador/pasajero/${id}`);
-        const conductores = respuesta.data.data
+        const pasajeros = respuesta.data.data
                   ? respuesta.data.data  
                   : Object.values(respuesta.data).filter(item => 
                   typeof item === 'object' && 
                   item?.nombre  
                   );
 
-                  setUsuario(conductores);
-                  console.log(conductores);
-
+                  setUsuario(pasajeros);
+                  console.log(pasajeros);
 
 
       } catch (error) {
@@ -48,6 +47,31 @@ function VisualizacionPasajero(){
 
   if (loading) return <p>Cargando...</p>;
   if (!usuario) return <p>Usuario no encontrado.</p>;
+  
+  const cargarPagina = async () =>{
+     try {
+        const respuesta = await api.post(`administrador/pasajero/${id}`);
+        const pasajeros = respuesta.data.data
+                  ? respuesta.data.data  
+                  : Object.values(respuesta.data).filter(item => 
+                  typeof item === 'object' && 
+                  item?.nombre  
+                  );
+
+                  setUsuario(pasajeros);
+                  console.log(pasajeros);
+
+
+
+      } catch (error) {
+        console.error('Error al obtener el usuario', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+
+  
 
   const regresarAdmi = async () =>{
         setUsuario('');
@@ -64,9 +88,9 @@ function VisualizacionPasajero(){
                  label: 'Sí',
                  onClick: async () => {
                    try {
-                     const respuesta = await api.post(`administrador/conductorAceptado/${id}`);
+                     const respuesta = await api.post(`administrador/pasajeroAceptado/${id}`);
                      console.log('Usuario activo:', respuesta.data);
-                     
+                     cargarPagina();
                    } catch (error) {
                      console.error('Error al activar usuario:', error);
                    }
@@ -91,8 +115,36 @@ function VisualizacionPasajero(){
                  label: 'Sí',
                  onClick: async () => {
                    try {
-                     const respuesta = await api.post(`administrador/pasajero/${id}`);
+                     const respuesta = await api.post(`administrador/pasajero/inactivo/${id}`);
                      console.log('Usuario eliminado:', respuesta.data);
+                     navigate('/Admi/Pasajero');
+                   } catch (error) {
+                     console.error('Error al eliminar usuario:', error);
+                   }
+                 }
+               },
+               {
+                 label: 'No',
+                 onClick: () => {
+                   console.log('Cancelado por el usuario');
+                 }
+               }
+             ]
+           });
+      };
+
+       const suspenderUsuario = async () =>{
+        confirmAlert({
+             title: 'Bloquear usuario',
+             message: '¿Estás seguro que deseas bloquear el usuario?',
+             buttons: [
+               {
+                 label: 'Sí',
+                 onClick: async () => {
+                   try {
+                     const respuesta = await api.post(`administrador/pasajeroSuspendido/${id}`);
+                     console.log('Usuario eliminado:', respuesta.data);
+                     cargarPagina();
                      
                    } catch (error) {
                      console.error('Error al eliminar usuario:', error);
@@ -107,11 +159,8 @@ function VisualizacionPasajero(){
                }
              ]
            });
-      }
-
-       const suspenderUsuario = async () =>{
        
-      }
+      };
 
         return(
 
@@ -135,6 +184,7 @@ function VisualizacionPasajero(){
                     <p>{usuario.correo}</p>
                     <p>{usuario.telefono}</p>
                     <p>{usuario.cedula}</p>
+                    <p>{usuario.estado}</p>
                 </div>
                 
                  <div className="card-image">

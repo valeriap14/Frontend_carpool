@@ -5,6 +5,9 @@ import '../styles/editarUsuario.css';
 import '../styles/MenuAdmi.css';
 import '../styles/tablas.css';
 
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 import ImagenPerfil from '../pages/fotoPerfil';
 import ImagenCarnet from '../pages/fotoCarnet';
 import ImagenVehiculo from '../pages/fotoVehiculo';
@@ -44,12 +47,117 @@ function VisualizacionConductor(){
     
       if (loading) return <p>Cargando...</p>;
       if (!usuario) return <p>Usuario no encontrado.</p>;
-     
+      const cargarPagina = async () =>{
+           try {
+              const respuesta = await api.post(`administrador/pasajero/${id}`);
+              const conductores = respuesta.data.data
+                        ? respuesta.data.data  
+                        : Object.values(respuesta.data).filter(item => 
+                        typeof item === 'object' && 
+                        item?.nombre  
+                        );
+      
+                        setUsuario(conductores);
+                        console.log(conductores);
+      
+      
+      
+            } catch (error) {
+              console.error('Error al obtener el usuario', error);
+            } finally {
+              setLoading(false);
+            }
+          };
+      
+
       
       const regresarAdmi = async () =>{
         setUsuario('');
         navigate('/Admi/Conductor');
       }
+
+      const aceptarUsuario = async () =>{
+              confirmAlert({
+                   title: 'Activar Usuario',
+                   message: '¿Estás seguro que deseas activar el usuario?',
+                   buttons: [
+                     {
+                       label: 'Sí',
+                       onClick: async () => {
+                         try {
+                           const respuesta = await api.post(`administrador/conductorAceptado/${id}`);
+                           console.log('Usuario activo:', respuesta.data);
+                           cargarPagina();
+                         } catch (error) {
+                           console.error('Error al activar usuario:', error);
+                         }
+                       }
+                     },
+                     {
+                       label: 'No',
+                       onClick: () => {
+                         console.log('Cancelado por el usuario');
+                       }
+                     }
+                   ]
+                 });
+            };
+      
+            const eliminarUsuario = async () =>{
+               confirmAlert({
+                   title: 'Eliminar Usuario',
+                   message: '¿Estás seguro que deseas eliminar el usuario?',
+                   buttons: [
+                     {
+                       label: 'Sí',
+                       onClick: async () => {
+                         try {
+                           const respuesta = await api.post(`administrador/conductor/inactivo/${id}`);
+                           console.log('Usuario eliminado:', respuesta.data);
+                           cargarPagina();
+                           navigate('/Admi/Conductor');
+                         } catch (error) {
+                           console.error('Error al eliminar usuario:', error);
+                         }
+                       }
+                     },
+                     {
+                       label: 'No',
+                       onClick: () => {
+                         console.log('Cancelado por el usuario');
+                       }
+                     }
+                   ]
+                 });
+            };
+      
+             const suspenderUsuario = async () =>{
+              confirmAlert({
+                   title: 'Bloquear usuario',
+                   message: '¿Estás seguro que deseas bloquear el usuario?',
+                   buttons: [
+                     {
+                       label: 'Sí',
+                       onClick: async () => {
+                         try {
+                           const respuesta = await api.post(`administrador/conductorSuspendido/${id}`);
+                           console.log('Usuario eliminado:', respuesta.data);
+                           cargarPagina();
+                         } catch (error) {
+                           console.error('Error al eliminar usuario:', error);
+                         }
+                       }
+                     },
+                     {
+                       label: 'No',
+                       onClick: () => {
+                         console.log('Cancelado por el usuario');
+                       }
+                     }
+                   ]
+                 });
+             
+            };
 
         return(
 
@@ -70,6 +178,7 @@ function VisualizacionConductor(){
                          <p>{usuario.correo}</p>
                         <p>{usuario.telefono}</p>
                         <p>{usuario.cedula}</p>
+                        <p>{usuario.estado}</p>
                         </div>
                 
                         <div className="datos-vehiculo">
@@ -108,10 +217,10 @@ function VisualizacionConductor(){
                 
                 
                 <div className="botones">
-                        <button className="btn-regresar">Aceptar</button>
-                        <button className="btn-regresar">Bloquear</button>
-                        <button className="btn-regresar">Rechazar</button>
-                        <button className="btn-regresar">Eliminar</button>
+                        <button className="btn-regresar" onClick={() => aceptarUsuario(usuario.id)}>Aceptar</button>
+                        <button className="btn-regresar" onClick={() => suspenderUsuario(usuario.id)}>Bloquear</button>
+                
+                        <button className="btn-regresar" onClick={() => eliminarUsuario(usuario.id)}>Eliminar</button>
                 </div>
                 </div>
             </div>
