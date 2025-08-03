@@ -1,0 +1,97 @@
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 15px;
+}
+
+.rate-card {
+  background: #fffafc;
+  border: 2px solid #0099ff;
+  border-radius: 20px;
+  padding: 25px 20px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.subtitulo {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.star {
+  font-size: 2.2rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.2s;
+}
+
+.star.active {
+  color: orange;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+textarea {
+  width: 100%;
+  min-height: 70px;
+  border: none;
+  border-radius: 15px;
+  padding: 10px;
+  background-color: #f5d4fa;
+  color: #333;
+  resize: none;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+textarea::placeholder {
+  color: #666;
+}
+
+button {
+  background-color: #0099ff;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 12px 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #007acc;
+}
