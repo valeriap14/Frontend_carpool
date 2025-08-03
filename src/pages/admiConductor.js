@@ -62,6 +62,7 @@ function Conductor(){
   
     const revisarUsuario = (id) =>{
     navigate(`/Admi/InfoConductor/${id}`);
+    setUsuario('');
   };
     
 
@@ -91,7 +92,7 @@ function Conductor(){
                     <tr>
                       <th>Nombre</th>
                  
-                      <th>Apellido</th>
+                      <th>Estado</th>
                       <th>Correo Electrónico</th>
                       <th>Celular</th>
                       <th></th>
@@ -101,9 +102,9 @@ function Conductor(){
                     {usuariosPaginados.length > 0 ? (
                       usuariosPaginados.map((u, i) => (
                         <tr key={i}>
-                          <td>{u.nombre}</td>
+                          <td>{u.nombre} {u.apellido}</td>
                        
-                          <td>{u.apellido}</td>
+                          <td>{u.estado}</td>
                           <td>{u.correo}</td>
                           <td>{u.telefono}</td>
                           <td>

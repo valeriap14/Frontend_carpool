@@ -68,6 +68,7 @@ function Pasajero(){
 
   const revisarUsuario = (id) =>{
     navigate(`/Admi/InfoPasajero/${id}`);
+    setUsuario('');
   };
 
         return(
@@ -92,7 +93,7 @@ function Pasajero(){
                   <thead>
                     <tr>
                       <th>Nombre</th>
-                      <th>Apellido</th>
+                      <th>Estado</th>
                       <th>Correo Electrónico</th>
                       <th>Telefono</th>
                       <th></th>
@@ -102,8 +103,8 @@ function Pasajero(){
                     {usuariosPaginados.length > 0 ? (
                       usuariosPaginados.map((u, i) => (
                         <tr key={i}>
-                          <td>{u.nombre}</td>
-                          <td>{u.apellido}</td>
+                          <td>{u.nombre} {u.apellido}</td>
+                          <td>{u.estado}</td>
                           <td>{u.correo}</td>
                           <td>{u.telefono}</td>
                           <td>

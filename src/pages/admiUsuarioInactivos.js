@@ -137,7 +137,7 @@ function Usuario(){
                 <table className="tabla-usuarios">
                   <thead>
                     <tr>
-                      <th>id</th>
+                      <th>codigo</th>
                       <th>Nombre</th>
                       <th>Apellido</th>
                       <th>Correo Electrónico</th>

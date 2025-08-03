@@ -73,7 +73,7 @@ function HistorialPasajeros(){
                     <div className="info-principal">
                         
                         <div className="datos-infoViaje">
-                        <h2>{infoConductor.conductor.nombre} </h2>
+                        <h2>{infoConductor.conductor.nombre} {infoConductor.conductor.apellido}</h2>
                         <h2>{infoConductor.conductor.correo} </h2>
                         <h2>{infoConductor.conductor.telefono} </h2>
                          <h2>{infoConductor.conductor.dni} </h2>
@@ -92,6 +92,7 @@ function HistorialPasajeros(){
                      <thead>
                     <tr>
                       <th>Nombre</th>
+                      <th>Apellido</th>
                       <th>DNI</th>
                       <th>Correo Electrónico</th>
                       <th>Celular</th>
@@ -103,7 +104,8 @@ function HistorialPasajeros(){
                     {Array.isArray(infoViaje) && infoViaje.length > 0 ? (
                      infoViaje.map((u, i) => (
                         <tr key={i}>
-                          <td>{u.Usuario.nombre || '-'}</td>
+                          <td>{u.Usuario.nombre  || '-'}</td>
+                          <td>{u.Usuario.apellido  || '-'}</td>
                           <td>{u.Usuario.dni || '-'}</td>
                           <td>{u.Usuario.correo || '-'}</td>
                           <td>{u.Usuario.telefono || '-'}</td>
@@ -124,12 +126,7 @@ function HistorialPasajeros(){
                 </div>
                 
                 
-                <div className="botones">
-                        <button className="btn-regresar">Aceptar</button>
-                        <button className="btn-regresar">Bloquear</button>
-                        <button className="btn-regresar">Rechazar</button>
-                        <button className="btn-regresar">Eliminar</button>
-                </div>
+               
                 </div>
             </div>
              
