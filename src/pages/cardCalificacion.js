@@ -21,6 +21,7 @@ const CardCalificacion = ({ onSubmit }) => {
   };
 
   return (
+   
     <div className="modal-overlay">
       <div className="rate-card">
         <h2>Tu viaje ha sido finalizado</h2>
@@ -32,7 +33,7 @@ const CardCalificacion = ({ onSubmit }) => {
               key={star}
               icon={solidStar}
               className={`star ${star <= (hover || rating) ? 'active' : ''}`}
-              onClick={() => setRating(star)} 
+              onClick={() => setRating(star)}
               onMouseEnter={() => setHover(star)}
               onMouseLeave={() => setHover(0)}
             />
@@ -45,7 +46,10 @@ const CardCalificacion = ({ onSubmit }) => {
           onChange={(e) => setComment(e.target.value)}
         />
 
-        <button onClick={handleSubmit}>Enviar calificación</button>
+        <div className="buttons-container">
+          <button onClick={handleSubmit}>Enviar calificación</button>
+          <button onClick={onClose} className="btn-cerrar">Cerrar</button>
+        </div>
       </div>
     </div>
   );
