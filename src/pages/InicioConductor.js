@@ -10,6 +10,7 @@ import CardViajeEnCurso from '../pages/CardViajeEnCurso';
 import SolicitudesReserva from './SolicitudesReserva';
 import ImagenPerfil from '../pages/fotoPerfil';
 import { useNotificacionesConductor } from '../hooks/useNotificacionesConductor';
+import ModalCalificarPasajeros from './ModalCalificarPasajero';
 
 
 function InicioConductor() {
@@ -31,6 +32,11 @@ function InicioConductor() {
   const [destinoCoords, setDestinoCoords] = useState(null);
   const navigate = useNavigate();
   const nuevasSolicitudes = useNotificacionesConductor();
+  const [mostrarModalCalificacion, setMostrarModalCalificacion] = useState(false);
+  const [pasajerosFinalizados, setPasajerosFinalizados] = useState([]);
+  const [viajeFinalizadoId, setViajeFinalizadoId] = useState(null);
+
+
 
 
   const sincronizarViajeActivo = async () => {
@@ -272,11 +278,54 @@ function InicioConductor() {
       setPasajerosAceptados([]);
       localStorage.removeItem("viaje_id"); // opcional, por limpieza
       alert('Viaje finalizado correctamente');
+
+      await obtenerPasajerosConReservaFinalizada(viajeId);
+      setViajeFinalizadoId(viajeId);
     } catch (error) {
       console.error('Error al finalizar viaje:', error.response?.data || error.message);
       alert('Error al finalizar viaje: ' + (error.response?.data?.error || error.message));
     }
   };
+
+ 
+ 
+
+const obtenerPasajerosConReservaFinalizada = async (viajeId) => {
+  try {
+    const response = await api.get(`/viajes/pasajeros-finalizados/${viajeId}`);
+    console.log('Respuesta completa del backend:', response.data);
+    console.log('Pasajeros recibidos:', response.data);
+
+    setPasajerosFinalizados(response.data || []);  
+    setMostrarModalCalificacion(true);
+  } catch (error) {
+    console.error('Error al obtener pasajeros para calificar:', error);
+    alert('Error al obtener pasajeros para calificar');
+  }
+};
+
+
+
+
+
+const handleEnviarCalificacion = async ({ viajeId, pasajeroId, rating, comentario }) => {
+  try {
+    const conductorId = JSON.parse(localStorage.getItem('usuario'))?.id;
+    await api.post(`/calificacion/pasajero/${viajeId}/${conductorId}`, {
+      pasajeroId,
+      tipo: 'pasajero',
+      calificacion: rating,
+      comentario
+    });
+    alert('Calificación enviada');
+  } catch (error) {
+    console.error('Error al calificar pasajero:', error);
+    alert('Error al enviar calificación');
+  }
+};
+
+
+
 
 
   return (
@@ -492,6 +541,15 @@ function InicioConductor() {
             </button>
           </div>
         </div>
+      )}
+
+       {mostrarModalCalificacion && (
+        <ModalCalificarPasajeros
+          pasajeros={pasajerosFinalizados}
+          onCerrar={() => setMostrarModalCalificacion(false)}
+          onEnviarCalificacion={handleEnviarCalificacion}
+          viajeId={viajeFinalizadoId}
+        />
       )}
     </div>
   );

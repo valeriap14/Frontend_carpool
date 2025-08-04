@@ -18,6 +18,7 @@ import AdmiViajeDetalle from "./pages/admiHistorialDetalles";
 import AdmiVerPasajero from "./pages/admiVerPasajero";
 import AdmiVerConductor from "./pages/admiVerConductor";
 import AdmiHistorialReserva from "./pages/AdmiHistorialReserva";
+import AdmiUsuarioInactivos from "./pages/admiUsuarioInactivos";
 
 function App() {
   return (
@@ -43,7 +44,7 @@ function App() {
           <Route path="/Admi/InfoPasajero/:id" element={<AdmiVerPasajero />} />
           <Route path="/Admi/InfoConductor/:id" element={<AdmiVerConductor />} />
           <Route path="/Admi/HistorialReserva" element={<AdmiHistorialReserva />} />
-
+          <Route path="/Admi/UsuariosInactivos" element={<AdmiUsuarioInactivos />} />
       </Routes>
 
        

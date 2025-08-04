@@ -3,6 +3,8 @@ import { useState, useEffect} from 'react';
 import '../styles/tablas.css';
 import api from '../api/api';
 
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function HistorialReserva(){
  const [busqueda, setBusqueda] = useState('');
@@ -21,11 +23,15 @@ function HistorialReserva(){
                     setUsuario(respuesta.data);
                     
   
-                   const data = Object.values(respuesta.data).filter(
-                     item => typeof item === 'object' && item.Usuario
-                    );
-                   setUsuario(data);
-                    console.log(data);
+                  
+                  const reserva = respuesta.data.data
+                  ? respuesta.data.data  
+                  : Object.values(respuesta.data).filter(item => 
+                  typeof item === 'object' && 
+                  item?.nombre  
+                  );
+
+                  setUsuario(reserva);
                     
     
                   }catch(error){  
@@ -56,6 +62,46 @@ function HistorialReserva(){
           setPaginaActual(nuevaPagina);
         }
       };
+
+
+      const eliminarReserva = async(id) =>{
+        confirmAlert({
+    title: 'Confirmar eliminación',
+    message: '¿Estás seguro que deseas eliminar esta reserva?',
+    buttons: [
+      {
+        label: 'Sí',
+        onClick: async () => {
+          try {
+            const respuesta = await api.delete(`administrador/reserva/${id}`);
+            console.log('Reserva eliminada:', respuesta.data);
+            const actualizacion = await api.get('administrador/reserva');
+                    setUsuario(respuesta.data);
+                    
+  
+                  
+                  const reserva = actualizacion.data.data
+                  ? actualizacion.data.data  
+                  : Object.values(actualizacion.data).filter(item => 
+                  typeof item === 'object' && 
+                  item?.nombre  
+                  );
+
+                  setUsuario(reserva);
+          } catch (error) {
+            console.error('Error al eliminar la reserva:', error);
+          }
+        }
+      },
+      {
+        label: 'No',
+        onClick: () => {
+          console.log('Cancelado por el usuario');
+        }
+      }
+    ]
+  });
+  };
     
     
 
@@ -83,11 +129,11 @@ function HistorialReserva(){
                     <tr>
                       <th>Estado</th>
                       <th>Codigo Viaje</th>
-                      <th>Mensaje</th>
+                     
                       <th>Nombre</th>
                       <th>Telefono</th>
                       <th>Correo</th>
-                    
+                     <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -96,11 +142,12 @@ function HistorialReserva(){
                         <tr key={i}>
                           <td>{u.estado}</td>
                           <td>{u.viaje_id}</td>
-                          <td>{u.mensaje}</td>
                           <td>{u.Usuario.nombre}</td>
                           <td>{u.Usuario.telefono}</td>
                           <td>{u.Usuario.correo}</td>
-                          
+                          <td>
+                            <button className="boton-revisar" onClick={() => eliminarReserva(u.id)} >Eliminar</button>
+                          </td>
                         </tr>
                       ))
                     ) : (

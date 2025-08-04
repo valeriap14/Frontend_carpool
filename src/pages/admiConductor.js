@@ -21,14 +21,16 @@ function Conductor(){
                try {
                  
                    const respuesta = await api.get('administrador/conductores');
-                   setUsuario(respuesta.data);
-                   
- 
-                   const data = Object.values(respuesta.data).filter(item => typeof item === 'object' && item.nombre);
-                   setUsuario(data);
-                   
-                   
-   
+                  
+                  const conductores = respuesta.data.data
+                  ? respuesta.data.data  
+                  : Object.values(respuesta.data).filter(item => 
+                  typeof item === 'object' && 
+                  item?.nombre  
+                  );
+
+                  setUsuario(conductores);
+                  console.log(conductores);
                  }catch(error){  
                    console.error('Error al encontrar conductores:', error);
                  }
@@ -60,6 +62,7 @@ function Conductor(){
   
     const revisarUsuario = (id) =>{
     navigate(`/Admi/InfoConductor/${id}`);
+    setUsuario('');
   };
     
 
@@ -88,7 +91,8 @@ function Conductor(){
                   <thead>
                     <tr>
                       <th>Nombre</th>
-                      <th>Apellido</th>
+                 
+                      <th>Estado</th>
                       <th>Correo Electrónico</th>
                       <th>Celular</th>
                       <th></th>
@@ -98,8 +102,9 @@ function Conductor(){
                     {usuariosPaginados.length > 0 ? (
                       usuariosPaginados.map((u, i) => (
                         <tr key={i}>
-                          <td>{u.nombre}</td>
-                          <td>{u.apellido}</td>
+                          <td>{u.nombre} {u.apellido}</td>
+                       
+                          <td>{u.estado}</td>
                           <td>{u.correo}</td>
                           <td>{u.telefono}</td>
                           <td>
