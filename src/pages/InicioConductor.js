@@ -369,7 +369,9 @@ const handleEnviarCalificacion = async ({ viajeId, pasajeroId, rating, comentari
             </button>
 
             <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
-            <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
+            <button className="nav-btn" onClick={() => navigate('/misviajesconductor')}> 
+              <FaRoute className="nav-icon" /> Mis Viajes
+            </button>
             <button className="nav-btn" onClick={() => navigate('/misganancias')}>
               <FaMoneyBill className="nav-icon" /> Mis Ganancias
             </button>

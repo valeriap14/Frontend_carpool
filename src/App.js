@@ -8,6 +8,8 @@ import InicioPasajero from './pages/InicioPasajero';
 import EditarUsuario from "./pages/editarUsuario";
 import ConfirmarReserva from './pages/ConfirmarReserva';
 import MisGanancias from './pages/MisGanancias';
+import MisViajesHistorialC from './pages/MisViajesHistorialC';
+import MisViajesHistorialP from './pages/MisViajesHistorialP';
 //administrador
 import InicioAdmi from "./pages/inicioAdmi";
 
@@ -32,6 +34,9 @@ function App() {
         <Route path="/editarUsuario" element={<EditarUsuario />} />
         <Route path="/confirmar-reserva" element={<ConfirmarReserva />} />
         <Route path="/misganancias" element={<MisGanancias />} />
+        <Route path="/misviajesconductor" element={<MisViajesHistorialC />} />
+        <Route path="/misviajespasajero" element={<MisViajesHistorialP />} />
+
 
 
 

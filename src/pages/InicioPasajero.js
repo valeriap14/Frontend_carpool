@@ -146,7 +146,9 @@ function InicioPasajero() {
         <aside className="sidebar-fixed">
           <nav className="sidebar-nav">
             <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
-            <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
+            <button className="nav-btn" onClick={() => navigate('/misviajespasajero')}> 
+              <FaRoute className="nav-icon" /> Mis Viajes
+            </button>
             <button className="nav-btn" onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>
             <button className="nav-btn"><FaQuestionCircle className="nav-icon" /> Ayuda</button>
           </nav>
