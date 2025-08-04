@@ -1,0 +1,27 @@
+.ganancias-container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ganancias-tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ganancias-tabla th,
+.ganancias-tabla td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.ganancias-tabla th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.error-text {
+  color: red;
+  font-weight: bold;
+}
