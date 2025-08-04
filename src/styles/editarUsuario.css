@@ -1,70 +1,433 @@
-
-  container {
-   
-    padding: 16;
-    border: '1px solid #ccc';
-   
+.edit-profile-container {
+  width: 100%;
+  height: calc(100vh - 60px);
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
-  imageBox {
-    width: '100%';
-    height: 200;
-    overflow: 'hidden';
-   
- }
-  buttons{
-   
-    display: 'flex';
-   
-  }
 
- .edit-profile-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 1.5rem;
+.edit-profile-header {
+  text-align: center;
+  padding: 1rem 2rem;
+  background: #ffffff;
+  border-bottom: 2px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+.edit-profile-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.2rem;
+}
+
+.edit-profile-subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.edit-profile-form {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 0;
+  flex: 1;
+  background: #f8fafc;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.profile-images-section {
+  background: #ffffff;
+  padding: 1.2rem;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+  border-radius: 0;
+}
+
+.image-upload-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.image-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .avatar-wrapper {
   position: relative;
-  margin: 0 auto 1rem auto;
-  width: fit-content;
+  display: inline-block;
 }
 
-.avatar-size {
-  width: 5rem;
-  height: 5rem;
+.profile-avatar {
+  width: 110px !important;
+  height: 110px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.avatar-fallback {
-  background-color: #e5e7eb;
+.document-wrapper {
+  position: relative;
+  display: inline-block;
 }
 
-.avatar-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  color: #9ca3af;
+.carnet-image {
+  width: 160px !important;
+  height: 100px !important;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 3px solid #8b5cf6;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
 .camera-button {
   position: absolute;
-  bottom: -0.5rem;
-  right: -0.5rem;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 9999px;
-  padding: 0;
-  background-color: white;
+  bottom: -6px;
+  right: -6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.camera-button:hover {
+  background: #f8fafc;
+  border-color: #3b82f6;
+  transform: scale(1.05);
+}
+
+.camera-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .camera-icon {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 10%;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
 }
 
+.image-label {
+  text-align: center;
+}
 
-.document {
-  position: relative;
-  margin: 0 auto 1rem auto;
-  width: fit-content;
+.label-title {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.2rem;
+}
+
+.label-subtitle {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Right Column - Form Fields */
+.form-fields-section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 1.2rem;
+  background: #f8fafc;
+  min-height: 0;
+}
+
+.personal-info-card {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  margin-bottom: 0.8rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.security-card {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  margin-bottom: 0.8rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.8rem 0;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.form-row {
+  margin-bottom: 0.8rem;
+}
+
+.form-row:last-child {
+  margin-bottom: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  background: #ffffff;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input.disabled {
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.form-input.error {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.form-input.error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-helper {
+  font-size: 0.65rem;
+  color: #64748b;
+  margin-top: 0.15rem;
+}
+
+.error-message {
+  font-size: 0.65rem;
+  color: #ef4444;
+  font-weight: 500;
+  margin-top: 0.15rem;
+}
+
+/* Form Actions - Always visible at bottom */
+.form-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  padding: 1rem 1.2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 0.65rem 1.1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #2563eb;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #f8fafc;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loading-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .edit-profile-form {
+    grid-template-columns: 1fr 1.5fr;
+  }
+
+  .profile-avatar {
+    width: 95px !important;
+    height: 95px !important;
+  }
+
+  .carnet-image {
+    width: 140px !important;
+    height: 90px !important;
+  }
+}
+
+@media (max-width: 968px) {
+  .edit-profile-container {
+    height: auto;
+    overflow: visible;
+  }
+
+  .edit-profile-form {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .form-fields-section {
+    height: auto;
+    overflow: visible;
+    padding: 1.2rem;
+  }
+
+  .image-upload-group {
+    flex-direction: row;
+    gap: 1.5rem;
+    justify-content: space-around;
+  }
+}
+
+@media (max-width: 768px) {
+  .edit-profile-header {
+    padding: 0.8rem;
+  }
+
+  .edit-profile-title {
+    font-size: 1.4rem;
+  }
+
+  .image-upload-group {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .profile-images-section {
+    padding: 1rem;
+  }
+
+  .personal-info-card,
+  .security-card {
+    padding: 0.8rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    padding: 0.8rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-avatar {
+    width: 75px !important;
+    height: 75px !important;
+  }
+
+  .carnet-image {
+    width: 110px !important;
+    height: 70px !important;
+  }
+
+  .camera-button {
+    width: 26px;
+    height: 26px;
+  }
+
+  .camera-icon {
+    width: 12px;
+    height: 12px;
+  }
 }

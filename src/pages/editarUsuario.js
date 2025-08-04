@@ -1,265 +1,329 @@
-import { useState, useEffect, useContext,useRef } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import api from '../api/api';
-import '../styles/RegistrarUsuario.css';
-import loopLogo from '../assets/loop.png';
-import camara from '../assets/editar.png';
-import '../styles/editarUsuario.css';
-import ImagenPerfil from '../pages/fotoPerfil';
-import ImagenCarnet from '../pages/fotoCarnet';
+import { useState, useEffect, useRef } from "react"
+
+import { useNavigate } from "react-router-dom"
+import { useForm } from "react-hook-form"
+import { FaBell} from "react-icons/fa"
+import api from "../api/api"
+import ImagenPerfil from "../pages/fotoPerfil"
+import ImagenCarnet from "../pages/fotoCarnet"
+import camara from "../assets/editar.png"
+import "../styles/editarUsuario.css"
+import "../styles/InicioPasajero.css"
 
 function EditarUsuario() {
-  const { usuario } = useContext(AuthContext);
-  
   const navigate = useNavigate();
-   const inputPerfilRef = useRef(null);
-  const [ setImagenPerfil] = useState(null);
-     const inputCarnetRef = useRef(null);
-  const [ setCarnet] = useState(null);
-   const {
-       register,
-       handleSubmit,
-     
-       setValue,
-       formState: { errors }
-     } = useForm({ mode: 'onChange' });
+  const inputPerfilRef = useRef(null);
+  const inputCarnetRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [previewPerfil, setPreviewPerfil] = useState(null);
+  const [previewCarnet, setPreviewCarnet] = useState(null);
+  const [usuario, setUsuario] = useState(() => {
+    const userData = localStorage.getItem('usuarioData');
+    return userData ? JSON.parse(userData) : {};
+  });
 
-
- 
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({ mode: "onChange" });
 
   useEffect(() => {
-    if (usuario) {
-      
-    setValue("nombre", usuario.nombre || "");
-    setValue("apellido", usuario.apellido || "");
-    setValue("telefono", usuario.telefono || "");
-    setValue("password", "");
-     }
-}, [usuario, setValue]);
-
-
- 
-
-  const handleClickImagenPerfil = () => {
-    if (inputPerfilRef.current) {
-      inputPerfilRef.current.click();
+    if (usuario && usuario.nombre) {
+      setValue("nombre", usuario.nombre || "");
+      setValue("apellido", usuario.apellido || "");
+      setValue("telefono", usuario.telefono || "");
+      setValue("password", "");
     }
+  }, [usuario, setValue]);
+
+  
+  const actualizarUsuario = (nuevosDatos) => {
+    const updatedUser = { ...usuario, ...nuevosDatos };
+    setUsuario(updatedUser);
+    localStorage.setItem('usuarioData', JSON.stringify(updatedUser));
   };
 
   const handleImagenPerfilChange = async (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    if (!file || !usuario.id) return;
 
+    setIsLoading(true);
     const formData = new FormData();
-    formData.append("fotoPerfil", file); 
+    formData.append("fotoPerfil", file);
+      if (previewPerfil) {
+    URL.revokeObjectURL(previewPerfil); 
+  }
 
     try {
-      const response = await api.put(`usuarios/actualizarFotoPerfil/${usuario.id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
+     const response = await api.put(`usuarios/actualizarFotoPerfil/${usuario.id}`, formData)
+     actualizarUsuario({
+        fotoPerfil: response.data.fotoPerfil 
       });
-
-      if (response.status === 200) {
-        setImagenPerfil(URL.createObjectURL(file));
-      }
-
-      setTimeout(() => {
-      window.location.reload();
-    }, 1500);
+      setPreviewPerfil(URL.createObjectURL(file));
+       window.location.reload();
+  
     } catch (error) {
-      console.error("Error al subir imagen:", error);
-      alert("Error al subir la imagen.");
+      alert("Error al subir la imagen.")
+    } finally {
+      setIsLoading(false)
     }
-  };
+  }
+
+  const clickCarnet = () => inputCarnetRef.current?.click()
 
   const preCarnet = async (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    if (!file || !usuario.id) return;
 
+    setIsLoading(true);
     const formData = new FormData();
-    formData.append("fotoCarnet", file); 
+    formData.append("fotoCarnet", file);
+       if (previewCarnet) {
+    URL.revokeObjectURL(previewCarnet); 
+  }
 
     try {
-      const response = await api.put(`usuarios/actualizarFotoCarnet/${usuario.id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
+      const response = await api.put(`usuarios/actualizarFotoCarnet/${usuario.id}`, formData)
+       actualizarUsuario({
+        fotoCarnet: response.data.fotoCarnet 
       });
+      
+      setPreviewCarnet(URL.createObjectURL(file));
+      window.location.reload();
+      
+    } catch (error) {
+      alert("Error al subir la imagen.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-      if (response.status === 200) {
-        setCarnet(URL.createObjectURL(file));
+  const guardarCambios = async (datos) => {
+    setIsLoading(true)
+    try {
+      await api.put(`usuarios/actualizacion/${usuario.correo}`, {
+        telefono: datos.telefono,
+      })
+
+      if (datos.password) {
+        await api.put(`usuarios/actualizacionContra/${usuario.correo}`, {
+          contrasena: datos.password,
+        })
+        alert("Contraseña actualizada.")
       }
 
-      setTimeout(() => {
-      window.location.reload();
-    }, 1500);
-    } catch (error) {
-      console.error("Error al subir imagen:", error);
-      alert("Error al subir la imagen.");
-    }
-  };
-  const clickCarnet = () => {
-    if (inputCarnetRef.current) {
-      inputCarnetRef.current.click();
-    }
-  };
-    
-//${usuario.correo}
-  const guardarCambios = async (datos) => {
-    try {
-      const response = await api.put(`usuarios/actualizacion/${usuario.correo}`, {
+        actualizarUsuario({
         telefono: datos.telefono
       });
 
-       if (datos.password) {
-      await api.put(`usuarios/actualizacionContra/${usuario.correo}`, {
-        contrasena: datos.password
-      });
-      alert("Contraseña actualizada.");
-    }
-
-
-      if (response) {
-        if (usuario.rolNombre === 'Conductor') {
-          navigate('/inicioconductor', {
-            state: { mensaje: `Datos actualizados` }
-          });
-        } else if (usuario.rolNombre === 'Pasajero') {
-          navigate('/iniciopasajero', {
-            state: { mensaje: `Datos actualizados` }
-          });
-        } else {
-          alert('Rol de usuario no reconocido.');
-        }
-      }
-
-
-      alert('Se guardaron cambios');
+      alert("Se guardaron los cambios")
+       window.location.reload();
+     
     } catch (error) {
-      console.error('error al actualizar:', error);
+      alert("Error al actualizar los datos.")
+    } finally {
+      setIsLoading(false)
     }
-  };
-
-  const handleCancel = () => {
-    if (usuario.rolNombre === 'Conductor') {
-      navigate('/inicioconductor', {
-        state: { mensaje: `Operación cancelada` }
-      });
-    } else if (usuario.rolNombre === 'Pasajero') {
-      navigate('/iniciopasajero', {
-        state: { mensaje: `Operación cancelada` }
-      });
-    } else {
-      alert('Rol de usuario no reconocido.');
-    }
-    
-  };
-
-  
-
-   if (!usuario) {
-    return <p>Cargando datos del usuario...</p>;
   }
 
-  return (
-    <main className="registro-container">
-      <form className="registro-form" onSubmit={handleSubmit(guardarCambios)}>
-
-         <div className="registro-logo-container">
-          <img src={loopLogo} alt="Loop Logo" className="registro-loop-logo-img" />
-        </div>
-          <h1 className="edit-profile-title">Editar Perfil</h1>
-
-    <div  className='avatar-wrapper'>
-      
-              <ImagenPerfil id={usuario.id} tamaño={120} />
-
-                <input
-                type="file"
-                accept="image/*"
-                ref={inputPerfilRef}
-                onChange={handleImagenPerfilChange}
-                style={{ display: "none" }}
-              />
-               <button
-              size="sm"
-              variant="outline"
-              className="camera-button"
-            > 
-              <img src={camara} className="camera-icon" alt={'fotoPerfil'} onClick={handleClickImagenPerfil}/>
-
-            </button>
-        </div>
-
-
-      <div className='document'>
-        
-            <ImagenCarnet id={usuario.id}/>
-            <input
-                type="file"
-                accept="image/*"
-                ref={inputCarnetRef}
-                onChange={preCarnet}
-                style={{ display: "none" }}
-              />
-
-            <button
-                    size="sm"
-                    variant="outline"
-                    className="camera-button"
-                  > 
-                    <img src={camara} className="camera-icon"  alt={'fotoCarnet'} onClick={clickCarnet}/>
-
-                  </button>
-        </div>
- 
-
-        <div className="campo">
-          <label htmlFor="telefono">Telefono:</label>
-         <input
-              type="text"
-              {...register("telefono", {
-                required: "Teléfono es requerido",
-                pattern: {
-                  value: /^\d{4}-\d{4}$/,
-                  message: "Formato inválido (Ej: 9876-1234)"
-                }
-              })}
-            />
-              {errors.telefono && <p>{errors.telefono.message}</p>}
-        </div>
-       
-
+  const handleCancel = () => {
+    navigate(usuario.Rol.nombre === "Conductor" ? "/inicioconductor" : "/iniciopasajero");
     
-          <div className="campo">
-            <label htmlFor="password">Ingrese contraseña nueva:</label>
-            <input
-                type="password"
-                {...register("password", {
-                  validate: (value) =>
-                    !value || value.length >= 8 || "La contraseña debe tener al menos 8 caracteres"
-                })}
-              />
-              {errors.password && <p>{errors.password.message}</p>}
-          </div>
-        
+  }
 
-        <div className="registro-botones">
-           <button
-            type="submit"
-          >
-          Guardar
-          </button>
-          <button type="button" className="cancelar" onClick={handleCancel}>
-            Cancelar
+  const handleCerrarSesion = () => {
+    localStorage.clear()
+    navigate("/")
+  }
+
+  if (!usuario) return <p>Cargando datos del usuario...</p>
+
+  return (
+    <div className="inicio-conductor-container">
+      <header className="inicio-conductor-header">
+        <div className="header-left">
+          <h1 className="logo-text">loop</h1>
+        </div>
+        <div className="header-right">
+          <div className="notification-icon-container">
+            <FaBell className="icon-notification" />
+          </div>
+          
+          <button className="logout-btn" onClick={handleCerrarSesion}>
+            Cerrar sesión
           </button>
         </div>
-      </form>
-    </main>
-  );
+      </header>
+
+      <div className="main-content-container">
+        <aside className="sidebar-fixed">
+          <nav className="sidebar-nav">
+            <button
+              className="nav-btn"
+              onClick={() => navigate(usuario.Rol.nombre === "Conductor" ? "/inicioconductor" : "/iniciopasajero")}
+            >
+              
+            </button>
+            
+          </nav>
+        </aside>
+
+        <main className="content-area-fixed">
+          <div className="edit-profile-container">
+            <div className="edit-profile-header">
+              <h1 className="edit-profile-title">Editar Perfil</h1>
+              <p className="edit-profile-subtitle">Actualiza tu información personal</p>
+            </div>
+
+            <form className="edit-profile-form" onSubmit={handleSubmit(guardarCambios)}>
+              <div className="profile-images-section">
+                <div className="image-upload-group">
+                  <div className="image-upload-container">
+                    <div className="avatar-wrapper">
+                      <ImagenPerfil id={usuario.id} className="profile-avatar" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={inputPerfilRef}
+                        onChange={handleImagenPerfilChange}
+                        style={{ display: "none" }}
+                      />
+                      <button
+                            className="camera-button"
+                            type="button"
+                            onClick={() => inputPerfilRef.current?.click()}
+                            disabled={isLoading}
+                          >
+                        <img src={camara || "/placeholder.svg"} alt="Editar" className="camera-icon" />
+                      </button>
+                    </div>
+                    <div className="image-label">
+                      <span className="label-title">Foto de Perfil</span>
+                      <span className="label-subtitle">Haz clic para cambiar</span>
+                    </div>
+                  </div>
+
+                  <div className="image-upload-container">
+                    <div className="document-wrapper">
+                      <ImagenCarnet id={usuario.id} className="carnet-image" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={inputCarnetRef}
+                        onChange={preCarnet}
+                        style={{ display: "none" }}
+                      />
+                      <button className="camera-button" type="button" onClick={clickCarnet} disabled={isLoading}>
+                        <img src={camara || "/placeholder.svg"} alt="Editar Carnet" className="camera-icon" />
+                      </button>
+                    </div>
+                    <div className="image-label">
+                      <span className="label-title">Carnet Estudiantil</span>
+                      <span className="label-subtitle">Haz clic para cambiar</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="form-fields-section">
+                <div className="personal-info-card">
+                  <h3 className="card-title">Información Personal</h3>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="nombre" className="form-label">
+                        Nombre Completo
+                      </label>
+                      <input
+                        type="text"
+                        id="nombre"
+                        className="form-input disabled"
+                        value={`${usuario.nombre} ${usuario.apellido}`}
+                        disabled
+                      />
+                      <span className="input-helper">Este campo no se puede modificar</span>
+                    </div>
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="correo" className="form-label">
+                        Correo Institucional
+                      </label>
+                      <input type="email" id="correo" className="form-input disabled" value={usuario.correo} disabled />
+                      <span className="input-helper">Este campo no se puede modificar</span>
+                    </div>
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="telefono" className="form-label">
+                        Número de Teléfono
+                      </label>
+                      <input
+                        type="text"
+                        id="telefono"
+                        className={`form-input ${errors.telefono ? "error" : ""}`}
+                        placeholder="9876-1234"
+                        {...register("telefono", {
+                          required: "Teléfono es requerido",
+                          pattern: {
+                            value: /^\d{4}-\d{4}$/,
+                            message: "Formato inválido (Ej: 9876-1234)",
+                          },
+                        })}
+                      />
+                      {errors.telefono && <span className="error-message">{errors.telefono.message}</span>}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="security-card">
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="password" className="form-label">
+                        Nueva Contraseña
+                      </label>
+                      <input
+                        type="password"
+                        id="password"
+                        className={`form-input ${errors.password ? "error" : ""}`}
+                        placeholder="Dejar vacío para mantener la actual"
+                        {...register("password", {
+                          validate: (value) => !value || value.length >= 8 || "Mínimo 8 caracteres",
+                        })}
+                      />
+                      {errors.password && <span className="error-message">{errors.password.message}</span>}
+                      <span className="input-helper">Opcional: Solo completa si deseas cambiar tu contraseña</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="form-actions">
+                <button type="button" className="btn-secondary" onClick={handleCancel} disabled={isLoading}>
+                  Cancelar
+                </button>
+                <button type="submit" className="btn-primary" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <div className="loading-spinner"></div>
+                      Guardando...
+                    </>
+                  ) : (
+                    "Guardar Cambios"
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </main>
+      </div>
+    </div>
+  )
 }
 
-export default EditarUsuario;
+export default EditarUsuario

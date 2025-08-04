@@ -181,7 +181,6 @@ useEffect(() => {
       formData.append('role_id', rol === 'conductor' ? '2' : '1');
       formData.append('telefono', data.telefono.trim());
       formData.append('campus_id', data.campus_id);
-     // formData.append('direccion_casa', data.direccion_casa.trim());
       formData.append('fotoPerfil', data.fotoPerfil);
       formData.append('fotoCarnet', data.fotoCarnet);
 
@@ -371,7 +370,7 @@ useEffect(() => {
                 placeholder="0801-2000-90123"
                 onChange={(e) => {
                   const formatted = formatIdentidad(e.target.value);
-                  setValue("dni", formatted); // <- react-hook-form
+                  setValue("dni", formatted); 
                 }}
               />
 

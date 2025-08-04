@@ -26,7 +26,8 @@ function InicioConductor() {
     descripcion: ''
   });
   const [errors, setErrors] = useState({}); 
-  const [datosViajeActual, setDatosViajeActual] = useState(null); 
+  const [datosViajeActual, setDatosViajeActual] = useState(null);
+  const [pasajerosAceptados, setPasajerosAceptados] = useState([]); 
   const [origenCoords, setOrigenCoords] = useState(null);
   const [destinoCoords, setDestinoCoords] = useState(null);
   const navigate = useNavigate();
@@ -51,11 +52,19 @@ function InicioConductor() {
       const response = await api.get(`/viajes/activo/${usuario.id}`);
       if (response.data?.viaje) {
         setViajeActivo(true);
-        setDatosViajeActual(response.data.viaje);
+        setDatosViajeActual(response.data.viaje)
         localStorage.setItem("viaje_id", response.data.viaje.id);
+        try {
+          const pasajerosRes = await api.get(`/viajes/pasajeros/${response.data.viaje.id}`);
+          setPasajerosAceptados(pasajerosRes.data || []);
+        } catch (error) {
+          console.error("Error al obtener pasajeros aceptados:", error);
+        }
+
       } else {
         setViajeActivo(false);
         setDatosViajeActual(null);
+        setPasajerosAceptados([]);
         localStorage.removeItem("viaje_id");
       }
     } catch (error) {
@@ -109,13 +118,11 @@ function InicioConductor() {
   }, []);
 
   const verificarViajeActivo = async () => {
-    await sincronizarViajeActivo();
-    if (viajeActivo) {
-      alert('Ya tienes un viaje activo. Por favor finalízalo antes de crear uno nuevo.');
-      return true;
-    }
-    return false;
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const response = await api.get(`/viajes/activo/${usuario.id}`);
+    return !!response.data?.viaje;
   };
+
 
   const guardarDireccion = async () => {
     const usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -238,9 +245,7 @@ function InicioConductor() {
   const finalizarViaje = async () => {
     try {
       const token = localStorage.getItem("token");
-      const viajeId = localStorage.getItem("viaje_id");
-
-       console.log('ID del viaje al finalizar:', viajeId); 
+      const viajeId = datosViajeActual?.id; 
 
       if (!viajeId) {
         alert("ID del viaje no encontrado.");
@@ -253,6 +258,14 @@ function InicioConductor() {
         }
       });
 
+      try {
+        await api.post(`/ganancia/${viajeId}`, null, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } catch (err) {
+        console.warn("Ganancia ya estaba registrada o falló:", err.response?.data || err.message);
+      }
+
       setViajeActivo(false);
       setViajeData({
         destino: '',
@@ -261,8 +274,9 @@ function InicioConductor() {
         precio: '10',
         descripcion: ''
       });
-      setDatosViajeActual(null); 
-      localStorage.removeItem("viaje_id");
+      setDatosViajeActual(null);
+      setPasajerosAceptados([]);
+      localStorage.removeItem("viaje_id"); 
       alert('Viaje finalizado correctamente');
 
       await obtenerPasajerosConReservaFinalizada(viajeId);
@@ -355,8 +369,12 @@ const handleEnviarCalificacion = async ({ viajeId, pasajeroId, rating, comentari
             </button>
 
             <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
-            <button className="nav-btn"><FaRoute className="nav-icon" /> Mis Viajes</button>
-            <button className="nav-btn"><FaMoneyBill className="nav-icon" /> Mis Ganancias</button>
+            <button className="nav-btn" onClick={() => navigate('/misviajesconductor')}> 
+              <FaRoute className="nav-icon" /> Mis Viajes
+            </button>
+            <button className="nav-btn" onClick={() => navigate('/misganancias')}>
+              <FaMoneyBill className="nav-icon" /> Mis Ganancias
+            </button>
             <button className="nav-btn" onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>
             <button className="nav-btn"><FaQuestionCircle className="nav-icon" /> Ayuda</button>
           </nav>
@@ -379,6 +397,7 @@ const handleEnviarCalificacion = async ({ viajeId, pasajeroId, rating, comentari
                 asientosDisponibles={datosViajeActual.asientos_disponibles}
                 precio={datosViajeActual.precio_asiento}
                 descripcion={datosViajeActual.descripcion}
+                pasajeros={pasajerosAceptados}
               />
             </>
           )}
