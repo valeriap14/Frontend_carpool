@@ -155,18 +155,23 @@ body {
 }
 
 .btn {
-  width: 100%;
-  max-width: 400px;
-  height: 50px;
-  padding: 0.75rem 2rem;
-  border: none;
-  border-radius: 25px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-  
+  width: 200px !important;
+  height: 60px !important;
+  padding: 0 !important;
+  border-radius: 25px !important;      /* bordes bien redondeados */
+  font-size: 1.0rem !important;       /* letras más grandes */
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  user-select: none !important;
+  margin: 0.5rem auto !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
 }
+
 
 .btn-login {
   background-color: #DDA0DD;
@@ -185,6 +190,7 @@ body {
 .btn-register:hover {
   background-color: #B0E0E6;
 }
+
 
 .register-text {
   color: #000000;
