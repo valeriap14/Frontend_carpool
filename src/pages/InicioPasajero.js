@@ -11,8 +11,6 @@ import SnackbarNotificacion from '../pages/SnackbarNotificacion';
 import ViajeAceptadoCard from '../pages/ViajeAceptadoCard';
 
 
-import CardCalificacion from '../pages/cardCalificacion';
-
 function InicioPasajero() {
   const [searchParams, setSearchParams] = useState({ destino: '' });
   const [viajesDisponibles, setViajesDisponibles] = useState([]);
@@ -22,7 +20,7 @@ function InicioPasajero() {
   const [snackbar, setSnackbar] = useState(null);
 
 
-  const [mostrarCalificacion, setMostrarCalificacion] = useState(false);
+ /* const [mostrarCalificacion, setMostrarCalificacion] = useState(false);*/
 
   const navigate = useNavigate();
   useNotificaciones(setViajeAceptado, setNotificaciones, setSnackbar);
@@ -55,14 +53,14 @@ function InicioPasajero() {
 
         
           if (res.data && res.data.estado === 'finalizado') {
-            setMostrarCalificacion(true);
+            /*setMostrarCalificacion(true);*/
           } else {
-            setMostrarCalificacion(false);
+            /*setMostrarCalificacion(false);*/
           }
         } catch (err) {
           console.error("Error al cargar viaje aceptado:", err);
           setViajeAceptado(null);
-          setMostrarCalificacion(false);
+          /*setMostrarCalificacion(false);*/
         }
       }
     };
@@ -99,14 +97,14 @@ function InicioPasajero() {
     }
   };
 
-  const handleEnviarCalificacion = async ({ rating, comment }) => {
+ /* const handleEnviarCalificacion = async ({ rating, comment }) => {
     try {
       const usuario = JSON.parse(localStorage.getItem('usuario'));
       const viajeId = viajeAceptado.id;
       const pasajeroId = usuario.id;
       const conductorId = viajeAceptado.conductor.id;
 
-      await api.post(`/calificacion/conductor/${viajeId}/${pasajeroId}`, {
+      /*await api.post(`/calificacion/conductor/${viajeId}/${pasajeroId}`, {
         conductorId,
         calificacion: rating,
         comentario: comment
@@ -120,7 +118,7 @@ function InicioPasajero() {
     } catch (error) {
       alert('Error al enviar la calificación: ' + (error.response?.data?.error || error.message));
     }
-  };
+  };*/
 
   return (
     <div className="inicio-conductor-container">
@@ -184,13 +182,7 @@ function InicioPasajero() {
               </div>
             )}
 
-            
-            {mostrarCalificacion && (
-              <CardCalificacion
-                onSubmit={handleEnviarCalificacion}
-                onClose={() => setMostrarCalificacion(false)}
-              />
-            )}
+          
 
             <div className="available-trips-container">
               <h2 className="trips-title">Viajes Disponibles</h2>
