@@ -245,7 +245,7 @@ function InicioConductor() {
   const finalizarViaje = async () => {
     try {
       const token = localStorage.getItem("token");
-      const viajeId = datosViajeActual?.id; // ✅ más confiable
+      const viajeId = datosViajeActual?.id; 
 
       if (!viajeId) {
         alert("ID del viaje no encontrado.");
@@ -276,7 +276,7 @@ function InicioConductor() {
       });
       setDatosViajeActual(null);
       setPasajerosAceptados([]);
-      localStorage.removeItem("viaje_id"); // opcional, por limpieza
+      localStorage.removeItem("viaje_id"); 
       alert('Viaje finalizado correctamente');
 
       await obtenerPasajerosConReservaFinalizada(viajeId);
