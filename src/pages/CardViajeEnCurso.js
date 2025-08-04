@@ -142,7 +142,8 @@ const CardViajeEnCurso = ({
                   </div>
                   <div className="pasajero-info">
                     <span className="pasajero-name">
-                      {p.nombre} {p.apellido}
+                      {p.nombre} {p.apellido} {p.telefono}
+                      {console.log(p)}
                     </span>
                     <span className="pasajero-status">Confirmado</span>
                   </div>
