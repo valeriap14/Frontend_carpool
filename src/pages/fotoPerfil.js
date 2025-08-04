@@ -40,15 +40,12 @@ function ImagenPerfil({id, alt='Imagen de perfil'}){
         
         <div>
             {
-                loading ? (
+                
                     
-                    <p>...</p>
-                ): (
-                    
-                    <img src={imagenUrl || defaultAvatar} alt={alt} className="avatar-circle"></img>
+                    <img    src={imagenUrl || defaultAvatar} alt={alt} className="avatar-circle"></img>
                     
 
-                )
+                
             }
 
 

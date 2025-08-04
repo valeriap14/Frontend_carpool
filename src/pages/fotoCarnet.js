@@ -40,15 +40,12 @@ function ImagenCarnet({id, alt='Foto de carnet'}){
         
         <div>
             {
-                loading ? (
-                    
-                    <p>...</p>
-                ): (
+               
                     
                     <img src={imagenUrl || defaultCarnet} alt={alt} className="carnet-photo"></img>
                     
 
-                )
+                
             }
 
 

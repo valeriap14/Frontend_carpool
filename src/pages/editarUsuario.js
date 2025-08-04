@@ -1,8 +1,8 @@
-import { useState, useEffect, useContext, useRef } from "react"
-import { AuthContext } from "../context/AuthContext"
+import { useState, useEffect, useRef } from "react"
+
 import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
-import { FaBell, FaHome, FaUserCircle, FaRoute, FaQuestionCircle } from "react-icons/fa"
+import { FaBell} from "react-icons/fa"
 import api from "../api/api"
 import ImagenPerfil from "../pages/fotoPerfil"
 import ImagenCarnet from "../pages/fotoCarnet"
@@ -11,44 +11,59 @@ import "../styles/editarUsuario.css"
 import "../styles/InicioPasajero.css"
 
 function EditarUsuario() {
-  const { usuario } = useContext(AuthContext)
-  const navigate = useNavigate()
-  const inputPerfilRef = useRef(null)
-  const inputCarnetRef = useRef(null)
-  const [setImagenPerfil] = useState(null)
-  const [setCarnet] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate();
+  const inputPerfilRef = useRef(null);
+  const inputCarnetRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [previewPerfil, setPreviewPerfil] = useState(null);
+  const [previewCarnet, setPreviewCarnet] = useState(null);
+  const [usuario, setUsuario] = useState(() => {
+    const userData = localStorage.getItem('usuarioData');
+    return userData ? JSON.parse(userData) : {};
+  });
 
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm({ mode: "onChange" })
+  } = useForm({ mode: "onChange" });
 
   useEffect(() => {
-    if (usuario) {
-      setValue("nombre", usuario.nombre || "")
-      setValue("apellido", usuario.apellido || "")
-      setValue("telefono", usuario.telefono || "")
-      setValue("password", "")
+    if (usuario && usuario.nombre) {
+      setValue("nombre", usuario.nombre || "");
+      setValue("apellido", usuario.apellido || "");
+      setValue("telefono", usuario.telefono || "");
+      setValue("password", "");
     }
-  }, [usuario, setValue])
+  }, [usuario, setValue]);
 
-  const handleClickImagenPerfil = () => inputPerfilRef.current?.click()
+  
+  const actualizarUsuario = (nuevosDatos) => {
+    const updatedUser = { ...usuario, ...nuevosDatos };
+    setUsuario(updatedUser);
+    localStorage.setItem('usuarioData', JSON.stringify(updatedUser));
+  };
 
   const handleImagenPerfilChange = async (e) => {
-    const file = e.target.files[0]
-    if (!file) return
+    const file = e.target.files[0];
+    if (!file || !usuario.id) return;
 
-    setIsLoading(true)
-    const formData = new FormData()
-    formData.append("fotoPerfil", file)
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append("fotoPerfil", file);
+      if (previewPerfil) {
+    URL.revokeObjectURL(previewPerfil); 
+  }
 
     try {
-      await api.put(`usuarios/actualizarFotoPerfil/${usuario.id}`, formData)
-      setImagenPerfil(URL.createObjectURL(file))
-      setTimeout(() => window.location.reload(), 1500)
+     const response = await api.put(`usuarios/actualizarFotoPerfil/${usuario.id}`, formData)
+     actualizarUsuario({
+        fotoPerfil: response.data.fotoPerfil 
+      });
+      setPreviewPerfil(URL.createObjectURL(file));
+       window.location.reload();
+  
     } catch (error) {
       alert("Error al subir la imagen.")
     } finally {
@@ -59,17 +74,25 @@ function EditarUsuario() {
   const clickCarnet = () => inputCarnetRef.current?.click()
 
   const preCarnet = async (e) => {
-    const file = e.target.files[0]
-    if (!file) return
+    const file = e.target.files[0];
+    if (!file || !usuario.id) return;
 
-    setIsLoading(true)
-    const formData = new FormData()
-    formData.append("fotoCarnet", file)
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append("fotoCarnet", file);
+       if (previewCarnet) {
+    URL.revokeObjectURL(previewCarnet); 
+  }
 
     try {
-      await api.put(`usuarios/actualizarFotoCarnet/${usuario.id}`, formData)
-      setCarnet(URL.createObjectURL(file))
-      setTimeout(() => window.location.reload(), 1500)
+      const response = await api.put(`usuarios/actualizarFotoCarnet/${usuario.id}`, formData)
+       actualizarUsuario({
+        fotoCarnet: response.data.fotoCarnet 
+      });
+      
+      setPreviewCarnet(URL.createObjectURL(file));
+      window.location.reload();
+      
     } catch (error) {
       alert("Error al subir la imagen.")
     } finally {
@@ -91,8 +114,13 @@ function EditarUsuario() {
         alert("Contraseña actualizada.")
       }
 
+        actualizarUsuario({
+        telefono: datos.telefono
+      });
+
       alert("Se guardaron los cambios")
-      navigate(usuario.rolNombre === "Conductor" ? "/inicioconductor" : "/iniciopasajero")
+       window.location.reload();
+     
     } catch (error) {
       alert("Error al actualizar los datos.")
     } finally {
@@ -101,7 +129,8 @@ function EditarUsuario() {
   }
 
   const handleCancel = () => {
-    navigate(usuario.rolNombre === "Conductor" ? "/inicioconductor" : "/iniciopasajero")
+    navigate(usuario.Rol.nombre === "Conductor" ? "/inicioconductor" : "/iniciopasajero");
+    
   }
 
   const handleCerrarSesion = () => {
@@ -121,7 +150,7 @@ function EditarUsuario() {
           <div className="notification-icon-container">
             <FaBell className="icon-notification" />
           </div>
-          <ImagenPerfil id={usuario.id} alt="Foto del usuario" className="avatar-circle" />
+          
           <button className="logout-btn" onClick={handleCerrarSesion}>
             Cerrar sesión
           </button>
@@ -133,19 +162,11 @@ function EditarUsuario() {
           <nav className="sidebar-nav">
             <button
               className="nav-btn"
-              onClick={() => navigate(usuario.rolNombre === "Conductor" ? "/inicioconductor" : "/iniciopasajero")}
+              onClick={() => navigate(usuario.Rol.nombre === "Conductor" ? "/inicioconductor" : "/iniciopasajero")}
             >
-              <FaHome className="nav-icon" /> Inicio
+              
             </button>
-            <button className="nav-btn active">
-              <FaUserCircle className="nav-icon" /> Editar Perfil
-            </button>
-            <button className="nav-btn">
-              <FaRoute className="nav-icon" /> Mis Viajes
-            </button>
-            <button className="nav-btn">
-              <FaQuestionCircle className="nav-icon" /> Ayuda
-            </button>
+            
           </nav>
         </aside>
 
@@ -170,11 +191,11 @@ function EditarUsuario() {
                         style={{ display: "none" }}
                       />
                       <button
-                        className="camera-button"
-                        type="button"
-                        onClick={handleClickImagenPerfil}
-                        disabled={isLoading}
-                      >
+                            className="camera-button"
+                            type="button"
+                            onClick={() => inputPerfilRef.current?.click()}
+                            disabled={isLoading}
+                          >
                         <img src={camara || "/placeholder.svg"} alt="Editar" className="camera-icon" />
                       </button>
                     </div>
