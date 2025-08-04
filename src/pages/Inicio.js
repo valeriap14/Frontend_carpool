@@ -15,7 +15,7 @@ export default function Inicio() {
           <div className="logo">loop</div>
 
           <nav className="nav-desktop">
-            <a className="nav-link" onClick={() => navigate('')}>Inicio</a>
+
             <a className="nav-link"onClick={() => navigate('')}>Sobre nosotros</a>
             <a className="nav-link" onClick={() => navigate('/login')}>Iniciar Sesión</a>
             <a className="nav-link" onClick={() => navigate('/registrarusuario')}>Registrarse</a>
