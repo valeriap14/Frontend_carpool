@@ -92,6 +92,7 @@ function InicioConductor() {
   useEffect(() => {
     sincronizarViajeActivo();
 
+    
     const obtenerRutaUsuario = async () => {
       const usuario = JSON.parse(localStorage.getItem("usuario"));
       const token = localStorage.getItem("token");
@@ -115,6 +116,12 @@ function InicioConductor() {
       }
     };
     obtenerRutaUsuario();
+
+    const intervalo = setInterval(() => {
+      sincronizarViajeActivo();
+    }, 5000);
+
+    return () => clearInterval(intervalo);
   }, []);
 
   const verificarViajeActivo = async () => {

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaBell, FaUserCircle, FaHome, FaRoute, FaQuestionCircle, FaSearch } from 'react-icons/fa';
@@ -9,7 +8,7 @@ import ImagenPerfil from '../pages/fotoPerfil';
 import { useNotificaciones } from '../hooks/useNotificaciones';
 import SnackbarNotificacion from '../pages/SnackbarNotificacion';
 import ViajeAceptadoCard from '../pages/ViajeAceptadoCard';
-
+import ModalCalificarConductor from '../pages/ModalCalificarConductor';
 
 function InicioPasajero() {
   const [searchParams, setSearchParams] = useState({ destino: '' });
@@ -18,60 +17,97 @@ function InicioPasajero() {
   const [viajeAceptado, setViajeAceptado] = useState(null);
   const [notificaciones, setNotificaciones] = useState(0);
   const [snackbar, setSnackbar] = useState(null);
-
-
- /* const [mostrarCalificacion, setMostrarCalificacion] = useState(false);*/
+  const [mostrarModalCalificacion, setMostrarModalCalificacion] = useState(false);
+  const [viajeParaCalificar, setViajeParaCalificar] = useState(null);
 
   const navigate = useNavigate();
   useNotificaciones(setViajeAceptado, setNotificaciones, setSnackbar);
 
   useEffect(() => {
-    const obtenerViajes = async () => {
-      try {
-        const res = await api.get('/viajes/disponibles');
-        if (Array.isArray(res.data.viajes)) {
-          setViajesDisponibles(res.data.viajes);
-        } else {
-          setViajesDisponibles([]);
-        }
-      } catch (error) {
-        console.error('Error al cargar viajes:', error);
+  const obtenerViajes = async () => {
+    try {
+      const res = await api.get('/viajes/disponibles');
+      if (Array.isArray(res.data.viajes)) {
+        setViajesDisponibles(res.data.viajes);
+      } else {
         setViajesDisponibles([]);
       }
-    };
+    } catch (error) {
+      console.error('Error al cargar viajes:', error);
+      setViajesDisponibles([]);
+    }
+  };
 
-    obtenerViajes();
+  obtenerViajes();
 
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const interval = setInterval(obtenerViajes, 10000);
 
-  
-    const obtenerViajeAceptado = async () => {
-      if (usuario?.id) {
-        try {
-          const res = await api.get(`/viajePasajero/pasajero/${usuario.id}/viaje-aceptado`);
-          setViajeAceptado(res.data);
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
 
-        
-          if (res.data && res.data.estado === 'finalizado') {
-            /*setMostrarCalificacion(true);*/
-          } else {
-            /*setMostrarCalificacion(false);*/
-          }
-        } catch (err) {
-          console.error("Error al cargar viaje aceptado:", err);
-          setViajeAceptado(null);
-          /*setMostrarCalificacion(false);*/
-        }
+  console.log("Usuario:", usuario);
+
+  const obtenerViajeAceptado = async () => {
+    if (usuario?.id) {
+      try {
+        const res = await api.get(`/viajePasajero/pasajero/${usuario.id}/viaje-aceptado`);
+        setViajeAceptado(res.data);
+        console.log("Viaje Aceptado:", res.data);
+      } catch (err) {
+        console.error("Error al cargar viaje aceptado:", err);
+        setViajeAceptado(null);
       }
-    };
+    }
+  };
 
-    obtenerViajeAceptado();
+  obtenerViajeAceptado();
 
-  
-    const intervalo = setInterval(obtenerViajeAceptado, 10000);
+  const intervalo = setInterval(obtenerViajeAceptado, 10000);
 
+  return () => {
+    clearInterval(interval);
+    clearInterval(intervalo);
+  };
+}, []);
+
+
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+  console.log("Usuario:", usuario);
+
+  const obtenerUltimoViajeFinalizado = async () => {
+    if (usuario?.id) {
+      try {
+        const res = await api.get(`/pasajero/viaje-finalizado/${usuario.id}`);
+        if (res.data && res.data.viaje) {
+          const viaje = res.data.viaje;
+          const calificacion = await verificarCalificacion(viaje.id, usuario.id, viaje.conductor.id, 'conductor');
+          if (!calificacion.existe) {
+            setViajeParaCalificar(viaje);
+            setMostrarModalCalificacion(true);
+          }
+        }
+      } catch (error) {
+        console.error("Error al obtener el último viaje finalizado:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    obtenerUltimoViajeFinalizado();
+
+    const intervalo = setInterval(obtenerUltimoViajeFinalizado, 10000);
     return () => clearInterval(intervalo);
-  }, []);
+  }, [usuario]);
+
+  const verificarCalificacion = async (viajeId, calificadorId, calificadoId, tipo) => {
+    try {
+      const res = await api.get(`/verificar/${viajeId}/${calificadorId}/${calificadoId}/${tipo}`);
+      return res.data;
+    } catch (err) {
+      console.error("Error al verificar la calificación:", err);
+      return { existe: false, calificado: false };
+    }
+  };
 
   const handleCerrarSesion = () => {
     localStorage.clear();
@@ -97,28 +133,20 @@ function InicioPasajero() {
     }
   };
 
- /* const handleEnviarCalificacion = async ({ rating, comment }) => {
+  const enviarCalificacion = async ({ viajeId, conductorId, rating, comentario }) => {
     try {
-      const usuario = JSON.parse(localStorage.getItem('usuario'));
-      const viajeId = viajeAceptado.id;
-      const pasajeroId = usuario.id;
-      const conductorId = viajeAceptado.conductor.id;
-
-      /*await api.post(`/calificacion/conductor/${viajeId}/${pasajeroId}`, {
+      await api.post('/calificacion', {
+        viajeId,
         conductorId,
-        calificacion: rating,
-        comentario: comment
+        calificadorId: JSON.parse(localStorage.getItem("usuario")).id,
+        rating,
+        comentario,
       });
-
-      alert('Calificación enviada correctamente');
-
-      
-      setMostrarCalificacion(false);
-      setViajeAceptado(null);
+      setMostrarModalCalificacion(false);
     } catch (error) {
-      alert('Error al enviar la calificación: ' + (error.response?.data?.error || error.message));
+      console.error("Error al enviar la calificación:", error);
     }
-  };*/
+  };
 
   return (
     <div className="inicio-conductor-container">
@@ -146,7 +174,7 @@ function InicioPasajero() {
         <aside className="sidebar-fixed">
           <nav className="sidebar-nav">
             <button className="nav-btn active"><FaHome className="nav-icon" /> Inicio</button>
-            <button className="nav-btn" onClick={() => navigate('/misviajespasajero')}> 
+            <button className="nav-btn" onClick={() => navigate('/misviajespasajero')}>
               <FaRoute className="nav-icon" /> Mis Viajes
             </button>
             <button className="nav-btn" onClick={() => navigate('/editarUsuario')}><FaUserCircle className="nav-icon" /> Editar Perfil</button>
@@ -177,14 +205,11 @@ function InicioPasajero() {
               </form>
             </div>
 
-          
             {viajeAceptado && (
               <div className="viaje-en-curso-container">
                 <ViajeAceptadoCard viaje={viajeAceptado} />
               </div>
             )}
-
-          
 
             <div className="available-trips-container">
               <h2 className="trips-title">Viajes Disponibles</h2>
@@ -242,6 +267,15 @@ function InicioPasajero() {
             </div>
           )}
 
+          {mostrarModalCalificacion && viajeParaCalificar && (
+            <ModalCalificarConductor
+              conductor={viajeParaCalificar.conductor}
+              onCerrar={() => setMostrarModalCalificacion(false)}
+              onEnviarCalificacion={enviarCalificacion}
+              viajeId={viajeParaCalificar.id}
+            />
+          )}
+
           {snackbar && (
             <SnackbarNotificacion
               mensaje={snackbar.mensaje}
@@ -256,4 +290,3 @@ function InicioPasajero() {
 }
 
 export default InicioPasajero;
-
