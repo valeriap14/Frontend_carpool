@@ -19,6 +19,9 @@ function RegistrarUsuario() {
     formState: { errors, isValid }
   } = useForm({ mode: 'onChange' });
 
+  const generarCodigo = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+
   const formatIdentidad = (value) => {
     const raw = value.replace(/\D/g, '');
     if (raw.length <= 4) return raw;
@@ -203,15 +206,22 @@ useEffect(() => {
           'Content-Type': 'multipart/form-data'
         }
       });
+      const codigoVerificacion = generarCodigo();
       
-      setSuccessMessage('¡Registro exitoso! Redirigiendo...');
+      setSuccessMessage({ 
+        text: '¡Registro exitoso! Redirigiendo para verificar tu correo...', 
+        type: 'success' 
+      });
+      
+      const correoValidado = data.correo.trim().toLowerCase();
+      // Redirigir a verificación después de 2 segundos
       setTimeout(() => {
-        reset();
-        navigate('/login', { 
+        navigate('/verificar-correo', { 
           state: { 
-            registroExitoso: true,
-            mensaje: `¡Bienvenid@ ${data.nombresCompletos}!` 
-          } 
+            nombre: data.nombresCompletos.trim(),
+            email: correoValidado,
+            codigo: codigoVerificacion
+          }
         });
       }, 2000);
 
